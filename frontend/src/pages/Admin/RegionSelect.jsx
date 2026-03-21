@@ -28,7 +28,7 @@ const RegionSelect = () => {
 
       <div className="region-cards-container">
         {/* India Dashboard Card */}
-        <div
+        {/* <div
           className="region-card india"
           onClick={() => handleSelectRegion("india")}
         >
@@ -41,7 +41,7 @@ const RegionSelect = () => {
             media corner exclusively for the Y4D India portal.
           </p>
           <i className="fas fa-arrow-right region-card-arrow"></i>
-        </div>
+        </div> */}
 
         {/* Global Dashboard Card */}
         <div

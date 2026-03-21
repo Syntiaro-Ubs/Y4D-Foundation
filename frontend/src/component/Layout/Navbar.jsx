@@ -41,17 +41,7 @@ const Navbar = () => {
   };
 
   const goToIndia = () => {
-    const isProduction = currentHostname === 'y4dinfo.org' || currentHostname === 'app.y4dinfo.org' || currentHostname === 'global.y4dinfo.org';
-
-    if (!isProduction) {
-      // Stay on the same domain but add/update region query param using navigate (SPA way)
-      const searchParams = new URLSearchParams(location.search);
-      searchParams.set('region', 'india');
-      navigate(`${location.pathname}?${searchParams.toString()}`);
-    } else {
-      // Standard production redirect
-      window.open("https://app.y4dinfo.org", "_blank");
-    }
+    window.open("https://app.y4dinfo.org/", "_blank");
   };
 
   useEffect(() => {
