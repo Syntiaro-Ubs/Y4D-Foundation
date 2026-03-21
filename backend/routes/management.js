@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
       params.push(region);
     }
 
-    query += " ORDER BY name";
+    query += " ORDER BY created_at DESC";
 
     const [rows] = await db.query(query, params);
     res.json(rows);
