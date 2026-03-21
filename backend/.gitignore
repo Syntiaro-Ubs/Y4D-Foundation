@@ -1,18 +1,5 @@
 # Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-yarn.lock
-
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env*.local
 
 # Logs
 logs/
@@ -20,45 +7,67 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
-# Runtime data
+# Environment (secrets — never commit)
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Runtime / process
 pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# Testing & coverage
 coverage/
-*.lcov
 .nyc_output/
+*.lcov
+test-results/
 
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
+# Caches
 .npm
-
-# Optional eslint cache
 .eslintcache
+.cache/
+.parcel-cache/
+.turbo/
+*.tsbuildinfo
 
-# Optional REPL history
-.node_repl_history
+# Build output
+dist/
+build/
+out/
 
-# Output of 'npm pack'
+# Pack / archives
 *.tgz
 
-# Yarn Integrity file
+# Yarn
 .yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
 
-# IDEs and editors
+# Uploads created at runtime (resumes, etc.)
+uploads/
+
+# Local databases & dumps
+*.db
+*.sqlite
+*.sqlite3
+*.sql.backup
+
+# IDE & editors
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
-.DS_Store
 *.sublime-project
 *.sublime-workspace
 .project
@@ -66,9 +75,8 @@ jspm_packages/
 .settings/
 *.iml
 
-# OS files
+# OS
 .DS_Store
-.DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
@@ -76,44 +84,16 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
-# Uploads (uncomment if you don't want to track uploaded files)
-# uploads/
-# uploads/**/*
-
-# Build files
-dist/
-build/
-*.tsbuildinfo
-
-# Test files
-coverage/
-.nyc_output/
-test-results/
-
-# Temporary files
+# Misc
 tmp/
 temp/
 *.tmp
 *.temp
+.node_repl_history
+jspm_packages/
 
-# Database files
-*.sql.backup
-*.db
-*.sqlite
-*.sqlite3
-
-# PM2
+# PM2 local state (not app config)
 .pm2/
-ecosystem.config.js
 
-# Misc
-.cache/
-.parcel-cache/
-.next/
-out/
-
-# Deployment
+# Deployment metadata
 .deployment-info.json
-dist/
-build/
-
