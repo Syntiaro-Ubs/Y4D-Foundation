@@ -74,15 +74,29 @@ const BlogDetails = () => {
 
         {renderTags(blog.tags)}
 
-        {blog.image && (
-          <div className="blog-image-full">
-            <img
-              src={`${UPLOADS_BASE}/media/blogs/${blog.image}`}
-              alt={blog.title}
-              onError={(e) => (e.target.src = "/placeholder-blog.jpg")}
-            />
-          </div>
-        )}
+        {/* Top Image (First one) */}
+        {(() => {
+          let images = [];
+          try {
+            images = typeof blog.image === 'string' ? JSON.parse(blog.image) : blog.image;
+            if (!Array.isArray(images)) images = blog.image ? [blog.image] : [];
+          } catch (e) {
+            images = blog.image ? [blog.image] : [];
+          }
+          
+          if (images.length > 0) {
+            return (
+              <div className="blog-image-full featured">
+                <img
+                  src={`${UPLOADS_BASE}/media/blogs/${images[0]}`}
+                  alt={blog.title}
+                  onError={(e) => (e.target.src = "/placeholder-blog.jpg")}
+                />
+              </div>
+            );
+          }
+          return null;
+        })()}
 
         <div className="blog-full-content">
           {blog.description && (
@@ -94,6 +108,35 @@ const BlogDetails = () => {
               .split("\n")
               .map((paragraph, idx) => <p key={idx}>{paragraph}</p>)}
         </div>
+
+        {/* Remaining Images at the bottom */}
+        {(() => {
+          let images = [];
+          try {
+            images = typeof blog.image === 'string' ? JSON.parse(blog.image) : blog.image;
+            if (!Array.isArray(images)) images = blog.image ? [blog.image] : [];
+          } catch (e) {
+            images = blog.image ? [blog.image] : [];
+          }
+          
+          const remainingImages = images.slice(1);
+          if (remainingImages.length > 0) {
+            return (
+              <div className="blog-additional-images">
+                {remainingImages.map((img, idx) => (
+                  <div key={idx} className="blog-additional-image-item">
+                    <img
+                      src={`${UPLOADS_BASE}/media/blogs/${img}`}
+                      alt={`${blog.title} - ${idx + 2}`}
+                      onError={(e) => (e.target.src = "/placeholder-blog.jpg")}
+                    />
+                  </div>
+                ))}
+              </div>
+            );
+          }
+          return null;
+        })()}
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import React from "react";
 import "./Footer.css";
+import { useRegion } from "../../hooks/useRegion";
 
 const Footer = () => {
+  const region = useRegion();
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -28,20 +30,24 @@ const Footer = () => {
               <li>
                 <a href="/quality-education">Quality Education</a>
               </li>
-              <li>
-                <a href="/livelihood">Livelihood</a>
-              </li>
-              <li>
-                <a href="/healthcare">Healthcare</a>
-              </li>
-              <li>
-                <a href="/environment-sustainability">
-                  Envirnment Sustainability
-                </a>
-              </li>
-              <li>
-                <a href="/idp">IDP</a>
-              </li>
+              {region !== "global" && (
+                <>
+                  <li>
+                    <a href="/livelihood">Livelihood</a>
+                  </li>
+                  <li>
+                    <a href="/healthcare">Healthcare</a>
+                  </li>
+                  <li>
+                    <a href="/environment-sustainability">
+                      Envirnment Sustainability
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/idp">IDP</a>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
 
@@ -63,21 +69,27 @@ const Footer = () => {
           <div className="footer-column">
             <h4>Media Corner</h4>
             <ul>
-              <li>
-                <a href="/newsletters">Newsletters</a>
-              </li>
+              {region !== "global" && (
+                <li>
+                  <a href="/newsletters">Newsletters</a>
+                </li>
+              )}
               <li>
                 <a href="/stories">Stories of Empowerment</a>
               </li>
-              <li>
-                <a href="/events">Events</a>
-              </li>
+              {region !== "global" && (
+                <li>
+                  <a href="/events">Events</a>
+                </li>
+              )}
               <li>
                 <a href="/blogs">Blogs</a>
               </li>
-              <li>
-                <a href="/documentaries">Documentaries</a>
-              </li>
+              {region !== "global" && (
+                <li>
+                  <a href="/documentaries">Documentaries</a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -87,27 +99,48 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="footer-left">
           <div className="footer-address">
-            <p style={{ fontWeight: "bold" }}>Head Office:</p>
+            <p style={{ fontWeight: "bold" }}>
+              {region === "global" ? "Postal Address:" : "Head Office:"}
+            </p>
             <a
-              href="https://www.google.com/maps/search/?api=1&query=Y4D+Foundation,+402,+The+Onyx,+Near+Euro+School,+Wakad,+Pune,+Maharashtra,+India+411057"
+              href={
+                region === "global"
+                  ? "https://www.google.com/maps/search/?api=1&query=322+Bellis+Ct,+Bridgewater,+NJ+08807"
+                  : "https://www.google.com/maps/search/?api=1&query=Y4D+Foundation,+402,+The+Onyx,+Near+Euro+School,+Wakad,+Pune,+Maharashtra,+India+411057"
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="footer-address-link"
             >
-              4th Floor, Near Euro School,
-              <br /> Wakad, Pune- 411057
+              {region === "global" ? (
+                <>
+                  322 Bellis Ct., Bridgewater,
+                  <br /> New Jersey, 08807
+                </>
+              ) : (
+                <>
+                  4th Floor, Near Euro School,
+                  <br /> Wakad, Pune- 411057
+                </>
+              )}
             </a>
 
             <p style={{ fontWeight: "bold", marginTop: "10px" }}>
-              Mumbai Office:
+              {region === "global" ? "Registered Address:" : "Mumbai Office:"}
             </p>
             <a
-              href="https://www.google.com/maps/search/?api=1&query=305+A,+Janmabhoomi+Chambers,+Ballard+Estate,+Mumbai+38"
+              href={
+                region === "global"
+                  ? "https://www.google.com/maps/search/?api=1&query=1401+21ST,+Sacramento,+CA+95811"
+                  : "https://www.google.com/maps/search/?api=1&query=305+A,+Janmabhoomi+Chambers,+Ballard+Estate,+Mumbai+38"
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="footer-address-link"
             >
-              305 A, Janmabhoomi Chambers, Ballard Estate, Mumbai-38
+              {region === "global"
+                ? "1401, 21ST, Sacramento, California, 95811"
+                : "305 A, Janmabhoomi Chambers, Ballard Estate, Mumbai-38"}
             </a>
           </div>
           <br />
@@ -184,7 +217,7 @@ const Footer = () => {
       </div>
       <div className="footer-bottom-syntiaro">
         <p style={{ letterSpacing: "2px", color: "white" }}>
-          Design and Developed By { ' ' }
+          Design and Developed By {' '}
           <a href="https://www.syntiaro.com" target="_blank" rel="noopener noreferrer" style={{ color: "white", textDecoration: "none" }}>
             SYNTIARO
           </a>{" "}

@@ -591,6 +591,31 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* CONTACT DETAILS SECTION */}
+      <section className="contactus-section contactus-details">
+        <div className="contact-details-title">
+          <h2>
+            Contact Details<span></span>
+          </h2>
+        </div>
+        <div className="contact-details-container">
+          <div className="contact-detail-item">
+            <div className="contact-icon">📧</div>
+            <div className="contact-info">
+              <h4>Email Address</h4>
+              <p><a href="mailto:info@y4d.ngo">info@y4d.ngo</a></p>
+            </div>
+          </div>
+          <div className="contact-detail-item">
+            <div className="contact-icon">📞</div>
+            <div className="contact-info">
+              <h4>Mobile Number</h4>
+              <p><a href="tel:+918282828811">+91 82828 28811</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ SECTION */}
       <section className="contactus-section contactus-faq">
         <div className="faq-title">
@@ -624,30 +649,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* CONTACT DETAILS SECTION */}
-      <section className="contactus-section contactus-details">
-        <div className="contact-details-title">
-          <h2>
-            Contact Details<span></span>
-          </h2>
-        </div>
-        <div className="contact-details-container">
-          <div className="contact-detail-item">
-            <div className="contact-icon">📧</div>
-            <div className="contact-info">
-              <h4>Email Address</h4>
-              <p><a href="mailto:random@gmail.com">random@gmail.com</a></p>
-            </div>
-          </div>
-          <div className="contact-detail-item">
-            <div className="contact-icon">📞</div>
-            <div className="contact-info">
-              <h4>Mobile Number</h4>
-              <p><a href="tel:+919876543210">+91 98765 43210</a></p>
-            </div>
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 };

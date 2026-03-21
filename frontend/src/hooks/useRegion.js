@@ -10,8 +10,24 @@ export const useRegion = () => {
     useEffect(() => {
         // Determine the current hostname
         const hostname = window.location.hostname;
+        const searchParams = new URLSearchParams(window.location.search);
+        const queryRegion = searchParams.get('region');
 
-        // In development mode, you can use local storage or an environment variable to test
+        // 1. Check query parameter first (highest priority) and persist it
+        if (queryRegion === 'global' || queryRegion === 'india') {
+            setRegion(queryRegion);
+            localStorage.setItem('userSelectedRegion', queryRegion);
+            return;
+        }
+
+        // 2. Check localStorage (persisted choice)
+        const persistedRegion = localStorage.getItem('userSelectedRegion');
+        if (persistedRegion === 'global' || persistedRegion === 'india') {
+            setRegion(persistedRegion);
+            return;
+        }
+
+        // 3. In development mode, check dev-specific key
         if (import.meta.env.DEV) {
             const devRegion = localStorage.getItem('devPublicRegion');
             if (devRegion) {
@@ -20,24 +36,18 @@ export const useRegion = () => {
             }
         }
 
-        // Determine region based on hostname
-        // You should configure these domains in your frontend config or env vars
+        // 4. Fallback: Determine region based on hostname
         const globalDomains = [
             "global.y4dinfo.org",
-            "y4d-global.netlify.app", // Example Netlify domains if applicable
-            "global.localhost" // Local testing
+            "y4d-global.netlify.app",
+            "global.localhost"
         ];
 
         const isGlobal = globalDomains.some(domain => hostname.includes(domain)) || hostname.startsWith("global.");
 
-        if (isGlobal) {
-            setRegion("global");
-        } else {
-            // By default, if it's app.y4dinfo.org or y4d.in, it's India
-            setRegion("india");
-        }
+        setRegion(isGlobal ? "global" : "india");
 
-    }, []);
+    }, [window.location.search]);
 
     return region;
 };
@@ -48,12 +58,28 @@ export const getActiveRegion = () => {
     if (typeof window === "undefined") return "india";
 
     const hostname = window.location.hostname;
+    const searchParams = new URLSearchParams(window.location.search);
+    const queryRegion = searchParams.get('region');
 
+    // 1. Check query parameter
+    if (queryRegion === 'global' || queryRegion === 'india') {
+        localStorage.setItem('userSelectedRegion', queryRegion);
+        return queryRegion;
+    }
+
+    // 2. Check localStorage
+    const persistedRegion = localStorage.getItem('userSelectedRegion');
+    if (persistedRegion === 'global' || persistedRegion === 'india') {
+        return persistedRegion;
+    }
+
+    // 3. Dev check
     if (import.meta.env.DEV) {
         const devRegion = localStorage.getItem('devPublicRegion');
         if (devRegion) return devRegion;
     }
 
+    // 4. Hostname fallback
     const globalDomains = [
         "global.y4dinfo.org",
         "global.localhost"
