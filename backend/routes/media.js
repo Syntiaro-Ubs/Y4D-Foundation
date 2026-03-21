@@ -290,12 +290,19 @@ router.post("/:type", authenticateToken, upload, async (req, res) => {
 
       case "blogs":
         const tagsJson = body.tags ? JSON.stringify(JSON.parse(body.tags)) : "[]";
+        
+        // Handle multiple images for blogs
+        const blogImages = files
+          .filter((f) => f.fieldname === "image")
+          .map((f) => f.filename);
+        
+        const blogImagesJson = JSON.stringify(blogImages);
 
         fields = mediaTables.blogs.fields.concat(["region", "last_modified_by"]);
         values = [
           body.title,
           body.content,
-          imageFile ? imageFile.filename : null,
+          blogImagesJson, // Store as JSON array
           body.author,
           tagsJson,
           body.published_date,
@@ -446,6 +453,35 @@ router.put("/:type/:id", authenticateToken, upload, async (req, res) => {
         break;
 
       case "blogs":
+        let imagesArray = [];
+        try {
+          imagesArray = JSON.parse(existing.image || "[]");
+          if (!Array.isArray(imagesArray)) {
+            imagesArray = existing.image ? [existing.image] : [];
+          }
+        } catch (e) {
+          imagesArray = existing.image ? [existing.image] : [];
+        }
+
+        // Handle existing images passed from frontend (for deletion support)
+        if (body.existing_images) {
+          const keptImages = JSON.parse(body.existing_images);
+          // Delete files that were removed
+          const removedImages = imagesArray.filter(img => !keptImages.includes(img));
+          for (const img of removedImages) {
+            const filePath = `uploads/media/blogs/${img}`;
+            await fs.unlink(filePath).catch(() => { });
+          }
+          imagesArray = keptImages;
+        }
+
+        // Add new uploaded images
+        const newImages = files
+          .filter((f) => f.fieldname === "image")
+          .map((f) => f.filename);
+        
+        imagesArray = [...imagesArray, ...newImages];
+
         updates = [
           "title = ?",
           "content = ?",
@@ -461,7 +497,7 @@ router.put("/:type/:id", authenticateToken, upload, async (req, res) => {
         values = [
           body.title,
           body.content,
-          imageFile ? imageFile.filename : existing.image,
+          JSON.stringify(imagesArray),
           body.author,
           JSON.stringify(JSON.parse(body.tags || "[]")),
           body.published_date,
@@ -538,8 +574,26 @@ router.delete("/:type/:id", authenticateToken, async (req, res) => {
     // Delete files
     for (const f of mediaTables[type].fileFields) {
       if (item[f]) {
-        const filePath = `uploads/media/${type}/${item[f]}`;
-        await fs.unlink(filePath).catch(() => { });
+        if (type === 'blogs' && f === 'image') {
+          try {
+            const images = JSON.parse(item[f]);
+            if (Array.isArray(images)) {
+              for (const img of images) {
+                const filePath = `uploads/media/${type}/${img}`;
+                await fs.unlink(filePath).catch(() => { });
+              }
+            } else {
+              const filePath = `uploads/media/${type}/${item[f]}`;
+              await fs.unlink(filePath).catch(() => { });
+            }
+          } catch (e) {
+            const filePath = `uploads/media/${type}/${item[f]}`;
+            await fs.unlink(filePath).catch(() => { });
+          }
+        } else {
+          const filePath = `uploads/media/${type}/${item[f]}`;
+          await fs.unlink(filePath).catch(() => { });
+        }
       }
     }
 
