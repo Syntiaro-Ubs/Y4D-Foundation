@@ -426,14 +426,15 @@ const Home = () => {
       {/* Partners Section */}
       <section className="Partners-section">
         {region === "global" ? (
-          <div className="global-partners-container" style={{ display: 'flex', justifyContent: 'center', gap: '40px', padding: '40px 20px', flexWrap: 'wrap' }}>
-            <h2 className="partner-title" style={{ width: '100%', textAlign: 'center', marginBottom: '20px' }}>
+          <div className="global-partners-container">
+            <h2 className="partner-title">
               Our Partners<span></span>
             </h2>
-            <div style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}>
-              <img src="/partners/global/global-partner-1.jpg" alt="Partner 1" style={{ width: '200px', height: '150px', objectFit: 'contain' }} />
-              <img src="/partners/global/global-partner-2.jpg" alt="Partner 2" style={{ width: '200px', height: '150px', objectFit: 'contain' }} />
-              <img src="/partners/global/global-partner-3.png" alt="Partner 3" style={{ width: '200px', height: '150px', objectFit: 'contain' }} />
+            <div className="global-partners-list">
+              <img src="/partners/global/global-partner-1.jpg" alt="Partner 1" />
+              <img src="/partners/global/global-partner-2.jpg" alt="Partner 2" />
+              <img src="/partners/global/global-partner-3.png" alt="Partner 3" />
+              <img src="/partners/global/smiling-rocks.png" alt="Smiling Rocks" />
             </div>
           </div>
         ) : (

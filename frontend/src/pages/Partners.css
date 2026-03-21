@@ -163,3 +163,47 @@
     max-width: 60px;
   }
 }
+
+/* Global Partners Specific Styles */
+.global-partners-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.global-partners-list {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.global-partners-list img {
+  width: 200px;
+  height: 150px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .global-partners-list {
+    gap: 20px;
+  }
+  
+  .global-partners-list img {
+    width: 140px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .global-partners-list {
+    gap: 15px;
+  }
+  
+  .global-partners-list img {
+    width: 100px;
+    height: 80px;
+  }
+}

@@ -15,6 +15,9 @@ const MediaManager = ({ mediaType, onClose }) => {
     tags: [],
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [blogImagePreviews, setBlogImagePreviews] = useState([]); // For blogs
+  const [blogSelectedFiles, setBlogSelectedFiles] = useState([]); // For new uploads
+  const [existingBlogImages, setExistingBlogImages] = useState([]); // For existing items
   const [publishOptions, setPublishOptions] = useState("immediate");
 
   // Use useApi hook for fetching items
@@ -37,8 +40,10 @@ const MediaManager = ({ mediaType, onClose }) => {
         // Add all form data
         Object.keys(formData).forEach((key) => {
           if (key === "image" && formData.image) {
-            // For image uploads (stories, events, blogs, documentaries)
-            formDataToSend.append("image", formData.image);
+            // For image uploads (stories, events, documentaries)
+            if (mediaType !== 'blogs') {
+              formDataToSend.append("image", formData.image);
+            }
           } else if (key === "file" && formData.file) {
             // For file uploads (newsletters)
             formDataToSend.append("file", formData.file);
@@ -49,10 +54,22 @@ const MediaManager = ({ mediaType, onClose }) => {
             } else {
               formDataToSend.append(key, "[]");
             }
+          } else if (key === "image" && mediaType === 'blogs') {
+            // Skip, handled below
           } else {
             formDataToSend.append(key, formData[key]);
           }
         });
+
+        // Special handling for blogs multiple images
+        if (mediaType === 'blogs') {
+          blogSelectedFiles.forEach(file => {
+            formDataToSend.append("image", file);
+          });
+          if (editingItem) {
+            formDataToSend.append("existing_images", JSON.stringify(existingBlogImages));
+          }
+        }
 
         // Handle publish options
         formDataToSend.append("publish_type", publishOptions);
@@ -78,6 +95,9 @@ const MediaManager = ({ mediaType, onClose }) => {
         setEditingItem(null);
         setFormData({ publish_type: "immediate", is_published: true, tags: [] });
         setImagePreview(null);
+        setBlogImagePreviews([]);
+        setBlogSelectedFiles([]);
+        setExistingBlogImages([]);
         setPublishOptions("immediate");
         fetchItems();
 
@@ -122,7 +142,19 @@ const MediaManager = ({ mediaType, onClose }) => {
       publish_type: item.is_published ? "immediate" : "schedule",
     });
     setPublishOptions(item.is_published ? "immediate" : "schedule");
-    if (item.image) {
+    
+    if (mediaType === 'blogs') {
+      let images = [];
+      try {
+        images = typeof item.image === 'string' ? JSON.parse(item.image) : item.image;
+        if (!Array.isArray(images)) images = item.image ? [item.image] : [];
+      } catch (e) {
+        images = item.image ? [item.image] : [];
+      }
+      setExistingBlogImages(images);
+      setBlogImagePreviews(images.map(img => `${UPLOADS_BASE}/media/blogs/${img}`));
+      setBlogSelectedFiles([]);
+    } else if (item.image) {
       setImagePreview(`${UPLOADS_BASE}/media/${mediaType}/${item.image}`);
     }
   };
@@ -167,19 +199,60 @@ const MediaManager = ({ mediaType, onClose }) => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (mediaType === "newsletters") {
-      setFormData({ ...formData, file: file });
-    } else {
-      setFormData({ ...formData, image: file });
-    }
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
+    if (mediaType === "blogs") {
+      const newFiles = [...blogSelectedFiles, ...files];
+      setBlogSelectedFiles(newFiles);
+
+      // Create previews for new files
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setBlogImagePreviews(prev => [...prev, reader.result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    } else {
+      const file = files[0];
+      if (mediaType === "newsletters") {
+        setFormData({ ...formData, file: file });
+      } else {
+        setFormData({ ...formData, image: file });
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
+  const removeBlogImage = (index) => {
+    const totalExisting = existingBlogImages.length;
+    if (index < totalExisting) {
+      // It's an existing image
+      const newExisting = [...existingBlogImages];
+      newExisting.splice(index, 1);
+      setExistingBlogImages(newExisting);
+      
+      const newPreviews = [...blogImagePreviews];
+      newPreviews.splice(index, 1);
+      setBlogImagePreviews(newPreviews);
+    } else {
+      // It's a newly selected file
+      const fileIndex = index - totalExisting;
+      const newFiles = [...blogSelectedFiles];
+      newFiles.splice(fileIndex, 1);
+      setBlogSelectedFiles(newFiles);
+
+      const newPreviews = [...blogImagePreviews];
+      newPreviews.splice(index, 1);
+      setBlogImagePreviews(newPreviews);
     }
   };
 
@@ -287,12 +360,34 @@ const MediaManager = ({ mediaType, onClose }) => {
           </div>
         ) : (
           <div className="form-group">
-            <label>Image:</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
-              <div className="image-preview">
-                <img src={imagePreview} alt="Preview" />
+            <label>{mediaType === 'blogs' ? 'Images:' : 'Image:'}</label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageChange} 
+              multiple={mediaType === 'blogs'}
+            />
+            {mediaType === 'blogs' ? (
+              <div className="blog-images-preview-container">
+                {blogImagePreviews.map((preview, idx) => (
+                  <div key={idx} className="blog-image-preview-item">
+                    <img src={preview} alt={`Preview ${idx}`} />
+                    <button 
+                      type="button" 
+                      className="remove-image-btn"
+                      onClick={() => removeBlogImage(idx)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
               </div>
+            ) : (
+              imagePreview && (
+                <div className="image-preview">
+                  <img src={imagePreview} alt="Preview" />
+                </div>
+              )
             )}
           </div>
         )}
@@ -425,7 +520,9 @@ const MediaManager = ({ mediaType, onClose }) => {
                 is_published: true,
                 tags: [],
               });
-              setImagePreview(null);
+              setBlogImagePreviews([]);
+              setBlogSelectedFiles([]);
+              setExistingBlogImages([]);
               setPublishOptions("immediate");
             }}
           >
@@ -464,7 +561,17 @@ const MediaManager = ({ mediaType, onClose }) => {
                 {item.image && (
                   <div className="item-image">
                     <img
-                      src={`${API_BASE}/uploads/media/${mediaType}/${item.image}`}
+                      src={`${API_BASE}/uploads/media/${mediaType}/${(() => {
+                        if (mediaType === 'blogs') {
+                          try {
+                            const images = typeof item.image === 'string' ? JSON.parse(item.image) : item.image;
+                            return Array.isArray(images) && images.length > 0 ? images[0] : (typeof item.image === 'string' && !item.image.startsWith('[') ? item.image : '');
+                          } catch (e) {
+                            return typeof item.image === 'string' && !item.image.startsWith('[') ? item.image : '';
+                          }
+                        }
+                        return item.image;
+                      })()}`}
                       alt={item.title}
                       onError={(e) => {
                         e.target.src = "/placeholder-image.jpg";

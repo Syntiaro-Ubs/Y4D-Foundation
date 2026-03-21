@@ -25,17 +25,31 @@ const Navbar = () => {
   };
 
   const goToGlobal = () => {
-    if (currentHostname.includes("localhost")) {
-      window.open(`http://global.localhost:${window.location.port}`, "_blank");
+    // If we are on local development or non-standard environment (like IP or Netlify preview)
+    const isProduction = currentHostname === 'y4dinfo.org' || currentHostname === 'app.y4dinfo.org' || currentHostname === 'global.y4dinfo.org';
+
+    if (!isProduction) {
+      // Stay on the same domain but add/update region query param using navigate (SPA way)
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set('region', 'global');
+      navigate(`${location.pathname}?${searchParams.toString()}`);
     } else {
+      // Standard production redirect - switch to same tab if user wants, but keeping window.open for now
+      // unless they explicitly ask for same tab on production too.
       window.open("https://global.y4dinfo.org", "_blank");
     }
   };
 
   const goToIndia = () => {
-    if (currentHostname.includes("localhost")) {
-      window.open(`http://localhost:${window.location.port}`, "_blank");
+    const isProduction = currentHostname === 'y4dinfo.org' || currentHostname === 'app.y4dinfo.org' || currentHostname === 'global.y4dinfo.org';
+
+    if (!isProduction) {
+      // Stay on the same domain but add/update region query param using navigate (SPA way)
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set('region', 'india');
+      navigate(`${location.pathname}?${searchParams.toString()}`);
     } else {
+      // Standard production redirect
       window.open("https://app.y4dinfo.org", "_blank");
     }
   };

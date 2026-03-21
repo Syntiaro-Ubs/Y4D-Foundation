@@ -128,6 +128,11 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [mediaItems, setMediaItems] = useState([]);
 
+  // Blog Multiple Image State
+  const [blogImagePreviews, setBlogImagePreviews] = useState([]);
+  const [blogSelectedFiles, setBlogSelectedFiles] = useState([]);
+  const [existingBlogImages, setExistingBlogImages] = useState([]);
+
   // Confirmation Modal Functions
   const showConfirmationModal = (
     title,
@@ -322,6 +327,15 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
     const file = e.target.files[0];
     if (file) {
       setReportForm({ ...reportForm, pdf: file });
+    }
+  };
+
+  const removeBlogImage = (index, isExisting) => {
+    if (isExisting) {
+      setExistingBlogImages(prev => prev.filter((_, i) => i !== index));
+    } else {
+      setBlogSelectedFiles(prev => prev.filter((_, i) => i !== index));
+      setBlogImagePreviews(prev => prev.filter((_, i) => i !== index));
     }
   };
 
@@ -1365,33 +1379,87 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
             </div>
           )}
 
-          {/* Show image upload for other types that need images */}
-          {["blogs", "stories", "documentaries"].includes(currentMediaType) && (
+          {/* BLOG IMAGE FIELD - Multiple upload for blogs */}
+          {currentMediaType === 'blogs' ? (
             <div className="form-group">
-              <label>
-                {currentMediaType === "documentaries"
-                  ? "Thumbnail Image:"
-                  : "Featured Image:"}
-              </label>
+              <label>Blog Images:</label>
               <input
                 type="file"
                 accept="image/*"
+                multiple
                 onChange={(e) => {
-                  const file = e.target.files[0];
-                  setMediaForm({ ...mediaForm, image: file });
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setImagePreview(reader.result);
-                  };
-                  if (file) reader.readAsDataURL(file);
+                  const files = Array.from(e.target.files);
+                  setBlogSelectedFiles(prev => [...prev, ...files]);
+
+                  files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setBlogImagePreviews(prev => [...prev, reader.result]);
+                    };
+                    reader.readAsDataURL(file);
+                  });
                 }}
               />
-              {imagePreview && (
-                <div className="image-preview">
-                  <img src={imagePreview} alt="Preview" />
+              <div className="blog-images-preview-container">
+                {/* Existing Images */}
+                {existingBlogImages.map((image, idx) => (
+                  <div key={`existing-${idx}`} className="blog-image-preview-item">
+                    <img src={`${UPLOADS_BASE}/media/blogs/${image}`} alt="Existing" />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => removeBlogImage(idx, true)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+                {/* New Previews */}
+                {blogImagePreviews.map((preview, idx) => (
+                  <div key={`new-${idx}`} className="blog-image-preview-item">
+                    <img src={preview} alt="New Preview" />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => removeBlogImage(idx, false)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Show image upload for other types that need images */}
+              {["stories", "documentaries"].includes(currentMediaType) && (
+                <div className="form-group">
+                  <label>
+                    {currentMediaType === "documentaries"
+                      ? "Thumbnail Image:"
+                      : "Featured Image:"}
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setMediaForm({ ...mediaForm, image: file });
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setImagePreview(reader.result);
+                      };
+                      if (file) reader.readAsDataURL(file);
+                    }}
+                  />
+                  {imagePreview && (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Preview" />
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
+            </>
           )}
 
           {currentMediaType === "documentaries" && (
@@ -2130,8 +2198,21 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                   {item.image && (
                     <div className="media-image-preview">
                       <img
-                        src={`${API_BASE}/uploads/media/${currentMediaType}/${item.image}`}
+                        src={`${API_BASE}/uploads/media/${currentMediaType}/${(() => {
+                          if (currentMediaType === "blogs") {
+                            try {
+                              const images = typeof item.image === "string" ? JSON.parse(item.image) : item.image;
+                              return Array.isArray(images) ? images[0] : item.image;
+                            } catch (e) {
+                              return item.image;
+                            }
+                          }
+                          return item.image;
+                        })()}`}
                         alt={item.title}
+                        onError={(e) => {
+                          e.target.src = "/placeholder-blog.jpg";
+                        }}
                       />
                     </div>
                   )}
@@ -2312,7 +2393,10 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
       }
 
       // Handle file uploads
-      if (mediaForm.image) {
+      if (currentMediaType === "blogs") {
+        blogSelectedFiles.forEach((file) => formData.append("image", file));
+        formData.append("existing_images", JSON.stringify(existingBlogImages));
+      } else if (mediaForm.image) {
         formData.append("image", mediaForm.image);
       }
 
@@ -2366,6 +2450,9 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
         location: "",
         is_active: true,
       });
+      setBlogImagePreviews([]);
+      setBlogSelectedFiles([]);
+      setExistingBlogImages([]);
       setImagePreview(null);
       fetchMediaData();
       updateUrlPath("media", "view", currentMediaType);
@@ -2405,9 +2492,20 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
     setImagePreview(null);
 
     if (item.image) {
-      setImagePreview(
-        `${UPLOADS_BASE}/media/${currentMediaType}/${item.image}`
-      );
+      if (currentMediaType === "blogs") {
+        try {
+          const images = typeof item.image === "string" ? JSON.parse(item.image) : item.image;
+          setExistingBlogImages(Array.isArray(images) ? images : [item.image]);
+        } catch (e) {
+          setExistingBlogImages([item.image]);
+        }
+        setBlogImagePreviews([]);
+        setBlogSelectedFiles([]);
+      } else {
+        setImagePreview(
+          `${UPLOADS_BASE}/media/${currentMediaType}/${item.image}`
+        );
+      }
     }
   };
 

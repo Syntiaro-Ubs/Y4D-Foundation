@@ -21,7 +21,8 @@ const RegionSelect = () => {
       <div className="region-header-wrapper">
         <h1 className="region-header">Select Dashboard Region</h1>
         <p className="region-subtitle">
-          Choose a regional context to manage exclusive campaigns, local impact data, and targeted media content.
+          Choose a regional context to manage exclusive campaigns, local impact
+          data, and targeted media content.
         </p>
       </div>
 
@@ -36,7 +37,8 @@ const RegionSelect = () => {
           </div>
           <h2 className="region-card-title">India Dashboard</h2>
           <p className="region-card-description">
-            Manage interventions, regional impact statistics, and dedicated media corner exclusively for the Y4D India portal.
+            Manage interventions, regional impact statistics, and dedicated
+            media corner exclusively for the Y4D India portal.
           </p>
           <i className="fas fa-arrow-right region-card-arrow"></i>
         </div>
@@ -51,7 +53,8 @@ const RegionSelect = () => {
           </div>
           <h2 className="region-card-title">Global Dashboard</h2>
           <p className="region-card-description">
-            Manage interventions, regional impact statistics, and dedicated media corner exclusively for the Y4D Global portal.
+            Manage interventions, regional impact statistics, and dedicated
+            media corner exclusively for the Y4D Global portal.
           </p>
           <i className="fas fa-arrow-right region-card-arrow"></i>
         </div>

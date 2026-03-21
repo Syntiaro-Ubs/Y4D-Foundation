@@ -160,7 +160,14 @@ const Blogs = () => {
                 {blog.image && (
                   <div className="blog-image">
                     <img
-                      src={`${UPLOADS_BASE}/media/blogs/${blog.image}`}
+                      src={`${UPLOADS_BASE}/media/blogs/${(() => {
+                        try {
+                          const images = typeof blog.image === "string" ? JSON.parse(blog.image) : blog.image;
+                          return Array.isArray(images) ? images[0] : blog.image;
+                        } catch (e) {
+                          return blog.image;
+                        }
+                      })()}`}
                       alt={blog.title}
                       onError={(e) => {
                         e.target.src = "/placeholder-blog.jpg";

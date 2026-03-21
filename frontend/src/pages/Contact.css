@@ -760,6 +760,29 @@
   .office-title span::after {
     left: 100px;
   }
+
+  .contact-details-title {
+    font-size: 1.5rem;
+    line-height: 34px;
+    margin-bottom: 3rem;
+    margin-top: 2.5rem;
+  }
+
+  .contact-details-title::before {
+    right: 120px;
+  }
+
+  .contact-details-title::after {
+    right: 100px;
+  }
+
+  .contact-details-title span::before {
+    left: 120px;
+  }
+
+  .contact-details-title span::after {
+    left: 100px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -903,6 +926,22 @@
 
   .popup-overlay {
     top: 6%;
+  }
+
+  .contact-details-title::before {
+    display: none;
+  }
+
+  .contact-details-title::after {
+    display: none;
+  }
+
+  .contact-details-title span::before {
+    display: none;
+  }
+
+  .contact-details-title span::after {
+    display: none;
   }
 }
 
