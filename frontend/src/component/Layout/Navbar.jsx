@@ -41,7 +41,7 @@ const Navbar = () => {
   };
 
   const goToIndia = () => {
-    window.open("https://app.y4dinfo.org/", "_blank");
+    window.open("https://www.y4d.ngo/", "_blank");
   };
 
   useEffect(() => {
