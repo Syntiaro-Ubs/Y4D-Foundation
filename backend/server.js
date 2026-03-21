@@ -95,6 +95,8 @@ const corsOptions = {
     }
 
     const allowedOrigins = [
+      "https://global.y4d.ngo",
+      "https://y4d.ngo",
       "https://app.y4dinfo.org",
       "http://localhost:3000",
       "http://localhost:5173",
