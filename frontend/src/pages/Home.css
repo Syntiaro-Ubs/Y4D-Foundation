@@ -4,7 +4,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 600px;
+  height: auto;
   /* Fixed height for desktop */
 }
 
@@ -447,7 +447,7 @@
 
 .About-container {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1250px;
   margin: 0 auto;
   padding: 0 15px 25px 15px;
   text-align: center;
@@ -586,7 +586,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 40px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -746,7 +746,7 @@
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -759,7 +759,7 @@
 
 .accreditations-container {
   background: #f7f7f7;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0px auto;
   padding: 40px 20px;
 }
@@ -823,14 +823,14 @@
 
 .our-reach-container {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 15px;
 }
 
 .Interventions-container {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 15px;
   text-align: center;
@@ -847,7 +847,7 @@
 
 .SDGs-container {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 15px;
   text-align: center;
@@ -859,7 +859,7 @@
 
 .Media-container {
   width: 90%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 15px;
   text-align: center;
@@ -1551,5 +1551,14 @@ html {
 @media (max-width: 480px) {
   .hero-slider {
     height: auto;
+  }
+}
+
+/* Desktop screen banner width adjustment */
+@media (min-width: 1601px) {
+  .hero-slider {
+    max-width: 1250px;
+    margin: 0 auto;
+    overflow: hidden;
   }
 }

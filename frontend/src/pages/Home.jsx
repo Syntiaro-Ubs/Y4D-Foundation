@@ -368,7 +368,8 @@ const Home = () => {
               {
                 title: "Quality Education",
                 img: edu,
-                link: "/our-work#education",
+                link: "#",
+                // link: "/our-work#education",
               },
               {
                 title: "Livelihood",
