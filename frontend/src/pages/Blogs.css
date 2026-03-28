@@ -221,7 +221,7 @@
 .blogs-banner img,
 .blogs-banner video {
   width: 100%;
-  height: auto;
+  height: 70vh;
   object-fit: cover;
   display: block;
 }
@@ -332,5 +332,15 @@
   .blog-card {
     width: 100%;
     max-width: 380px;
+  }
+}
+
+@media (min-width: 1601px) {
+
+  .blogs-banner img,
+  .blogs-banner video {
+    max-width: 1250px;
+    margin: 0 auto;
+    overflow: hidden;
   }
 }

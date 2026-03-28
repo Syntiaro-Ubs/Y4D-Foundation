@@ -112,7 +112,7 @@ const QualityEducation = () => {
                   src={`${UPLOADS_BASE}/banners/${banner.media}`}
                   alt={`Quality Education Banner - ${banner.page}`}
                   className="qe-banner-image"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '70vh', objectFit: 'cover' }}
                 />
               ) : (
                 <video

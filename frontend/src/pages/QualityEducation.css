@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+
 }
 
 /* Image and video styling */
@@ -314,5 +314,13 @@
   .loading-banner,
   .no-banner-message {
     height: 180px;
+  }
+}
+
+@media (min-width: 1601px) {
+  .qe-banner-slider-container {
+    max-width: 1250px;
+    margin: 0 auto;
+    overflow: hidden;
   }
 }

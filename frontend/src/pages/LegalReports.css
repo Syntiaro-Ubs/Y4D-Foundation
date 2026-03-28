@@ -7,7 +7,7 @@
 
 .legal-banner img {
   width: 100%;
-  height: auto;
+  height: 70vh;
   display: block;
   border-radius: 8px;
 }
@@ -336,5 +336,13 @@ table td {
   .no-image {
     width: 120px;
     height: 120px;
+  }
+}
+
+@media (min-width: 1601px) {
+  .legal-banner {
+    max-width: 1250px;
+    margin: 0 auto;
+    overflow: hidden;
   }
 }

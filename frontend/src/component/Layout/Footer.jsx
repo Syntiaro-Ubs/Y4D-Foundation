@@ -51,20 +51,22 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="footer-column">
-            <h4>Satellite offices</h4>
-            <ul>
-              <li>
-                <a>Palghar</a>
-              </li>
-              <li>
-                <a>Washim</a>
-              </li>
-              <li>
-                <a>Chennai</a>
-              </li>
-            </ul>
-          </div>
+          {region !== "global" && (
+            <div className="footer-column">
+              <h4>Satellite offices</h4>
+              <ul>
+                <li>
+                  <a>Palghar</a>
+                </li>
+                <li>
+                  <a>Washim</a>
+                </li>
+                <li>
+                  <a>Chennai</a>
+                </li>
+              </ul>
+            </div>
+          )}
 
           <div className="footer-column">
             <h4>Media Corner</h4>
