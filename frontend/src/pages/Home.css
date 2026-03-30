@@ -73,7 +73,7 @@
   height: auto !important;
 }
 
-.hero-slider .slick-slide>div {
+.hero-slider .slick-slide > div {
   height: 100%;
 }
 
@@ -85,7 +85,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -139,7 +138,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -193,7 +191,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -247,7 +244,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -301,7 +297,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -347,7 +342,6 @@
   background: #f26722;
 }
 
-
 .no-accreditations-message {
   text-align: center;
   padding: 40px 20px;
@@ -362,8 +356,6 @@
   font-size: 16px;
 }
 
-
-
 .media-title {
   position: relative;
   text-align: center;
@@ -372,7 +364,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -657,7 +648,9 @@
   border-radius: 10px;
   background: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .intervention-card h3 {
@@ -911,8 +904,6 @@
   .SDGs-container {
     width: 86%;
   }
-
-
 
   .accreditations-container {
     width: 84%;
@@ -1183,7 +1174,6 @@
     line-height: 30px;
     margin-bottom: 2rem;
     margin-top: 0px;
-
   }
 
   .accreditations-title::before {
@@ -1226,7 +1216,6 @@
 }
 
 @media (max-width: 768px) {
-
   .hero-slider .slick-slider,
   .hero-slider .slick-list,
   .hero-slider .slick-track {
@@ -1554,11 +1543,11 @@ html {
   }
 }
 
-/* Desktop screen banner width adjustment */
 @media (min-width: 1601px) {
   .hero-slider {
-    max-width: 1250px;
-    margin: 0 auto;
-    overflow: hidden;
+    height: 70vh;
+  }
+  .slide-img {
+    height: 70vh;
   }
 }

@@ -36,7 +36,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -90,7 +89,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -144,7 +142,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -198,7 +195,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -272,7 +268,9 @@
   align-items: center;
   justify-content: flex-start;
   height: auto;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .team-card:hover {
@@ -712,8 +710,6 @@
 
 @media (min-width: 1601px) {
   .banner img {
-    max-width: 1250px;
-    margin: 0 auto;
-    overflow: hidden;
+    height: 70vh;
   }
 }

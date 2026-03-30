@@ -28,7 +28,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -288,7 +287,6 @@ table td {
   .legal-section h2 span::after {
     display: none;
   }
-
 }
 
 @media (max-width: 480px) {
@@ -300,9 +298,6 @@ table td {
     padding: 5px;
     font-size: 0.7rem;
   }
-
-
-
 }
 
 @media (max-width: 1024px) {
@@ -341,8 +336,9 @@ table td {
 
 @media (min-width: 1601px) {
   .legal-banner {
-    max-width: 1250px;
-    margin: 0 auto;
-    overflow: hidden;
+    height: 60vh;
+  }
+  .legal-banner img {
+    height: 60vh;
   }
 }

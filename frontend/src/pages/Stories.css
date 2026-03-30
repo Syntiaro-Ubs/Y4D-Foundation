@@ -18,7 +18,6 @@
   font-weight: 600;
   color: #333;
   margin: 0px auto 30px auto;
-
 }
 
 /* Right top line */
@@ -78,14 +77,15 @@
   justify-items: center;
 }
 
-
 .st-card {
   width: 362px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
 }
@@ -307,7 +307,6 @@
 
 /* Tablet view */
 @media (max-width: 1024px) {
-
   .stories-banner img,
   .stories-banner video {
     height: auto;
@@ -321,7 +320,6 @@
 
 /* Mobile view */
 @media (max-width: 768px) {
-
   .stories-banner img,
   .stories-banner video {
     height: auto;
@@ -421,11 +419,8 @@
 }
 
 @media (min-width: 1601px) {
-
   .stories-banner img,
   .stories-banner video {
-    max-width: 1250px;
-    margin: 0 auto;
-    overflow: hidden;
+    height: 60vh;
   }
 }

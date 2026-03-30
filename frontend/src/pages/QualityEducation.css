@@ -15,7 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 /* Image and video styling */
@@ -39,7 +38,6 @@
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-
   .qe-banner-image,
   .qe-banner-video {
     height: 500px;
@@ -47,7 +45,6 @@
 }
 
 @media (max-width: 768px) {
-
   .qe-banner-image,
   .qe-banner-video {
     height: 400px;
@@ -55,7 +52,6 @@
 }
 
 @media (max-width: 480px) {
-
   .qe-banner-image,
   .qe-banner-video {
     height: 300px;
@@ -246,7 +242,6 @@
 
 /* Responsive adjustments for banner */
 @media (max-width: 1024px) {
-
   .qe-banner-image,
   .qe-banner-video {
     max-height: 400px;
@@ -259,7 +254,6 @@
 }
 
 @media (max-width: 768px) {
-
   .qe-banner-image,
   .qe-banner-video {
     max-height: 300px;
@@ -277,10 +271,7 @@
   }
 
   .qe-title::before {
-
     display: none;
-
-
   }
 
   /* Right bottom line */
@@ -291,7 +282,6 @@
   /* Left side */
   .qe-title span::before {
     display: none;
-
   }
 
   .qe-title span::after {
@@ -305,7 +295,6 @@
 }
 
 @media (max-width: 480px) {
-
   .qe-banner-image,
   .qe-banner-video {
     max-height: 250px;
@@ -319,8 +308,6 @@
 
 @media (min-width: 1601px) {
   .qe-banner-slider-container {
-    max-width: 1250px;
-    margin: 0 auto;
-    overflow: hidden;
+    height: 70vh;
   }
 }

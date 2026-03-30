@@ -63,7 +63,7 @@
   padding: 0 20px;
 }
 
-.story-section>.story-tab {
+.story-section > .story-tab {
   background: #fefc00;
   display: inline-block;
   font-size: 20px;
@@ -238,14 +238,13 @@
   .pyramid-image {
     margin-bottom: 20px;
   }
-
-
 }
 
 @media (min-width: 1601px) {
+  .story-banner img {
+    height: 60vh;
+  }
   .story-banner {
-    max-width: 1250px;
-    margin: 0 auto;
-    overflow: hidden;
+    height: 60vh;
   }
 }
