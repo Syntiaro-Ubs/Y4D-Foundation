@@ -502,3 +502,52 @@
     font-size: 14px;
   }
 }
+
+/* Global Education Side-by-Side Layout */
+.global-education-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.global-education-container .work-image {
+  flex: 0 0 330px; /* Fixed width for logo */
+}
+
+.global-education-container .work-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin-left: 0;
+}
+
+.global-education-container .no-margin-padding {
+  flex: 1; /* Take remaining space */
+  margin: 0 !important;
+  height: auto !important;
+}
+
+/* Mobile stacking for global layout */
+@media (max-width: 991px) {
+  .global-education-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .global-education-container .work-image {
+    flex: 0 0 auto;
+    margin-bottom: 20px;
+  }
+  
+  .global-education-container .work-image img {
+    max-width: 250px;
+  }
+}
+

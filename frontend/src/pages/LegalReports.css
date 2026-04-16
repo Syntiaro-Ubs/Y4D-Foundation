@@ -336,9 +336,9 @@ table td {
 
 @media (min-width: 1601px) {
   .legal-banner {
-    height: 60vh;
+    height: 50vh;
   }
   .legal-banner img {
-    height: 60vh;
+    height: 50vh;
   }
 }
