@@ -432,10 +432,9 @@ const Home = () => {
               Our Partners<span></span>
             </h2>
             <div className="global-partners-list">
-              <img src="/partners/global/global-partner-1.jpg" alt="Partner 1" />
-              <img src="/partners/global/global-partner-2.jpg" alt="Partner 2" />
-              <img src="/partners/global/global-partner-3.png" alt="Partner 3" />
-              <img src="/partners/global/smiling-rocks.png" alt="Smiling Rocks" />
+              <img src="/partners/partner-pink-cycle.png" alt="Pink Cycle EmpowerHer Initiative" />
+              <img src="/partners/partner-smart-education.png" alt="Smart Education" />
+              <img src="/partners/partner-trip.jpg" alt="TRIP - Terimbere Rural Integrated Partnership" />
             </div>
           </div>
         ) : (
