@@ -38,6 +38,7 @@ export const useRegion = () => {
 
         // 4. Fallback: Determine region based on hostname
         const globalDomains = [
+            "global.y4d.ngo",
             "global.y4dinfo.org",
             "y4d-global.netlify.app",
             "global.localhost"
@@ -81,6 +82,7 @@ export const getActiveRegion = () => {
 
     // 4. Hostname fallback
     const globalDomains = [
+        "global.y4d.ngo",
         "global.y4dinfo.org",
         "global.localhost"
     ];

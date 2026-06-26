@@ -25,23 +25,11 @@ const Navbar = () => {
   };
 
   const goToGlobal = () => {
-    // If we are on local development or non-standard environment (like IP or Netlify preview)
-    const isProduction = currentHostname === 'y4dinfo.org' || currentHostname === 'app.y4dinfo.org' || currentHostname === 'global.y4dinfo.org';
-
-    if (!isProduction) {
-      // Stay on the same domain but add/update region query param using navigate (SPA way)
-      const searchParams = new URLSearchParams(location.search);
-      searchParams.set('region', 'global');
-      navigate(`${location.pathname}?${searchParams.toString()}`);
-    } else {
-      // Standard production redirect - switch to same tab if user wants, but keeping window.open for now
-      // unless they explicitly ask for same tab on production too.
-      window.open("https://global.y4dinfo.org", "_blank");
-    }
+    window.open("https://global.y4d.ngo/", "_blank");
   };
 
   const goToIndia = () => {
-    const isProduction = currentHostname === 'y4dinfo.org' || currentHostname === 'app.y4dinfo.org' || currentHostname === 'global.y4dinfo.org';
+    const isProduction = currentHostname === 'y4dinfo.org' || currentHostname === 'app.y4dinfo.org' || currentHostname === 'global.y4dinfo.org' || currentHostname === 'y4d.ngo' || currentHostname === 'www.y4d.ngo' || currentHostname === 'global.y4d.ngo';
 
     if (!isProduction) {
       // Stay on the same domain but add/update region query param using navigate (SPA way)
@@ -50,7 +38,7 @@ const Navbar = () => {
       navigate(`${location.pathname}?${searchParams.toString()}`);
     } else {
       // Standard production redirect
-      window.open("https://app.y4dinfo.org", "_blank");
+      window.open("https://y4d.ngo/", "_blank");
     }
   };
 
