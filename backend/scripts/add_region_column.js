@@ -28,7 +28,8 @@ const tables = [
     // Other dynamic sections
     'impact_data',
     'careers',
-    'reports'
+    'reports',
+    'accreditations'
 ];
 
 async function runMigration() {

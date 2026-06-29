@@ -2,6 +2,9 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const db = require('../config/database');
+const { authenticateToken, requireRole } = require('../middleware/auth');
+const { uploadLimiter, adminLimiter } = require('../middleware/rateLimiter');
+const { imageFileFilter, IMAGE_MAX_SIZE } = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -16,14 +19,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: function (req, file, cb) {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'), false);
-    }
-  }
+  limits: { fileSize: IMAGE_MAX_SIZE },
+  fileFilter: imageFileFilter,
 });
 
 // Get all mentors
@@ -97,7 +94,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create mentor
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload.single('image'), async (req, res) => {
   try {
     const { name, position, bio, social_links, region } = req.body;
     const image = req.file ? req.file.filename : null;
@@ -150,7 +147,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 });
 
 // Update mentor
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const { name, position, bio, social_links, region } = req.body;
@@ -218,7 +215,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 });
 
 // Delete mentor
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
   try {
     const { id } = req.params;
 

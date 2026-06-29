@@ -10,7 +10,7 @@ import "./LoginPage.css";
 import logo from "../../assets/landing_logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 
-const LoginPage = ({ onLogin, onAdminLogin }) => {
+const LoginPage = ({ onLogin }) => {
   const [showRegistration, setShowRegistration] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [loginData, setLoginData] = useState({ username: "", password: "" });
@@ -49,11 +49,6 @@ const LoginPage = ({ onLogin, onAdminLogin }) => {
         throw error; // Re-throw to let useLoadingState handle it
       }
     });
-  };
-
-  const handleAdminLogin = () => {
-    // This would open admin-specific login modal or redirect
-    onAdminLogin();
   };
 
   // Toggle password visibility

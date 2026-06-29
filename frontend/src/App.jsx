@@ -193,10 +193,6 @@ function AppContent({
                       setCurrentUser(user);
                       setIsAuthenticated(true);
                     }}
-                    onAdminLogin={() => {
-                      setCurrentUser({ role: "admin" });
-                      setIsAuthenticated(true);
-                    }}
                   />
                 )
               }
@@ -214,10 +210,6 @@ function AppContent({
                   <LoginPage
                     onLogin={(user) => {
                       setCurrentUser(user);
-                      setIsAuthenticated(true);
-                    }}
-                    onAdminLogin={() => {
-                      setCurrentUser({ role: "admin" });
                       setIsAuthenticated(true);
                     }}
                   />

@@ -6,6 +6,7 @@ const { body, validationResult } = require("express-validator");
 const db = require("../config/database");
 const router = express.Router();
 const { sendDonationMail } = require("../services/donationMail");
+const { publicLimiter } = require("../middleware/rateLimiter");
 /* Razorpay Instance (Secure)
  * Use backend-only environment variables (do NOT expose secret to frontend)
  */
@@ -57,6 +58,7 @@ if (!CORP_MAIL || !CORP_MAIL_PASSWORD) {
 ----------------------------- */
 router.post(
   "/create-order",
+  publicLimiter,
   [
     body("amount")
       .trim()
@@ -179,6 +181,7 @@ router.post(
 
 router.post(
   "/verify-payment",
+  publicLimiter,
   [
     body("razorpay_payment_id")
       .trim()

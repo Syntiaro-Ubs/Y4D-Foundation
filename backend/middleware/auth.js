@@ -2,8 +2,7 @@ const jwt = require("jsonwebtoken");
 const db = require("../config/database");
 const consoleLogger = require("../utils/logger");
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || "your_fallback_secret_here_change_in_production";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 /**
  * Middleware: Authenticate JWT token and check user status

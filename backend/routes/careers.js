@@ -4,6 +4,9 @@ const nodemailer = require("nodemailer");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { authenticateToken, requireRole } = require("../middleware/auth");
+const { uploadLimiter, adminLimiter, publicLimiter } = require("../middleware/rateLimiter");
+const { imageAndPdfFileFilter, PDF_MAX_SIZE } = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -24,13 +27,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype === "application/pdf") {
-      cb(null, true);
-    } else {
-      cb(new Error("Only PDF files are allowed"));
-    }
-  },
+  limits: { fileSize: PDF_MAX_SIZE },
+  fileFilter: imageAndPdfFileFilter,
 });
 // CAREERS CRUD 
 router.get("/", async (req, res) => {
@@ -89,7 +87,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create career
-router.post("/", async (req, res) => {
+router.post("/", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
   try {
     const { title, description, requirements, location, type, region } = req.body;
     const careerRegion = region || 'both';
@@ -118,7 +116,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update career
-router.put("/:id", async (req, res) => {
+router.put("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, requirements, location, type, is_active, region } =
@@ -140,7 +138,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete career
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
   try {
     const [result] = await db.query("DELETE FROM careers WHERE id = ?", [
       req.params.id,
@@ -154,7 +152,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //  APPLY FOR JOB 
-router.post("/apply", upload.single("resume"), async (req, res) => {
+router.post("/apply", publicLimiter, uploadLimiter, upload.single("resume"), async (req, res) => {
   try {
     const { name, email, phone, message, careerId } = req.body;
     const resumeFile = req.file;
@@ -175,8 +173,10 @@ router.post("/apply", upload.single("resume"), async (req, res) => {
       },
     });
 
+    const smtpFrom = process.env.SMTP_FROM || process.env.HR_EMAIL;
     const mailOptions = {
-      from: email,
+      from: smtpFrom,
+      replyTo: email,
       to: process.env.OWNER_EMAIL,
       subject: `Job Application for ${career.title}`,
       html: `

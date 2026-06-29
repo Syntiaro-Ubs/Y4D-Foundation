@@ -1,10 +1,13 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const xss = require("xss");
 const db = require("../config/database");
 const logger = require("../services/logger");
 const consoleLogger = require("../utils/logger");
 const { authLimiter } = require("../middleware/rateLimiter");
+const { JWT_SECRET } = require("../middleware/auth");
 const {
   sendError,
   sendSuccess,
@@ -14,6 +17,8 @@ const {
 const {
   validateLogin,
   validateRegistration,
+  validatePasswordResetRequest,
+  validatePasswordReset,
 } = require("../middleware/validation");
 
 const router = express.Router();
@@ -138,7 +143,7 @@ router.post("/login", authLimiter, validateLogin, async (req, res) => {
     // Create token
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
-      process.env.JWT_SECRET || "your_jwt_secret_here",
+      JWT_SECRET,
       { expiresIn: "24h" }
     );
 
@@ -195,7 +200,7 @@ router.post(
   authLimiter,
   validateRegistration,
   async (req, res) => {
-    const { username, email, password, role } = req.body;
+    const { username, email, password } = req.body;
 
     try {
       const checkQuery = "SELECT id FROM users WHERE username = ? OR email = ?";
@@ -206,7 +211,7 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      const userRole = role || "viewer";
+      const userRole = "viewer";
 
       const insertQuery =
         "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
@@ -242,10 +247,7 @@ router.get("/verify", async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "your_jwt_secret_here"
-    );
+    const decoded = jwt.verify(token, JWT_SECRET);
 
     const query =
       'SELECT id, username, email, role, status FROM users WHERE id = ? AND status = "approved"';
@@ -265,7 +267,7 @@ router.get("/verify", async (req, res) => {
 // ===============================
 // PASSWORD RESET REQUEST (Send OTP)
 // ===============================
-router.post("/request-password-reset", authLimiter, async (req, res) => {
+router.post("/request-password-reset", authLimiter, validatePasswordResetRequest, async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -292,7 +294,7 @@ router.post("/request-password-reset", authLimiter, async (req, res) => {
     }
 
     // Generate reset token (6-digit OTP)
-    const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+    const resetToken = crypto.randomInt(100000, 999999).toString();
     const tokenExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
 
     // Store reset token in database
@@ -380,7 +382,7 @@ router.post("/verify-reset-token", authLimiter, async (req, res) => {
 // ===============================
 // In routes/auth.js, update the reset-password endpoint:
 
-router.post("/reset-password", authLimiter, async (req, res) => {
+router.post("/reset-password", authLimiter, validatePasswordReset, async (req, res) => {
   const { email, token, newPassword } = req.body;
 
   try {
@@ -492,7 +494,7 @@ const sendResetEmail = async (email, username, token) => {
           <div style="padding: 30px; background-color: #f9f9f9;">
             <h2 style="color: #333;">Password Reset Request</h2>
             
-            <p>Hello ${username},</p>
+            <p>Hello ${xss(username)},</p>
             
             <p>We received a request to reset your password for your Y4D Foundation account.</p>
             

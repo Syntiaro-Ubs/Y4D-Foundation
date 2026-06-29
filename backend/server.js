@@ -4,6 +4,7 @@
 
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
@@ -18,6 +19,7 @@ const consoleLogger = require("./utils/logger");
 // Import database and middleware
 const db = require("./config/database");
 const { requestLogger, errorLogger } = require("./middleware/logger");
+const { apiLimiter } = require("./middleware/rateLimiter");
 const logger = require("./services/logger");
 
 // Import LinkedIn Route
@@ -61,6 +63,9 @@ ensureUploadDirs();
 // Initialize app
 const app = express();
 
+// Security headers
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+
 // Proxy trust
 app.set("trust proxy", true);
 
@@ -85,36 +90,52 @@ app.use((req, res, next) => {
 });
 
 // =============================================================
-//  CORS FIX — MOVED HERE BEFORE ALL ROUTES 🚀
+//  CORS — uses ALLOWED_ORIGINS env var
 // =============================================================
+function buildAllowedOrigins() {
+  const fromEnv = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  const devDefaults = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://global.localhost:5173",
+    "http://global.localhost:5174",
+    "http://127.0.0.1:3000",
+  ];
+
+  const origins = isProduction()
+    ? [...fromEnv]
+    : [...new Set([...fromEnv, ...devDefaults])];
+
+  const apiUrl = process.env.API_BASE_URL || "";
+  if (apiUrl) {
+    try {
+      const url = new URL(apiUrl);
+      const apiOrigin = `${url.protocol}//${url.host}`.toLowerCase();
+      if (!origins.includes(apiOrigin)) {
+        origins.push(apiOrigin);
+      }
+    } catch { }
+  }
+
+  return origins;
+}
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin) {
-      consoleLogger.debug("CORS: Request with no origin, allowing");
+      if (isProduction()) {
+        return callback(new Error("Origin header required"));
+      }
+      consoleLogger.debug("CORS: Request with no origin, allowing (dev only)");
       return callback(null, true);
     }
 
-    const allowedOrigins = [
-      "https://app.y4dinfo.org",
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://global.localhost:5173",
-      "http://global.localhost:5174",
-      "http://127.0.0.1:3000",
-    ];
-
-    const apiUrl = process.env.API_BASE_URL || "";
-    if (apiUrl) {
-      try {
-        const url = new URL(apiUrl);
-        const apiOrigin = `${url.protocol}//${url.host}`.toLowerCase();
-        if (!allowedOrigins.includes(apiOrigin)) {
-          allowedOrigins.push(apiOrigin);
-        }
-      } catch { }
-    }
-
+    const allowedOrigins = buildAllowedOrigins();
     const normalized = origin.toLowerCase().replace(/\/$/, "");
     const isAllowed = allowedOrigins.some(
       (o) => normalized === o.toLowerCase().replace(/\/$/, "")
@@ -129,11 +150,14 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 };
 
-app.use(cors(corsOptions)); // 👍 FIXED
+app.use(cors(corsOptions));
 
 // Body parsing middleware
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Global rate limiting
+app.use(apiLimiter);
 
 // Request Logger
 app.use(requestLogger);
@@ -159,8 +183,11 @@ app.get(["/", "/dev"], async (req, res) => {
   });
 });
 
-// Test DB
+// Test DB (disabled in production)
 app.get(["/api/test-db", "/dev/api/test-db"], async (req, res) => {
+  if (isProduction()) {
+    return res.status(404).json({ error: "Not found" });
+  }
   try {
     const [results] = await db.query("SELECT 1 + 1 AS solution");
     await logger.success("system", "DB OK");
@@ -172,7 +199,6 @@ app.get(["/api/test-db", "/dev/api/test-db"], async (req, res) => {
     await logger.error("system", "DB FAILED", error);
     res.status(500).json({
       error: "Database connection failed",
-      details: error.message,
     });
   }
 });

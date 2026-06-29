@@ -81,6 +81,7 @@
     "has-symbols": "^1.1.0",
     "has-tostringtag": "^1.0.2",
     "hasown": "^2.0.2",
+    "helmet": "^8.2.0",
     "http-errors": "^2.0.0",
     "iconv-lite": "^0.6.3",
     "ignore-by-default": "^1.0.1",
@@ -204,7 +205,6 @@
     "yaml": "^2.0.0-1",
     "z-schema": "^5.0.5"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"

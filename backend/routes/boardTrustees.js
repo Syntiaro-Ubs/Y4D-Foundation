@@ -3,6 +3,9 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const db = require("../config/database");
+const { authenticateToken, requireRole } = require("../middleware/auth");
+const { uploadLimiter, adminLimiter } = require("../middleware/rateLimiter");
+const { imageFileFilter, IMAGE_MAX_SIZE } = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -22,14 +25,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: function (req, file, cb) {
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only image files are allowed!"), false);
-    }
-  },
+  limits: { fileSize: IMAGE_MAX_SIZE },
+  fileFilter: imageFileFilter,
 });
 
 const handleMulterError = (err, req, res, next) => {
@@ -124,6 +121,9 @@ router.get("/:id", async (req, res) => {
 // Create trustee
 router.post(
   "/",
+  authenticateToken,
+  requireRole(["super_admin", "admin"]),
+  uploadLimiter,
   upload.single("image"),
   handleMulterError,
   async (req, res) => {
@@ -197,6 +197,9 @@ router.post(
 // Update trustee
 router.put(
   "/:id",
+  authenticateToken,
+  requireRole(["super_admin", "admin"]),
+  uploadLimiter,
   upload.single("image"),
   handleMulterError,
   async (req, res) => {
@@ -294,7 +297,7 @@ router.put(
 );
 
 // Delete trustee
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
   try {
     const { id } = req.params;
 

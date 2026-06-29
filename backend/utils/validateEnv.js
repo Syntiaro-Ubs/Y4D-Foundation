@@ -19,7 +19,7 @@ const optionalEnvVars = {
   PORT: { default: '5000', type: 'number' },
   NODE_ENV: { default: 'development', type: 'string' },
   API_BASE_URL: { default: 'http://localhost:5000', type: 'string' },
-  ALLOWED_ORIGINS: { default: 'http://localhost:3000,http://localhost:5173', type: 'string' }
+  ALLOWED_ORIGINS: { default: 'http://localhost:3000,http://localhost:5173,https://y4dindia.syntiaro.com,https://india.y4d.ngo', type: 'string' }
 };
 
 /**
