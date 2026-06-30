@@ -1,13 +1,13 @@
+// routes/linkedin.js
 const express = require("express");
 const axios = require("axios");
-const { publicLimiter } = require("../middleware/rateLimiter");
 
 const router = express.Router();
 
 const LINKEDIN_ACCESS_TOKEN = process.env.LINKEDIN_ACCESS_TOKEN;
 const ORGANIZATION_ID = process.env.LINKEDIN_ORGANIZATION_ID;
 
-router.get("/latest-post", publicLimiter, async (req, res) => {
+router.get("/latest-post", async (req, res) => {
   try {
     if (!LINKEDIN_ACCESS_TOKEN || !ORGANIZATION_ID) {
       return res.status(500).json({

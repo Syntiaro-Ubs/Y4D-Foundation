@@ -7,9 +7,6 @@ const path = require("path");
 const fs = require("fs");
 const { sendError, sendSuccess, sendNotFound, sendInternalError } = require("../utils/response");
 const consoleLogger = require("../utils/logger");
-const { authenticateToken, requireRole } = require("../middleware/auth");
-const { uploadLimiter, adminLimiter } = require("../middleware/rateLimiter");
-const { imageAndVideoFileFilter, IMAGE_MAX_SIZE } = require("../middleware/upload");
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -26,11 +23,22 @@ const storage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype.startsWith("image/") ||
+    file.mimetype.startsWith("video/")
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image and video files are allowed!"), false);
+  }
+};
+
 const upload = multer({
   storage: storage,
-  fileFilter: imageAndVideoFileFilter,
+  fileFilter: fileFilter,
   limits: {
-    fileSize: 50 * 1024 * 1024,
+    fileSize: 50 * 1024 * 1024, // 50MB limit for videos
   },
 });
 
@@ -245,7 +253,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST new banner
-router.post("/", authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload.array("media"), async (req, res) => {
+router.post("/", upload.array("media"), async (req, res) => {
   try {
     console.log("➕ Creating new banner(s)");
 
@@ -345,7 +353,7 @@ router.post("/", authenticateToken, requireRole(["super_admin", "admin"]), uploa
 });
 
 // PUT update banner
-router.put("/:id", authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload.single("media"), async (req, res) => {
+router.put("/:id", upload.single("media"), async (req, res) => {
   try {
     const { id } = req.params;
     const { media_type, page, section, category, is_active, modified_by_id } =
@@ -505,7 +513,7 @@ router.put("/:id", authenticateToken, requireRole(["super_admin", "admin"]), upl
 });
 
 // DELETE banner
-router.delete("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`🗑️ Deleting banner with ID: ${id}`);

@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const db = require("../config/database");
 const fs = require("fs").promises;
-const { authenticateToken: auth, requireRole } = require("../middleware/auth");
+const { authenticateToken: auth } = require("../middleware/auth");
 const consoleLogger = require("../utils/logger");
 const { publicLimiter, adminLimiter, uploadLimiter } = require("../middleware/rateLimiter");
 const { sendError, sendSuccess, sendNotFound, sendInternalError } = require("../utils/response");
@@ -195,7 +195,7 @@ router.get("/published/:category/:id", publicLimiter, validateCategory, validate
 /* ------------------------------------------------------------------
    ADMIN: Get all items for a category (filtered by role)
    ------------------------------------------------------------------ */
-router.get("/admin/:category", auth, requireRole(["super_admin", "admin"]), adminLimiter, validateCategory, async (req, res) => {
+router.get("/admin/:category", auth, adminLimiter, validateCategory, async (req, res) => {
   const { category } = req.params;
   const { region } = req.query;
   try {
@@ -238,7 +238,7 @@ router.get("/admin/:category", auth, requireRole(["super_admin", "admin"]), admi
 /* ------------------------------------------------------------------
    ADMIN: Get single item by id (with user info)
    ------------------------------------------------------------------ */
-router.get("/admin/:category/:id", auth, requireRole(["super_admin", "admin"]), validateCategory, validateId, async (req, res) => {
+router.get("/admin/:category/:id", auth, validateCategory, validateId, async (req, res) => {
   const { category, id } = req.params;
   try {
     const columns = getSelectColumns(category, "ow");
@@ -260,7 +260,7 @@ router.get("/admin/:category/:id", auth, requireRole(["super_admin", "admin"]), 
 /* ------------------------------------------------------------------
    ADMIN: Create item
    ------------------------------------------------------------------ */
-router.post("/admin/:category", auth, requireRole(["super_admin", "admin"]), uploadLimiter, validateCategory, validateOurWorkItem, (req, res, next) => {
+router.post("/admin/:category", auth, uploadLimiter, validateCategory, validateOurWorkItem, (req, res, next) => {
   upload(req, res, function (err) {
     if (err) return sendInternalError(res, err, "File upload error");
     createItem(req, res).catch(next);
@@ -376,7 +376,7 @@ async function createItem(req, res) {
 /* ------------------------------------------------------------------
    ADMIN: Update item
    ------------------------------------------------------------------ */
-router.put("/admin/:category/:id", auth, requireRole(["super_admin", "admin"]), uploadLimiter, validateCategory, validateId, validateOurWorkItem, (req, res, next) => {
+router.put("/admin/:category/:id", auth, uploadLimiter, validateCategory, validateId, validateOurWorkItem, (req, res, next) => {
   upload(req, res, function (err) {
     if (err) return sendInternalError(res, err, "File upload error");
     updateItem(req, res).catch(next);
@@ -513,7 +513,7 @@ async function updateItem(req, res) {
 /* ------------------------------------------------------------------
    ADMIN: Delete item
    ------------------------------------------------------------------ */
-router.delete("/admin/:category/:id", auth, requireRole(["super_admin", "admin"]), adminLimiter, validateCategory, validateId, async (req, res) => {
+router.delete("/admin/:category/:id", auth, adminLimiter, validateCategory, validateId, async (req, res) => {
   const { category, id } = req.params;
   try {
     // Use explicit columns — include file-related fields so we can safely remove files
@@ -579,7 +579,7 @@ router.delete("/admin/:category/:id", auth, requireRole(["super_admin", "admin"]
 /* ------------------------------------------------------------------
    ADMIN: Toggle active status
    ------------------------------------------------------------------ */
-router.patch("/admin/:category/:id/status", auth, requireRole(["super_admin", "admin"]), adminLimiter, validateCategory, validateId, validateStatusUpdate, async (req, res) => {
+router.patch("/admin/:category/:id/status", auth, adminLimiter, validateCategory, validateId, validateStatusUpdate, async (req, res) => {
   const { category, id } = req.params;
   const { is_active } = req.body;
 
@@ -600,7 +600,7 @@ router.patch("/admin/:category/:id/status", auth, requireRole(["super_admin", "a
 /* ------------------------------------------------------------------
    ADMIN: Update display order
    ------------------------------------------------------------------ */
-router.patch("/admin/:category/:id/order", auth, requireRole(["super_admin", "admin"]), adminLimiter, validateCategory, validateId, validateDisplayOrder, async (req, res) => {
+router.patch("/admin/:category/:id/order", auth, adminLimiter, validateCategory, validateId, validateDisplayOrder, async (req, res) => {
   const { category, id } = req.params;
   const { display_order } = req.body;
 
@@ -621,7 +621,7 @@ router.patch("/admin/:category/:id/order", auth, requireRole(["super_admin", "ad
 /* ------------------------------------------------------------------
    ADMIN: Stats for a category (total, active, inactive, recent activity)
    ------------------------------------------------------------------ */
-router.get("/admin/stats/:category", auth, requireRole(["super_admin", "admin"]), adminLimiter, validateCategory, async (req, res) => {
+router.get("/admin/stats/:category", auth, adminLimiter, validateCategory, async (req, res) => {
   const { category } = req.params;
   try {
     const totalQuery = `SELECT COUNT(*) as total FROM ${category}`;
@@ -654,7 +654,7 @@ router.get("/admin/stats/:category", auth, requireRole(["super_admin", "admin"])
 /* ------------------------------------------------------------------
    ADMIN: Aggregate stats across categories
    ------------------------------------------------------------------ */
-router.get("/admin/categories/stats", auth, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.get("/admin/categories/stats", auth, adminLimiter, async (req, res) => {
   try {
     const stats = {};
     for (const category of Object.keys(ourWorkTables)) {

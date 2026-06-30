@@ -4,9 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const db = require("../config/database");
 const fs = require("fs").promises;
-const { authenticateToken, requireRole } = require("../middleware/auth");
-const { uploadLimiter, adminLimiter } = require("../middleware/rateLimiter");
-const { imageAndVideoFileFilter } = require("../middleware/upload");
+const { authenticateToken } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -106,8 +104,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 },
-  fileFilter: imageAndVideoFileFilter,
+  limits: { fileSize: 50 * 1024 * 1024 }
 }).any();
 
 // --------------------------------------------------
@@ -148,7 +145,7 @@ router.get("/published/:type", async (req, res) => {
 // --------------------------------------------------
 //   GET ALL ITEMS — ADMIN
 // --------------------------------------------------
-router.get("/:type", authenticateToken, requireRole(["super_admin", "admin"]), async (req, res) => {
+router.get("/:type", authenticateToken, async (req, res) => {
   const { type } = req.params;
   const { region } = req.query;
   if (!isValidMediaType(type)) return res.status(400).json({ error: "Invalid media type" });
@@ -225,7 +222,7 @@ router.get("/:type/:id", async (req, res) => {
 // --------------------------------------------------
 //   CREATE ITEM
 // --------------------------------------------------
-router.post("/:type", authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload, async (req, res) => {
+router.post("/:type", authenticateToken, upload, async (req, res) => {
   const { type } = req.params;
 
   if (!isValidMediaType(type))
@@ -353,7 +350,7 @@ router.post("/:type", authenticateToken, requireRole(["super_admin", "admin"]), 
 // --------------------------------------------------
 //   UPDATE ITEM
 // --------------------------------------------------
-router.put("/:type/:id", authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload, async (req, res) => {
+router.put("/:type/:id", authenticateToken, upload, async (req, res) => {
   const { type, id } = req.params;
   if (!isValidMediaType(type)) return res.status(400).json({ error: "Invalid media type" });
 
@@ -556,7 +553,7 @@ router.put("/:type/:id", authenticateToken, requireRole(["super_admin", "admin"]
 // --------------------------------------------------
 //   DELETE ITEM
 // --------------------------------------------------
-router.delete("/:type/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.delete("/:type/:id", authenticateToken, async (req, res) => {
   const { type, id } = req.params;
   if (!isValidMediaType(type)) return res.status(400).json({ error: "Invalid media type" });
 
@@ -614,7 +611,7 @@ router.delete("/:type/:id", authenticateToken, requireRole(["super_admin", "admi
 // --------------------------------------------------
 //   PUBLISH / UNPUBLISH
 // --------------------------------------------------
-router.patch("/:type/:id/publish", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.patch("/:type/:id/publish", authenticateToken, async (req, res) => {
   const { type, id } = req.params;
   const { is_published } = req.body;
 
@@ -675,7 +672,7 @@ router.get("/scheduled/:type", async (req, res) => {
 // --------------------------------------------------
 //   PUBLISH ALL SCHEDULED ITEMS
 // --------------------------------------------------
-router.post("/publish-scheduled", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.post("/publish-scheduled", authenticateToken, async (req, res) => {
   try {
     const now = new Date().toISOString().slice(0, 19).replace("T", " ");
     let count = 0;

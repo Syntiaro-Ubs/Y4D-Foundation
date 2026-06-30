@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const nodemailer = require("nodemailer");
-const xss = require("xss");
-const { publicLimiter } = require("../middleware/rateLimiter");
+const xss = require("xss"); // Prevent injected HTML/script
 
 require("dotenv").config();
 
@@ -13,7 +12,6 @@ const HR_EMAIL = process.env.HR_EMAIL;
 const HR_EMAIL_PASSWORD = process.env.HR_EMAIL_PASSWORD;
 const CORP_MAIL = process.env.CORP_MAIL;
 const CORP_MAIL_PASSWORD = process.env.CORP_MAIL_PASSWORD;
-const SMTP_FROM = process.env.SMTP_FROM || HR_EMAIL;
 
 if (!HR_EMAIL || !HR_EMAIL_PASSWORD) {
   console.error("❌ ERROR: HR_EMAIL or HR_EMAIL_PASSWORD missing in environment");
@@ -63,7 +61,7 @@ const clean = (value) => (value ? xss(value.trim()) : "");
 // --------------------------------------------------
 // CORPORATE PARTNERSHIP FORM
 // --------------------------------------------------
-router.post("/corporate-partnership", publicLimiter, async (req, res) => {
+router.post("/corporate-partnership", async (req, res) => {
   const companyName = clean(req.body.companyName);
   const email = clean(req.body.email);
   const contact = clean(req.body.contact);
@@ -78,8 +76,7 @@ router.post("/corporate-partnership", publicLimiter, async (req, res) => {
 
   return sendMailSafe(
     {
-      from: SMTP_FROM,
-      replyTo: email,
+      from: email,
       to: CORP_MAIL,
       subject: "New Corporate Partnership Submission",
       html: `
@@ -97,7 +94,7 @@ router.post("/corporate-partnership", publicLimiter, async (req, res) => {
 // --------------------------------------------------
 // INTERNSHIP FORM
 // --------------------------------------------------
-router.post("/internship", publicLimiter, async (req, res) => {
+router.post("/internship", async (req, res) => {
   const fullName = clean(req.body.fullName);
   const email = clean(req.body.email);
   const phone = clean(req.body.phone);
@@ -113,8 +110,7 @@ router.post("/internship", publicLimiter, async (req, res) => {
 
   return sendMailSafe(
     {
-      from: SMTP_FROM,
-      replyTo: email,
+      from: email,
       to: HR_EMAIL,
       subject: "New Internship Application",
       html: `
@@ -133,7 +129,7 @@ router.post("/internship", publicLimiter, async (req, res) => {
 // --------------------------------------------------
 // VOLUNTEER FORM
 // --------------------------------------------------
-router.post("/volunteer", publicLimiter, async (req, res) => {
+router.post("/volunteer", async (req, res) => {
   const fullName = clean(req.body.fullName);
   const email = clean(req.body.email);
   const phone = clean(req.body.phone);
@@ -148,8 +144,7 @@ router.post("/volunteer", publicLimiter, async (req, res) => {
 
   return sendMailSafe(
     {
-      from: SMTP_FROM,
-      replyTo: email,
+      from: email,
       to: HR_EMAIL,
       subject: "New Volunteer Registration",
       html: `
@@ -167,7 +162,7 @@ router.post("/volunteer", publicLimiter, async (req, res) => {
 // --------------------------------------------------
 // GENERAL ENQUIRY FORM
 // --------------------------------------------------
-router.post("/enquiry", publicLimiter, async (req, res) => {
+router.post("/enquiry", async (req, res) => {
   const firstName = clean(req.body.firstName);
   const lastName = clean(req.body.lastName);
   const email = clean(req.body.email);
@@ -183,8 +178,7 @@ router.post("/enquiry", publicLimiter, async (req, res) => {
 
   return sendMailSafe(
     {
-      from: SMTP_FROM,
-      replyTo: email,
+      from: email,
       to: HR_EMAIL,
       subject: "New General Enquiry",
       html: `

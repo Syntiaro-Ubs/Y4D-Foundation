@@ -4,9 +4,6 @@ const nodemailer = require("nodemailer");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { authenticateToken, requireRole } = require("../middleware/auth");
-const { uploadLimiter, adminLimiter, publicLimiter } = require("../middleware/rateLimiter");
-const { imageAndPdfFileFilter, PDF_MAX_SIZE } = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -27,8 +24,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: PDF_MAX_SIZE },
-  fileFilter: imageAndPdfFileFilter,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === "application/pdf") {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PDF files are allowed"));
+    }
+  },
 });
 // CAREERS CRUD 
 router.get("/", async (req, res) => {
@@ -87,7 +89,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create career
-router.post("/", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { title, description, requirements, location, type, region } = req.body;
     const careerRegion = region || 'both';
@@ -116,7 +118,7 @@ router.post("/", authenticateToken, requireRole(["super_admin", "admin"]), admin
 });
 
 // Update career
-router.put("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, requirements, location, type, is_active, region } =
@@ -138,7 +140,7 @@ router.put("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adm
 });
 
 // Delete career
-router.delete("/:id", authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const [result] = await db.query("DELETE FROM careers WHERE id = ?", [
       req.params.id,
@@ -152,7 +154,7 @@ router.delete("/:id", authenticateToken, requireRole(["super_admin", "admin"]), 
 });
 
 //  APPLY FOR JOB 
-router.post("/apply", publicLimiter, uploadLimiter, upload.single("resume"), async (req, res) => {
+router.post("/apply", upload.single("resume"), async (req, res) => {
   try {
     const { name, email, phone, message, careerId } = req.body;
     const resumeFile = req.file;
@@ -173,10 +175,8 @@ router.post("/apply", publicLimiter, uploadLimiter, upload.single("resume"), asy
       },
     });
 
-    const smtpFrom = process.env.SMTP_FROM || process.env.HR_EMAIL;
     const mailOptions = {
-      from: smtpFrom,
-      replyTo: email,
+      from: email,
       to: process.env.OWNER_EMAIL,
       subject: `Job Application for ${career.title}`,
       html: `

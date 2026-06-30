@@ -155,6 +155,11 @@ const validateRegistration = [
       "Password must contain at least one uppercase letter, one lowercase letter, and one number"
     ),
 
+  body("role")
+    .optional()
+    .isIn(["viewer", "editor", "admin"])
+    .withMessage("Role must be one of: viewer, editor, admin"),
+
   handleValidationErrors,
 ];
 

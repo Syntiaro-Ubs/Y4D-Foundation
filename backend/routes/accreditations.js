@@ -4,10 +4,6 @@ const db = require('../config/database');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { authenticateToken, requireRole } = require('../middleware/auth');
-const { uploadLimiter, adminLimiter } = require('../middleware/rateLimiter');
-const { sendInternalError, sendNotFound } = require('../utils/response');
-const { imageFileFilter, IMAGE_MAX_SIZE } = require('../middleware/upload');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -25,8 +21,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: IMAGE_MAX_SIZE },
-  fileFilter: imageFileFilter,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  }
 });
 
 // Get all accreditations
@@ -51,7 +55,10 @@ router.get('/', async (req, res) => {
     res.json(results);
   } catch (error) {
     console.error('❌ Error fetching accreditations:', error);
-    return sendInternalError(res, error, 'Failed to fetch accreditations');
+    res.status(500).json({
+      error: 'Failed to fetch accreditations',
+      details: error.message
+    });
   }
 });
 
@@ -72,11 +79,14 @@ router.get('/:id', async (req, res) => {
     res.json(results[0]);
   } catch (error) {
     console.error('❌ Error fetching accreditation:', error);
-    return sendInternalError(res, error, 'Failed to fetch accreditation');
+    res.status(500).json({
+      error: 'Failed to fetch accreditation',
+      details: error.message
+    });
   }
 });
 
-router.post('/', authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload.single('image'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   try {
     console.log('➕ Creating new accreditation');
 
@@ -113,11 +123,16 @@ router.post('/', authenticateToken, requireRole(["super_admin", "admin"]), uploa
     });
   } catch (error) {
     console.error('❌ Error creating accreditation:', error);
-    return sendInternalError(res, error, 'Failed to create accreditation');
+    console.error('❌ SQL Error details:', error.sqlMessage);
+    res.status(500).json({
+      error: 'Failed to create accreditation',
+      details: error.message,
+      sqlMessage: error.sqlMessage
+    });
   }
 });
 
-router.put('/:id', authenticateToken, requireRole(["super_admin", "admin"]), uploadLimiter, upload.single('image'), async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, is_active, display_order, region } = req.body;
@@ -176,11 +191,16 @@ router.put('/:id', authenticateToken, requireRole(["super_admin", "admin"]), upl
     res.json({ message: 'Accreditation updated successfully' });
   } catch (error) {
     console.error('❌ Error updating accreditation:', error);
-    return sendInternalError(res, error, 'Failed to update accreditation');
+    console.error('❌ SQL Error details:', error.sqlMessage);
+    res.status(500).json({
+      error: 'Failed to update accreditation',
+      details: error.message,
+      sqlMessage: error.sqlMessage
+    });
   }
 });
 
-router.delete('/:id', authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`🗑️ Deleting accreditation with ID: ${id}`);
@@ -210,11 +230,14 @@ router.delete('/:id', authenticateToken, requireRole(["super_admin", "admin"]), 
     res.json({ message: 'Accreditation deleted successfully' });
   } catch (error) {
     console.error('❌ Error deleting accreditation:', error);
-    return sendInternalError(res, error, 'Failed to delete accreditation');
+    res.status(500).json({
+      error: 'Failed to delete accreditation',
+      details: error.message
+    });
   }
 });
 
-router.patch('/:id/toggle-status', authenticateToken, requireRole(["super_admin", "admin"]), adminLimiter, async (req, res) => {
+router.patch('/:id/toggle-status', async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`🔄 Toggling status for accreditation ID: ${id}`);
@@ -239,7 +262,10 @@ router.patch('/:id/toggle-status', authenticateToken, requireRole(["super_admin"
     });
   } catch (error) {
     console.error('❌ Error toggling accreditation status:', error);
-    return sendInternalError(res, error, 'Failed to toggle accreditation status');
+    res.status(500).json({
+      error: 'Failed to toggle accreditation status',
+      details: error.message
+    });
   }
 });
 

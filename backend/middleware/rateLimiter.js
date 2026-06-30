@@ -31,12 +31,9 @@ const authLimiter = rateLimit({
     });
   },
   skip: (req) => {
-    return (
-      process.env.NODE_ENV === "development" &&
-      process.env.ALLOW_RATE_LIMIT_BYPASS === "true" &&
-      req.query.skipRateLimit === "true"
-    );
-  },
+    // Skip rate limiting in development for testing
+    return process.env.NODE_ENV === 'development' && req.query.skipRateLimit === 'true';
+  }
 });
 
 /**
