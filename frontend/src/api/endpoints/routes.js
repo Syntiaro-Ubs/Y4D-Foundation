@@ -103,6 +103,12 @@ export const API_ROUTES = {
     BASE: '/corporate-partnership/corporate-partnership',
   },
 
+  // Partners
+  PARTNERS: {
+    BASE: '/partners',
+    BY_ID: (id) => `/partners/${id}`,
+  },
+
   // Contact
   CONTACT: {
     BASE: '/contact',

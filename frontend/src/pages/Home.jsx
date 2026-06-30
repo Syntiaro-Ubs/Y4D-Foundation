@@ -9,8 +9,9 @@ import {
   impactService,
   accreditationsService,
   bannerService,
+  partnersService,
 } from "../api/services";
-import { UPLOADS_BASE } from "../config/api";
+import { API_BASE, UPLOADS_BASE } from "../config/api";
 import logger from "../utils/logger";
 import { useRegion } from "../hooks/useRegion";
 import "slick-carousel/slick/slick.css";
@@ -43,6 +44,7 @@ const Home = () => {
   const [accreditations, setAccreditations] = useState([]);
   const [heroBanners, setHeroBanners] = useState([]);
   const [campaignBanners, setCampaignBanners] = useState([]);
+  const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [accreditationsError, setAccreditationsError] = useState(false);
   const [bannersLoading, setBannersLoading] = useState(true);
@@ -69,6 +71,7 @@ const Home = () => {
           accreditationsData,
           heroBannersData,
           campaignBannersData,
+          partnersData,
         ] = await Promise.all([
           impactService.getMentors().catch((err) => {
             logger.error("❌ Error fetching mentors:", err);
@@ -99,10 +102,15 @@ const Home = () => {
             logger.error("❌ Error fetching campaign banners:", err);
             return [];
           }),
+          partnersService.getPartners("global").catch((err) => {
+            logger.error("❌ Error fetching global partners:", err);
+            return [];
+          }),
         ]);
 
         logger.log("📊 Hero banners received:", heroBannersData);
         logger.log("📊 Campaign banners received:", campaignBannersData);
+        logger.log("📊 Global partners received:", partnersData);
 
         setTeamCount(mentorsData.length + managementData.length);
         setReportsCount(reportsData.length);
@@ -110,6 +118,7 @@ const Home = () => {
         setAccreditations(accreditationsData || []);
         setHeroBanners(heroBannersData);
         setCampaignBanners(campaignBannersData);
+        setPartners(partnersData || []);
       } catch (err) {
         logger.error("💥 Error in fetchHomeData:", err);
         setAccreditationsError(true);
@@ -432,9 +441,30 @@ const Home = () => {
               Our Partners<span></span>
             </h2>
             <div className="global-partners-list">
-              <img src="/partners/partner-pink-cycle.png" alt="Pink Cycle EmpowerHer Initiative" />
-              <img src="/partners/partner-smart-education.png" alt="Smart Education" />
-              <img src="/partners/partner-trip.jpg" alt="TRIP - Terimbere Rural Integrated Partnership" />
+              {partners && partners.length > 0 ? (
+                partners.map((partner) => {
+                  const logoUrl = partner.logo.startsWith("http")
+                    ? partner.logo
+                    : `${API_BASE}/uploads/partners/${partner.logo}`;
+                  return (
+                    <img
+                      key={partner.id}
+                      src={logoUrl}
+                      alt={partner.name}
+                      onError={(e) => {
+                        // Fallback to static public path
+                        e.target.src = `/partners/${partner.logo}`;
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <>
+                  <img src="/partners/partner-pink-cycle.png" alt="Pink Cycle EmpowerHer Initiative" />
+                  <img src="/partners/partner-smart-education.png" alt="Smart Education" />
+                  <img src="/partners/partner-trip.jpg" alt="TRIP - Terimbere Rural Integrated Partnership" />
+                </>
+              )}
             </div>
           </div>
         ) : (

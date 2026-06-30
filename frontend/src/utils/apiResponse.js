@@ -25,7 +25,10 @@ export const extractData = (response) => {
   // Check if it's the new standardized format
   if (responseData.success !== undefined) {
     // New standardized format
-    return responseData.data;
+    if (responseData.data !== undefined) {
+      return responseData.data;
+    }
+    return responseData;
   }
 
   // Legacy format - return data as is (for backward compatibility)

@@ -33,8 +33,8 @@ const DonateNow = () => {
     { defaultData: [] }
   );
 
-  // Use useLoadingState for payment processing
-  const { loading: isProcessing, execute: executePayment } = useLoadingState();
+  // State for payment processing
+  const [isProcessing, setIsProcessing] = useState(false);
 
   /* Input Handler*/
   const handleChange = (e) => {
@@ -104,11 +104,13 @@ const DonateNow = () => {
 
   /* Razorpay Checkout Logic*/
   const loadRazorpay = async () => {
-    await executePayment(async () => {
+    setIsProcessing(true);
+    try {
       // Load Razorpay script
       const loaded = await loadRazorpayScript();
       if (!loaded) {
         toast.error("Payment gateway failed to load. Please check your internet connection and try again.");
+        setIsProcessing(false);
         return;
       }
 
@@ -120,11 +122,13 @@ const DonateNow = () => {
       } catch (error) {
         logger.error("Error fetching Razorpay key:", error);
         toast.error("Unable to connect to payment service. Please try again later.");
+        setIsProcessing(false);
         return;
       }
 
       if (!keyData.success || !keyData.key) {
         toast.error("Payment service is not configured. Please contact support.");
+        setIsProcessing(false);
         return;
       }
 
@@ -137,16 +141,19 @@ const DonateNow = () => {
           email: formData.email.trim(),
           pan: formData.pan?.trim() || "",
           message: formData.message?.trim() || "",
+          currency: isGlobal ? "USD" : "INR",
         });
       } catch (error) {
         logger.error("Error creating order:", error);
         toast.error(error.message || "Failed to create payment order. Please check your details and try again.");
+        setIsProcessing(false);
         return;
       }
 
       if (!orderData.success || !orderData.order) {
         const errorMsg = orderData.message || orderData.errors?.[0]?.msg || "Order creation failed";
         toast.error(errorMsg);
+        setIsProcessing(false);
         return;
       }
 
@@ -245,7 +252,11 @@ const DonateNow = () => {
       });
 
       razorpayInstance.open();
-    });
+    } catch (err) {
+      logger.error("Error launching Razorpay:", err);
+      toast.error("Failed to initialize payment. Please try again.");
+      setIsProcessing(false);
+    }
   };
 
   /*  Submit Handler*/

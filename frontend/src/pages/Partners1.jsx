@@ -1,13 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
+import { partnersService } from "../api/services/partners.service";
+import { API_BASE } from "../config/api";
+import logger from "../utils/logger";
 import "./Partners.css";
 
 const Partners1 = () => {
-  // logos 1–27
-  const partnerLogos = Array.from({ length: 27 }, (_, i) => {
+  const [partnerLogos, setPartnerLogos] = useState([]);
+  const [isFallback, setIsFallback] = useState(false);
+
+  // Generate fallback logos 1–27
+  const fallbackLogos = Array.from({ length: 27 }, (_, i) => {
     const num = (i + 1).toString().padStart(2, "0");
-    return `/partners/Partners-${num}.png`;
+    return {
+      id: `fallback-${num}`,
+      name: `Partner ${num}`,
+      logo: `Partners-${num}.png`,
+      isFallback: true
+    };
   });
+
+  useEffect(() => {
+    const loadPartners = async () => {
+      try {
+        // Fetch India and 'both' partners from backend
+        const data = await partnersService.getPartners("india");
+        // Filter for Line 1 (Partners1 slider)
+        const line1Partners = data.filter(
+          (p) => p.carousel_line === "line1" && (p.is_active === 1 || p.is_active === true)
+        );
+
+        if (line1Partners.length > 0) {
+          setPartnerLogos(line1Partners);
+          setIsFallback(false);
+        } else {
+          setPartnerLogos(fallbackLogos);
+          setIsFallback(true);
+        }
+      } catch (error) {
+        logger.error("Error loading partners line 1:", error);
+        setPartnerLogos(fallbackLogos);
+        setIsFallback(true);
+      }
+    };
+
+    loadPartners();
+  }, []);
 
   const settings = {
     slidesToShow: 6,
@@ -37,18 +75,29 @@ const Partners1 = () => {
             Our Partners<span></span>
           </h2>
         </div>
-        <Slider {...settings}>
-          {partnerLogos.map((logo, index) => (
-            <div key={index} className="partner-item">
-              <img
-                src={logo}
-                alt={`Partner ${index + 1}`}
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          ))}
-        </Slider>
+        {partnerLogos.length > 0 && (
+          <Slider {...settings}>
+            {partnerLogos.map((partner) => {
+              const srcUrl = partner.isFallback
+                ? `/partners/${partner.logo}`
+                : `${API_BASE}/uploads/partners/${partner.logo}`;
+              return (
+                <div key={partner.id} className="partner-item">
+                  <img
+                    src={srcUrl}
+                    alt={partner.name}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      // Fallback to static public path if server path fails
+                      e.target.src = `/partners/${partner.logo}`;
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </Slider>
+        )}
       </div>
     </section>
   );
