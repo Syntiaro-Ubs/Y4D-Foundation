@@ -10,7 +10,8 @@ import MediaManager from "../Media/MediaManager";
 import OurWorkManagement from "../OurWork/OurWorkManagement";
 import ImpactDataEditor from "../Impact/ImpactDataEditor";
 import AccreditationManagement from "../Accreditation/AccreditationManagement";
-import BannerManagement from "../Banner/BannerManagement";
+import BannerManagement from "../Banner/Management/../BannerManagement"; // Keep original path
+import PartnerManagement from "../Partner/PartnerManagement";
 import SanitizedHTML from "../Common/SanitizedHTML";
 import "./Dashboard.css";
 import logger from "../../utils/logger";
@@ -86,6 +87,8 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
   const [accreditationAction, setAccreditationAction] = useState("view");
   const [currentBannerType, setCurrentBannerType] = useState(null);
   const [bannerAction, setBannerAction] = useState("view");
+  const [currentPartnerType, setCurrentPartnerType] = useState(null);
+  const [partnerAction, setPartnerAction] = useState("view");
 
   // Form states - UPDATED: Added pdf field to reportForm
   const [reportForm, setReportForm] = useState({
@@ -227,6 +230,8 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
     setInterventionsSubDropdown(null);
     setInterventionsAction("view");
     setAccreditationAction("view");
+    setCurrentPartnerType(null);
+    setPartnerAction("view");
   }, [activeTab]);
 
   useEffect(() => {
@@ -375,6 +380,13 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
     updateUrlPath("banners", action);
   };
 
+  const handlePartnerAction = (action) => {
+    setCurrentPartnerType("partners");
+    setPartnerAction(action);
+    setOpenDropdown(null);
+    updateUrlPath("partners", action);
+  };
+
   // Modified render functions to check permissions
   const renderActionButtons = (item, section, subSection = null) => {
     const canEditItem = canUserPerformAction(section, subSection, "edit");
@@ -473,6 +485,25 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
           onActionChange={(action) => setAccreditationAction(action)}
           currentUser={currentUser}
           // ADDED: Pass confirmation modal functions
+          onShowConfirmation={showConfirmationModal}
+          onHideConfirmation={hideConfirmationModal}
+        />
+      </div>
+    );
+  };
+
+  const renderPartnerContent = () => {
+    return (
+      <div className="accreditation-content-section">
+        <PartnerManagement
+          action={partnerAction}
+          onClose={() => {
+            setCurrentPartnerType(null);
+            setPartnerAction("view");
+            updateUrlPath("partners");
+          }}
+          onActionChange={(action) => setPartnerAction(action)}
+          currentUser={currentUser}
           onShowConfirmation={showConfirmationModal}
           onHideConfirmation={hideConfirmationModal}
         />
@@ -3813,6 +3844,60 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
               </li>
             )}
 
+            {/* Partners Logo Section */}
+            {canUserPerformAction("partners", null, "view") && localStorage.getItem("adminRegion") !== "global" && (
+              <li className={activeTab === "partners" ? "active" : ""}>
+                <button
+                  onClick={() => {
+                    if (openDropdown === "partners") {
+                      setOpenDropdown(null);
+                    } else {
+                      setOpenDropdown("partners");
+                      setActiveTab("partners");
+                      updateUrlPath("partners");
+                    }
+                  }}
+                >
+                  Partners Logo {openDropdown === "partners" ? "▴" : "▾"}
+                </button>
+                {openDropdown === "partners" && (
+                  <ul className="submenu">
+                    <li>
+                      <button
+                        onClick={() => {
+                          handlePartnerAction("view");
+                        }}
+                      >
+                        Show Partners
+                      </button>
+                    </li>
+                    {canUserPerformAction("partners", null, "create") && (
+                      <li>
+                        <button
+                          onClick={() => {
+                            handlePartnerAction("add");
+                          }}
+                        >
+                          Add Partner Logo
+                        </button>
+                      </li>
+                    )}
+                    {canUserPerformAction("partners", null, "edit") && (
+                      <li>
+                        <button
+                          onClick={() => {
+                            handlePartnerAction("update");
+                          }}
+                        >
+                          Update Partner Logo
+                        </button>
+                      </li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            )}
+
             {/* Team */}
             {canUserPerformAction("team", null, "view") && (
               <li className={activeTab === "our-team" ? "active" : ""}>
@@ -4114,6 +4199,8 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
             renderOurWorkManagement()
           ) : currentAccreditationType && localStorage.getItem("adminRegion") !== "global" ? (
             renderAccreditationContent()
+          ) : currentPartnerType && localStorage.getItem("adminRegion") !== "global" ? (
+            renderPartnerContent()
           ) : currentBannerType ? (
             renderBannerContent()
           ) : activeTab === "users" &&

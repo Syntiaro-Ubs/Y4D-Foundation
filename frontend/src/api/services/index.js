@@ -13,4 +13,5 @@ export { contactService } from './contact.service';
 export { paymentService } from './payment.service';
 export { ourworkService } from './ourwork.service';
 export { usersService } from './users.service';
+export { partnersService } from './partners.service';
 

@@ -1,18 +1,25 @@
 import React from "react";
 import Slider from "react-slick";
+import { UPLOADS_BASE } from "../config/api";
 import "./Partners.css";
 
-const Partners1 = () => {
-  // logos 1–27
-  const partnerLogos = Array.from({ length: 27 }, (_, i) => {
-    const num = (i + 1).toString().padStart(2, "0");
-    return `/partners/Partners-${num}.png`;
-  });
+const Partners1 = ({ partners }) => {
+  // Filter for line1 partners
+  const line1Partners = partners ? partners.filter(p => p.carousel_line === 'line1') : [];
 
+  // Use dynamic logos if available, otherwise fallback to static ones (logos 1-27)
+  const partnerLogos = line1Partners.length > 0
+    ? line1Partners.map(p => `${UPLOADS_BASE}/partners/${p.logo}`)
+    : Array.from({ length: 27 }, (_, i) => {
+        const num = (i + 1).toString().padStart(2, "0");
+        return `/partners/Partners-${num}.png`;
+      });
+
+  const isInfinite = partnerLogos.length > 6;
   const settings = {
-    slidesToShow: 6,
+    slidesToShow: Math.min(6, partnerLogos.length),
     slidesToScroll: 1,
-    infinite: true,
+    infinite: isInfinite,
     autoplay: true,
     autoplaySpeed: 0,
     speed: 2000,
@@ -23,11 +30,13 @@ const Partners1 = () => {
     pauseOnFocus: false,
     swipeToSlide: true,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 5 } },
-      { breakpoint: 768, settings: { slidesToShow: 3 } },
-      { breakpoint: 480, settings: { slidesToShow: 2 } },
+      { breakpoint: 1024, settings: { slidesToShow: Math.min(5, partnerLogos.length), infinite: partnerLogos.length > 5 } },
+      { breakpoint: 768, settings: { slidesToShow: Math.min(3, partnerLogos.length), infinite: partnerLogos.length > 3 } },
+      { breakpoint: 480, settings: { slidesToShow: Math.min(2, partnerLogos.length), infinite: partnerLogos.length > 2 } },
     ],
   };
+
+  if (partnerLogos.length === 0) return null;
 
   return (
     <section className="partners-section">

@@ -9,6 +9,7 @@ import {
   impactService,
   accreditationsService,
   bannerService,
+  partnersService,
 } from "../api/services";
 import { UPLOADS_BASE } from "../config/api";
 import logger from "../utils/logger";
@@ -43,6 +44,7 @@ const Home = () => {
   const [accreditations, setAccreditations] = useState([]);
   const [heroBanners, setHeroBanners] = useState([]);
   const [campaignBanners, setCampaignBanners] = useState([]);
+  const [dynamicPartners, setDynamicPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [accreditationsError, setAccreditationsError] = useState(false);
   const [bannersLoading, setBannersLoading] = useState(true);
@@ -69,6 +71,7 @@ const Home = () => {
           accreditationsData,
           heroBannersData,
           campaignBannersData,
+          partnersData,
         ] = await Promise.all([
           impactService.getMentors().catch((err) => {
             logger.error("❌ Error fetching mentors:", err);
@@ -99,10 +102,15 @@ const Home = () => {
             logger.error("❌ Error fetching campaign banners:", err);
             return [];
           }),
+          partnersService.getPartners("india").catch((err) => {
+            logger.error("❌ Error fetching partners:", err);
+            return [];
+          }),
         ]);
 
         logger.log("📊 Hero banners received:", heroBannersData);
         logger.log("📊 Campaign banners received:", campaignBannersData);
+        logger.log("📊 Partners received:", partnersData);
 
         setTeamCount(mentorsData.length + managementData.length);
         setReportsCount(reportsData.length);
@@ -110,6 +118,7 @@ const Home = () => {
         setAccreditations(accreditationsData || []);
         setHeroBanners(heroBannersData);
         setCampaignBanners(campaignBannersData);
+        setDynamicPartners((partnersData || []).filter(p => p.is_active === 1 || p.is_active === true));
       } catch (err) {
         logger.error("💥 Error in fetchHomeData:", err);
         setAccreditationsError(true);
@@ -439,8 +448,8 @@ const Home = () => {
           </div>
         ) : (
           <>
-            <Partners1 />
-            <Partners2 />
+            <Partners1 partners={dynamicPartners} />
+            <Partners2 partners={dynamicPartners} />
           </>
         )}
       </section>

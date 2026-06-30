@@ -59,6 +59,11 @@ export const API_ROUTES = {
     KEY: '/payment/key',
   },
 
+  // Partners
+  PARTNERS: {
+    BASE: '/partners',
+  },
+
   // Impact Data
   IMPACT: {
     BASE: '/impact-data',

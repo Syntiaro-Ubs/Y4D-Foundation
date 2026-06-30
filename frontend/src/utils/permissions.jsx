@@ -59,6 +59,15 @@ export const checkPermission = (
       if (mainSectionPerm) {
         return mainSectionPerm[`can_${action}`] || false;
       }
+
+      // If section is not found at all in custom permissions, fallback to role-based permissions
+      const sectionExists = userPermissionsCache.permissions.some(
+        (p) => p.section === section
+      );
+      if (!sectionExists) {
+        const rolePermissions = getRoleBasedPermissions(currentUser.role);
+        return rolePermissions[`can_${action}`] || false;
+      }
     }
   }
 

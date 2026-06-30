@@ -4,7 +4,7 @@
  */
 import apiClient from '../client/axiosClient';
 import { API_ROUTES } from '../endpoints/routes';
-import { handleResponse, handleApiError } from '../../utils/api/responseHandler';
+import { handleApiError } from '../../utils/api/responseHandler';
 import logger from '../../utils/logger';
 
 export const paymentService = {
@@ -16,9 +16,9 @@ export const paymentService = {
     try {
       logger.log('🔑 Fetching Razorpay key...');
       const response = await apiClient.get(API_ROUTES.PAYMENT.KEY);
-      const data = handleResponse(response);
+      const responseData = response.data;
       logger.log('✅ Razorpay key received');
-      return data.key || data;
+      return responseData.key || responseData;
     } catch (error) {
       handleApiError(error, { 
         context: 'paymentService.getRazorpayKey',
@@ -37,9 +37,9 @@ export const paymentService = {
     try {
       logger.log('💳 Creating payment order...');
       const response = await apiClient.post(API_ROUTES.PAYMENT.CREATE_ORDER, orderData);
-      const data = handleResponse(response);
+      const responseData = response.data;
       logger.log('✅ Payment order created');
-      return data;
+      return responseData;
     } catch (error) {
       handleApiError(error, { 
         context: 'paymentService.createOrder',
@@ -58,9 +58,9 @@ export const paymentService = {
     try {
       logger.log('✅ Verifying payment...');
       const response = await apiClient.post(API_ROUTES.PAYMENT.VERIFY_PAYMENT, paymentData);
-      const data = handleResponse(response);
+      const responseData = response.data;
       logger.log('✅ Payment verified successfully');
-      return data;
+      return responseData;
     } catch (error) {
       handleApiError(error, { 
         context: 'paymentService.verifyPayment',
