@@ -15,7 +15,7 @@ export const API_ROUTES = {
     REFRESH: '/auth/refresh',
     RESET_PASSWORD: '/auth/reset-password',
     REQUEST_PASSWORD_RESET: '/auth/request-password-reset',
-    VERIFY_TOKEN: '/auth/verify-token',
+    VERIFY_TOKEN: '/auth/verify',
   },
 
   // Banners
@@ -105,7 +105,10 @@ export const API_ROUTES = {
 
   // Contact
   CONTACT: {
-    BASE: '/contact',
+    BASE: '/contact/enquiry',
+    INTERNSHIP: '/contact/internship',
+    VOLUNTEER: '/contact/volunteer',
+    CORPORATE: '/contact/corporate-partnership',
   },
 
   // Registration
