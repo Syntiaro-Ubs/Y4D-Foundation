@@ -1,6 +1,0 @@
-﻿id	title	region	is_active
-22	global	global	1
-18	shri	india	1
-17	sdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	india	1
-16	sdfgfsd	india	1
-11	fghhwer	india	1
