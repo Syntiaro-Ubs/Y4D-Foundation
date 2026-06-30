@@ -1,6 +1,0 @@
-﻿id	title	region
-22	global	global
-18	shri	india
-17	sdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	india
-16	sdfgfsd	india
-11	fghhwer	india
