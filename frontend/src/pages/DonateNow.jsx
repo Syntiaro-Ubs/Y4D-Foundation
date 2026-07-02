@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./DonateNow.css";
 import { bannerService } from "../api/services/banners.service";
 import { paymentService } from "../api/services/payment.service";
@@ -10,6 +12,14 @@ import toast from "../utils/toast";
 import { useRegion } from "../hooks/useRegion";
 
 const DonateNow = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
+      mirror: false,
+    });
+  }, []);
   const [formData, setFormData] = useState({
     name: "",
     email: "",

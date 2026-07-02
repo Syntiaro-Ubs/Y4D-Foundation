@@ -58,7 +58,7 @@ const OurWork = () => {
     },
     {
       id: "livelihood",
-      title: "Livelihood",
+      title: region === "global" ? "Sustainable Livelihoods" : "Livelihood",
       description:
         "Y4D Foundation promotes sustainable livelihoods aligned with SDG 8 by empowering marginalized communities through skill development, financial literacy, and digital education, enabling self-reliance and economic stability. Our industry-relevant training bridges the gap between knowledge and practice, fostering employability, entrepreneurship, and long-term socio-economic growth.",
       image: LS,
@@ -74,7 +74,7 @@ const OurWork = () => {
     },
     {
       id: "environment",
-      title: "Environment Sustainability",
+      title: region === "global" ? "Environment Sustainability" : "Environment & Sustainability",
       description:
         "Y4D Foundation supports SDG 15 by promoting environmental sustainability through tree planting drives, ecological restoration, and awareness programs, fostering conservation and climate resilience. Using innovative methods like Miyawaki Afforestation, Y4D enhances green cover and ecological balance, empowering communities to contribute to a healthier, sustainable planet.",
       image: ES,
@@ -122,7 +122,7 @@ const OurWork = () => {
 
       {/* Loop sections */}
       {interventions
-        .filter((intervention) => (region === "global" ? intervention.id === "education" : true))
+        .filter((intervention) => (region === "global" ? ["education", "livelihood", "healthcare", "environment"].includes(intervention.id) : true))
         .map((intervention) => (
 
           <div
@@ -132,9 +132,10 @@ const OurWork = () => {
             className="work-section"
           >
             {/* Tabs in each section */}
-            {region !== "global" && (
-              <div className="work-tabs">
-                {interventions.map((tab) => (
+            <div className="work-tabs">
+              {interventions
+                .filter((tab) => (region === "global" ? ["education", "livelihood", "healthcare", "environment"].includes(tab.id) : true))
+                .map((tab) => (
                   <button
                     key={tab.id}
                     className={`work-tab ${tab.id === intervention.id ? "active" : ""
@@ -149,20 +150,153 @@ const OurWork = () => {
                     {tab.title}
                   </button>
                 ))}
-              </div>
-            )}
+            </div>
 
 
             {/* Content */}
-            <div className={`work-content-container ${region === "global" ? "global-education-container" : ""}`}>
+            <div className={`work-content-container ${region === "global" && (intervention.id === "education" || intervention.id === "livelihood" || intervention.id === "healthcare" || intervention.id === "environment") ? "global-education-container" : ""}`}>
               <div className="work-image">
                 <img src={intervention.image} alt={intervention.title} />
               </div>
-              {region === "global" ? (
-                <div className="education-extra-text-full no-margin-padding">
-                  <p>
-                    In the rapidly evolving digital era, digital education has become a vital force for equipping young learners with essential 21st-century skills, helping them thrive in a technology-driven world and effectively bridging the digital divide in developing regions like Kenya. Y4D Foundation International (Youth for Development Foundation), a youth-led global non-profit organization, is advancing this cause through a strong and ongoing partnership with Wema Foundation (Wema BDO Kenya), a local organization dedicated to youth empowerment and community development in Kenya. Through this collaboration, formalized via a Letter of Cooperation, Y4D Foundation conducts regular interactive and practical digital learning sessions, particularly in Mombasa, where students many of whom are using a computer for the first time are introduced to foundational skills such as computer basics, email writing, internet usage, and presentation skills. The sessions go deeper into critical topics, including how the internet and web services function (such as how websites work and how data travels across networks), the importance of safe internet practices, operating systems as the “brain” behind every computer, cyber awareness, and Cyber Law, where students learn about their rights, responsibilities, and ways to stay protected in the digital world. Building on these foundations, Y4D introduces advanced concepts like Artificial Intelligence (AI) and Machine Learning, blending theory with hands-on applications such as AI-assisted presentations, content creation, and critical thinking exercises. Led by dedicated volunteers and team members, these weekly online and interactive workshops foster curiosity, build confidence, and develop responsible digital habits among Kenyan youth. This meaningful India-Kenya cross-border partnership not only empowers underprivileged students with end-to-end digital and AI competencies but also contributes to Kenya’s broader goals of inclusive growth, innovation, and digital inclusion, creating a stronger foundation for the next generation to participate confidently in the global digital economy.
-                  </p>
+              {region === "global" && intervention.id === "education" ? (
+                <div className="global-edu-info-grid no-margin-padding">
+                  <div className="global-edu-col-left">
+                    <div className="global-edu-section">
+                      <h3>Objective</h3>
+                      <p>Empowering children and youth through quality education, digital literacy and future-ready skills.</p>
+                    </div>
+                    <div className="global-edu-section">
+                      <h3>Key Interventions</h3>
+                      <ol className="global-edu-list">
+                        <li>Digital Literacy & ICT Skills</li>
+                        <li>Technology Access for Underserved Communities</li>
+                        <li>Coding, AI & STEM Learning</li>
+                        <li>Data Science & Analytics Exposure</li>
+                        <li>Cybersecurity & Online Safety</li>
+                        <li>Innovation & Problem-Solving Workshops</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div className="global-edu-col-right">
+                    <div className="global-edu-section">
+                      <h3>Project & Partners</h3>
+                      <div className="project-detail-box">
+                        <p><strong>Project Name:</strong> Smart Education & Digital Empowerment Programme</p>
+                      </div>
+                      <div className="partners-box">
+                        <h4>Partners:</h4>
+                        <ul className="global-partners-bullets">
+                          <li>Wema Bukembe Development Organization (WBDO)</li>
+                          <li>Youth for Sustainable Development (YSD)</li>
+                          <li>FINDEF</li>
+                          <li>Tagwaye Foundation</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : region === "global" && intervention.id === "livelihood" ? (
+                <div className="global-edu-info-grid no-margin-padding livelihood-theme-grid">
+                  <div className="global-edu-col-left">
+                    <div className="global-edu-section">
+                      <h3>Objective</h3>
+                      <p>Building employability, entrepreneurship and leadership skills among youth and women.</p>
+                    </div>
+                    <div className="global-edu-section">
+                      <h3>Key Interventions</h3>
+                      <ol className="global-edu-list">
+                        <li>Entrepreneurship Development</li>
+                        <li>Employability & Career Readiness</li>
+                        <li>Leadership & Life Skills Training</li>
+                        <li>Youth & Women Empowerment</li>
+                        <li>Innovation & Design Thinking</li>
+                        <li>Financial Literacy Awareness</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div className="global-edu-col-right">
+                    <div className="global-edu-section">
+                      <h3>Project & Partners</h3>
+                      <div className="project-detail-box">
+                        <p><strong>Project Name:</strong> Youth Employability & Entrepreneurship Development Programme</p>
+                      </div>
+                      <div className="partners-box">
+                        <h4>Partners:</h4>
+                        <ul className="global-partners-bullets">
+                          <li>Career-Pink Foundation</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : region === "global" && intervention.id === "healthcare" ? (
+                <div className="global-edu-info-grid no-margin-padding healthcare-theme-grid">
+                  <div className="global-edu-col-left">
+                    <div className="global-edu-section">
+                      <h3>Objective</h3>
+                      <p>Promoting health awareness, hygiene, and overall well-being within communities.</p>
+                    </div>
+                    <div className="global-edu-section">
+                      <h3>Key Interventions</h3>
+                      <ol className="global-edu-list">
+                        <li>Menstrual Health & Hygiene Education</li>
+                        <li>Women's Health Empowerment</li>
+                        <li>Reproductive Health Awareness</li>
+                        <li>Community Health Awareness</li>
+                        <li>Adolescent Health Programs</li>
+                        <li>Nutrition & Well-being Education</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div className="global-edu-col-right">
+                    <div className="global-edu-section">
+                      <h3>Project & Partners</h3>
+                      <div className="project-detail-box">
+                        <p><strong>Project Name:</strong> Community Health & Menstrual Hygiene Management Programme</p>
+                      </div>
+                      <div className="partners-box">
+                        <h4>Partners:</h4>
+                        <ul className="global-partners-bullets">
+                          <li>Career-Pink Foundation</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : region === "global" && intervention.id === "environment" ? (
+                <div className="global-edu-info-grid no-margin-padding environment-theme-grid">
+                  <div className="global-edu-col-left">
+                    <div className="global-edu-section">
+                      <h3>Objective</h3>
+                      <p>Promoting climate action and sustainable environmental practices through education and clean energy solutions.</p>
+                    </div>
+                    <div className="global-edu-section">
+                      <h3>Key Interventions</h3>
+                      <ol className="global-edu-list">
+                        <li>Climate Change Awareness</li>
+                        <li>Environmental Education</li>
+                        <li>Clean Energy Solutions</li>
+                        <li>Green Community Development</li>
+                        <li>Sustainable Resource Management</li>
+                        <li>Carbon Reduction Initiatives</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div className="global-edu-col-right">
+                    <div className="global-edu-section">
+                      <h3>Project & Partners</h3>
+                      <div className="project-detail-box">
+                        <p><strong>Project Name:</strong> Climate Action & Clean Energy Programme</p>
+                      </div>
+                      <div className="partners-box">
+                        <h4>Partners:</h4>
+                        <ul className="global-partners-bullets">
+                          <li>Youth for Sustainable Development (YSD)</li>
+                          <li>TRIP</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="work-text">
@@ -224,7 +358,7 @@ const OurWork = () => {
 
 
 
-            {intervention.id === "livelihood" && (
+            {region !== "global" && intervention.id === "livelihood" && (
               <div className="livelihood-extra-text-full">
                 <h4>
                   Journey to Self-Reliance- Skill Training (Printed Circuit
@@ -284,7 +418,7 @@ const OurWork = () => {
               </div>
             )}
 
-            {intervention.id === "healthcare" && (
+            {region !== "global" && intervention.id === "healthcare" && (
               <div className="healthcare-extra-text-full">
                 <h4>
                   Immediate Investigation - Theme-Based Health Check-up Camps
@@ -371,7 +505,7 @@ const OurWork = () => {
               </div>
             )}
 
-            {intervention.id === "environment" && (
+            {region !== "global" && intervention.id === "environment" && (
               <div className="environment-extra-text-full">
                 <h4>Preserving Ecological BalanceLand & Water Conservation</h4>
                 <p>

@@ -56,12 +56,15 @@
   background: #c2c1c0;
   position: relative;
   justify-content: center;
-  width: 97%;
+  align-items: center;
+  width: fit-content;
+  max-width: 97%;
   border-radius: 20px;
+  padding: 6px;
 }
 
 .work-tab {
-  padding: 10px 20px;
+  padding: 12px 24px;
   color: #222;
   border: none;
   cursor: pointer;
@@ -69,21 +72,22 @@
   text-transform: uppercase;
   background: transparent;
   margin: 0;
-  transition: background 0.3s;
+  transition: background 0.3s, color 0.3s;
   font-size: 15px;
+  border-radius: 14px;
 }
 
 .work-tab:hover {
   background: #005e30;
   color: white;
-  border-radius: 20px;
+  border-radius: 14px;
 }
 
 .work-tab.active {
   background-color: #005e30;
   color: #fff;
   font-weight: bold;
-  border-radius: 19px;
+  border-radius: 14px;
 }
 
 /* Section */
@@ -400,7 +404,8 @@
   }
 
   .work-tabs {
-    width: 90%;
+    width: fit-content;
+    max-width: 90%;
     margin: 25px auto;
   }
 
@@ -551,3 +556,127 @@
   }
 }
 
+/* Global Education Info Grid */
+.global-edu-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  background: #f0f7ff;
+  border: 2px solid #38b6e9;
+  border-radius: 10px;
+  padding: 30px !important;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.global-edu-section {
+  margin-bottom: 20px;
+}
+
+.global-edu-section h3 {
+  font-size: 22px;
+  color: #222;
+  margin-bottom: 15px;
+  font-weight: 600;
+  border-bottom: 2px solid #38b6e9;
+  padding-bottom: 8px;
+  display: inline-block;
+  text-align: left;
+}
+
+.global-edu-section p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  text-align: left;
+}
+
+.global-edu-list {
+  list-style-type: decimal;
+  padding-left: 20px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.global-edu-list li {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.project-detail-box {
+  background: #fff;
+  border-left: 4px solid #ef6022;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  text-align: left;
+}
+
+.project-detail-box p {
+  margin: 0;
+  font-size: 16px;
+  text-align: left;
+}
+
+.partners-box h4 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.global-partners-bullets {
+  list-style-type: circle;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.global-partners-bullets li {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Mobile responsive for global education info grid */
+@media (max-width: 768px) {
+  .global-edu-info-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px !important;
+  }
+}
+
+/* Livelihood Yellow Theme Override */
+.livelihood-theme-grid {
+  background: #fffdf5 !important;
+  border: 2px solid #febd2c !important;
+}
+
+.livelihood-theme-grid .global-edu-section h3 {
+  border-bottom: 2px solid #febd2c !important;
+}
+
+/* Healthcare Red Theme Override */
+.healthcare-theme-grid {
+  background: #fff5f5 !important;
+  border: 2px solid #e63a34 !important;
+}
+
+.healthcare-theme-grid .global-edu-section h3 {
+  border-bottom: 2px solid #e63a34 !important;
+}
+
+/* Environment Green Theme Override */
+.environment-theme-grid {
+  background: #f5fff5 !important;
+  border: 2px solid #42b242 !important;
+}
+
+.environment-theme-grid .global-edu-section h3 {
+  border-bottom: 2px solid #42b242 !important;
+}

@@ -371,17 +371,16 @@ const Home = () => {
 
           <div
             className={region === "global" ? "" : "grid grid-3"}
-            style={region === "global" ? { display: 'flex', justifyContent: 'center' } : {}}
+            style={region === "global" ? { display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' } : {}}
           >
             {[
               {
                 title: "Quality Education",
                 img: edu,
                 link: "/our-work#education",
-                // link: "/our-work#education",
               },
               {
-                title: "Livelihood",
+                title: region === "global" ? "Sustainable Livelihoods" : "Livelihood",
                 img: livelihood,
                 link: "/our-work#livelihood",
               },
@@ -391,7 +390,7 @@ const Home = () => {
                 link: "/our-work#healthcare",
               },
               {
-                title: "Environment & Sustainability",
+                title: region === "global" ? "Environment Sustainability" : "Environment & Sustainability",
                 img: environment,
                 link: "/our-work#environment",
               },
@@ -400,12 +399,22 @@ const Home = () => {
                 img: idp,
                 link: "/our-work#idp",
               },
-            ].filter(item => region === "global" ? item.title === "Quality Education" : true)
+            ].filter(item => {
+              if (region === "global") {
+                return [
+                  "Quality Education",
+                  "Sustainable Livelihoods",
+                  "Healthcare",
+                  "Environment Sustainability"
+                ].includes(item.title);
+              }
+              return true;
+            })
               .map((item, index) => (
                 <div
                   key={index}
                   className="card text-center intervention-card"
-                  style={region === "global" ? { maxWidth: '350px', width: '100%' } : {}}
+                  style={region === "global" ? { maxWidth: '280px', width: '100%', padding: '20px 15px' } : {}}
                   data-aos="zoom-in"
                   data-aos-delay={200 + index * 100}
                 >
