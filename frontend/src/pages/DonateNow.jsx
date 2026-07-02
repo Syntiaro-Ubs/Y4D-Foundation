@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./DonateNow.css";
 import { bannerService } from "../api/services/banners.service";
 import { paymentService } from "../api/services/payment.service";
@@ -24,6 +26,15 @@ const DonateNow = () => {
   const isGlobal = region === 'global';
   const currencySymbol = isGlobal ? "$" : "₹";
   const suggestedAmounts = isGlobal ? [25, 50, 100, 150] : [500, 1000, 2000, 5000];
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-in-out",
+      once: true,
+      mirror: false,
+    });
+  }, []);
 
   // Use new useApi hook for banners
   const { data: donateBanners = [], loading: bannersLoading } = useApi(
