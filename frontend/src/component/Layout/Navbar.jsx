@@ -78,7 +78,7 @@ const Navbar = () => {
       ...(region !== "global" ? [{ id: "/newsletters", label: "Newsletters" }] : []),
       { id: "/stories", label: "Stories of Empowerment" },
       ...(region !== "global" ? [{ id: "/events", label: "Events" }] : []),
-      { id: "/blogs", label: "Blogs" },
+      // { id: "/blogs", label: "Blogs" },
       ...(region !== "global" ? [{ id: "/documentaries", label: "Documentaries" }] : []),
     ],
   };
