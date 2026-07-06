@@ -58,7 +58,7 @@ const OurWork = () => {
     },
     {
       id: "livelihood",
-      title: region === "global" ? "Sustainable Livelihoods" : "Livelihood",
+      title: region === "global" ? "Sustainable Livelihood" : "Livelihood",
       description:
         "Y4D Foundation promotes sustainable livelihoods aligned with SDG 8 by empowering marginalized communities through skill development, financial literacy, and digital education, enabling self-reliance and economic stability. Our industry-relevant training bridges the gap between knowledge and practice, fostering employability, entrepreneurship, and long-term socio-economic growth.",
       image: LS,

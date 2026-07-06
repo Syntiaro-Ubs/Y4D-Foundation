@@ -5,16 +5,19 @@ import { ourworkService } from "../api/services/ourwork.service";
 import { UPLOADS_BASE } from "../config/api";
 import SanitizedHTML from "../component/Common/SanitizedHTML";
 import logger from "../utils/logger";
+import { useRegion } from "../hooks/useRegion";
 import "./LivelihoodDetail.css";
 
-// --- Helpers ---
 const getFullUrl = (path) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
 
-  // Remove any leading slashes just in case
-  const cleanPath = path.replace(/^\/?uploads\/our-work\/livelihood\//, "");
-  return `${UPLOADS_BASE}/our-work/livelihood/${cleanPath}`;
+  const cleanPath = path.replace(/^\/?api\/uploads\//, "").replace(/^\/?uploads\//, "");
+  if (!cleanPath.startsWith("our-work/livelihood/")) {
+    const fileOnly = cleanPath.replace(/^our-work\/livelihood\//, "");
+    return `${UPLOADS_BASE}/our-work/livelihood/${fileOnly}`;
+  }
+  return `${UPLOADS_BASE}/${cleanPath}`;
 };
 
 const getEmbedUrl = (url) => {
@@ -43,6 +46,7 @@ const isDirectVideoFile = (url) => {
 };
 
 const LivelihoodDetail = () => {
+  const region = useRegion();
   const { id } = useParams();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -97,7 +101,9 @@ const LivelihoodDetail = () => {
     <div className="lv-detail-page">
       {/* Back link */}
       <div className="lv-detail-back">
-        <Link to="/livelihood">← Back to Livelihood Programs</Link>
+        <Link to="/livelihood">
+          {region === "global" ? "← Back to Sustainable Livelihood Programs" : "← Back to Livelihood Programs"}
+        </Link>
       </div>
 
       {/* Content container */}

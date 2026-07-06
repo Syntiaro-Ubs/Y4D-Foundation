@@ -11,12 +11,12 @@ const getFullUrl = (path) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
 
-  // Remove any leading slashes just in case
-  const cleanPath = path.replace(
-    /^\/?uploads\/our-work\/integrated_development\//,
-    ""
-  );
-  return `${UPLOADS_BASE}/our-work/integrated_development/${cleanPath}`;
+  const cleanPath = path.replace(/^\/?api\/uploads\//, "").replace(/^\/?uploads\//, "");
+  if (!cleanPath.startsWith("our-work/integrated_development/")) {
+    const fileOnly = cleanPath.replace(/^our-work\/integrated_development\//, "");
+    return `${UPLOADS_BASE}/our-work/integrated_development/${fileOnly}`;
+  }
+  return `${UPLOADS_BASE}/${cleanPath}`;
 };
 
 // Convert YouTube / Vimeo watch URLs to embeddable URLs

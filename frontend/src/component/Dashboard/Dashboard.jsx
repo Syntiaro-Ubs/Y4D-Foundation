@@ -1253,7 +1253,7 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
   const getOurWorkCategoryLabel = (category) => {
     const labels = {
       quality_education: "Quality Education",
-      livelihood: "Livelihood",
+      livelihood: "Sustainable Livelihood",
       healthcare: "Healthcare",
       environment_sustainability: "Environment Sustainability",
       integrated_development: "Integrated Development (IDP)",
@@ -2795,7 +2795,12 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                 ]
                   .filter((category) =>
                     localStorage.getItem("adminRegion") === "global"
-                      ? category === "quality_education"
+                      ? [
+                          "quality_education",
+                          "livelihood",
+                          "healthcare",
+                          "environment_sustainability",
+                        ].includes(category)
                       : true
                   )
                   .map(
@@ -3488,7 +3493,12 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                     ]
                       .filter((category) =>
                         localStorage.getItem("adminRegion") === "global"
-                          ? category === "quality_education"
+                          ? [
+                              "quality_education",
+                              "livelihood",
+                              "healthcare",
+                              "environment_sustainability",
+                            ].includes(category)
                           : true
                       )
                       .map(

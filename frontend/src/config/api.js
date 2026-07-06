@@ -19,7 +19,7 @@ const getEnvVar = (key, fallback) => {
 
 // For local development only Provide sensible local defaults with protocol so fetch() works correctly
 const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'https://y4d.ngo/dev/api');
-const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', 'https://y4d.ngo/dev/api/uploads'); 
+const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', getEnvVar('VITE_UPLOADS_BASE_UR', 'https://y4d.ngo/dev/api/uploads')); 
 // For QA/Production only
 // const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'https://y4d.ngo/dev/api');
 // const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', 'https://y4d.ngo/dev/api/uploads'); 

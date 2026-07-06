@@ -56,9 +56,12 @@ const Healthcare = () => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
 
-    // Remove any leading slashes just in case
-    const cleanPath = path.replace(/^\/?uploads\/our-work\/healthcare\//, "");
-    return `${UPLOADS_BASE}/our-work/healthcare/${cleanPath}`;
+    const cleanPath = path.replace(/^\/?api\/uploads\//, "").replace(/^\/?uploads\//, "");
+    if (!cleanPath.startsWith("our-work/healthcare/")) {
+      const fileOnly = cleanPath.replace(/^our-work\/healthcare\//, "");
+      return `${UPLOADS_BASE}/our-work/healthcare/${fileOnly}`;
+    }
+    return `${UPLOADS_BASE}/${cleanPath}`;
   };
 
   useEffect(() => {

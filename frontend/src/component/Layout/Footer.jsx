@@ -30,23 +30,21 @@ const Footer = () => {
               <li>
                 <a href="/quality-education">Quality Education</a>
               </li>
+              <li>
+                <a href="/livelihood">{region === "global" ? "Sustainable Livelihood" : "Livelihood"}</a>
+              </li>
+              <li>
+                <a href="/healthcare">Healthcare</a>
+              </li>
+              <li>
+                <a href="/environment-sustainability">
+                  Environment Sustainability
+                </a>
+              </li>
               {region !== "global" && (
-                <>
-                  <li>
-                    <a href="/livelihood">Livelihood</a>
-                  </li>
-                  <li>
-                    <a href="/healthcare">Healthcare</a>
-                  </li>
-                  <li>
-                    <a href="/environment-sustainability">
-                      Envirnment Sustainability
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/idp">IDP</a>
-                  </li>
-                </>
+                <li>
+                  <a href="/idp">IDP</a>
+                </li>
               )}
             </ul>
           </div>

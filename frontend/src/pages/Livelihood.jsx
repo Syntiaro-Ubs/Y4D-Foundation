@@ -7,12 +7,14 @@ import { ourworkService } from "../api/services/ourwork.service";
 import { UPLOADS_BASE } from "../config/api";
 import SanitizedHTML from "../component/Common/SanitizedHTML";
 import logger from "../utils/logger";
+import { useRegion } from "../hooks/useRegion";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const Livelihood = () => {
+  const region = useRegion();
   const [items, setItems] = useState([]);
   const [livelihoodBanners, setLivelihoodBanners] = useState([]);
   const [bannersLoading, setBannersLoading] = useState(true);
@@ -56,9 +58,12 @@ const Livelihood = () => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
 
-    // Remove any leading slashes just in case
-    const cleanPath = path.replace(/^\/?uploads\/our-work\/livelihood\//, "");
-    return `${UPLOADS_BASE}/our-work/livelihood/${cleanPath}`;
+    const cleanPath = path.replace(/^\/?api\/uploads\//, "").replace(/^\/?uploads\//, "");
+    if (!cleanPath.startsWith("our-work/livelihood/")) {
+      const fileOnly = cleanPath.replace(/^our-work\/livelihood\//, "");
+      return `${UPLOADS_BASE}/our-work/livelihood/${fileOnly}`;
+    }
+    return `${UPLOADS_BASE}/${cleanPath}`;
   };
 
   useEffect(() => {
@@ -150,7 +155,7 @@ const Livelihood = () => {
         <div className="lv-container">
           <div className="lv-header">
             <h1 className="lv-title">
-              Livelihood Programs <span></span>
+              {region === "global" ? "Sustainable Livelihood" : "Livelihood"} Programs
             </h1>
           </div>
 

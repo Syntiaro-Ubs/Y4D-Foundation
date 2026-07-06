@@ -28,7 +28,7 @@ const OurWorkManager = ({ category, onClose }) => {
 
   const categoryLabels = {
     quality_education: 'Quality Education',
-    livelihood: 'Livelihood',
+    livelihood: 'Sustainable Livelihood',
     healthcare: 'Healthcare',
     environment_sustainability: 'Environment Sustainability',
     integrated_development: 'Integrated Development Program (IDP)'

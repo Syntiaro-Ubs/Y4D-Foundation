@@ -12,12 +12,12 @@ const getImageUrl = (path) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
 
-  // Remove any leading slashes just in case
-  const cleanPath = path.replace(
-    /^\/?uploads\/our-work\/environment_sustainability\//,
-    ""
-  );
-  return `${UPLOADS_BASE}/our-work/environment_sustainability/${cleanPath}`;
+  const cleanPath = path.replace(/^\/?api\/uploads\//, "").replace(/^\/?uploads\//, "");
+  if (!cleanPath.startsWith("our-work/environment_sustainability/")) {
+    const fileOnly = cleanPath.replace(/^our-work\/environment_sustainability\//, "");
+    return `${UPLOADS_BASE}/our-work/environment_sustainability/${fileOnly}`;
+  }
+  return `${UPLOADS_BASE}/${cleanPath}`;
 };
 
 import Slider from "react-slick";

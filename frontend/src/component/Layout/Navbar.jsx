@@ -61,13 +61,13 @@ const Navbar = () => {
     ],
     work: [
       { id: "/quality-education", label: "Quality Education" },
+      { id: "/livelihood", label: region === "global" ? "Sustainable Livelihood" : "Livelihood" },
+      { id: "/healthcare", label: "Healthcare" },
+      {
+        id: "/environment-sustainability",
+        label: "Environment Sustainability",
+      },
       ...(region !== "global" ? [
-        { id: "/livelihood", label: "Livelihood" },
-        { id: "/healthcare", label: "Healthcare" },
-        {
-          id: "/environment-sustainability",
-          label: "Environment Sustainability",
-        },
         { id: "/idp", label: "Integrated Development Program (IDP)" },
       ] : []),
     ],

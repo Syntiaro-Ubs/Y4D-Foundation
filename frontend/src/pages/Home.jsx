@@ -380,7 +380,7 @@ const Home = () => {
                 link: "/our-work#education",
               },
               {
-                title: region === "global" ? "Sustainable Livelihoods" : "Livelihood",
+                title: region === "global" ? "Sustainable Livelihood" : "Livelihood",
                 img: livelihood,
                 link: "/our-work#livelihood",
               },
@@ -403,7 +403,7 @@ const Home = () => {
               if (region === "global") {
                 return [
                   "Quality Education",
-                  "Sustainable Livelihoods",
+                  "Sustainable Livelihood",
                   "Healthcare",
                   "Environment Sustainability"
                 ].includes(item.title);

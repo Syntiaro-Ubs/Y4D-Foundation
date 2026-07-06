@@ -108,47 +108,7 @@
 }
 
 /* Right top line */
-.lv-title::before {
-  content: "";
-  position: absolute;
-  right: 280px;
-  top: calc(50% - 6px);
-  width: 20px;
-  height: 2px;
-  background: #f15a29;
-}
 
-/* Right bottom line */
-.lv-title::after {
-  content: "";
-  position: absolute;
-  right: 260px;
-  top: calc(50% + 4px);
-  width: 40px;
-  height: 2px;
-  background: #f15a29;
-}
-
-/* Left side */
-.lv-title span::before {
-  content: "";
-  position: absolute;
-  left: 280px;
-  top: calc(50% - 6px);
-  width: 20px;
-  height: 2px;
-  background: #f15a29;
-}
-
-.lv-title span::after {
-  content: "";
-  position: absolute;
-  left: 260px;
-  top: calc(50% + 4px);
-  width: 40px;
-  height: 2px;
-  background: #f15a29;
-}
 
 .lv-grid {
   display: grid;
