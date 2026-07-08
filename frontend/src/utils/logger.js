@@ -29,10 +29,12 @@ const logger = {
   },
 
   /**
-   * Error message (always shown, even in production)
+   * Error message (only in development)
    */
   error: (...args) => {
-    console.error(...args);
+    if (isDevelopment) {
+      console.error(...args);
+    }
   },
 
   /**

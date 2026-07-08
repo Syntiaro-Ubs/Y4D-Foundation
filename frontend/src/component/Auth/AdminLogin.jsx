@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { API_BASE } from '../../config/api';
+import { setToken, setUser } from '../../utils/tokenManager';
 import './AdminLogin.css';
 
 const AdminLogin = ({ onLogin }) => {
@@ -24,8 +25,8 @@ const AdminLogin = ({ onLogin }) => {
       const data = await response.json();
       
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        setToken(data.token);
+        setUser(data.user);
         onLogin(data.user);
       } else {
         setError(data.error || 'Login failed');
@@ -71,7 +72,6 @@ const AdminLogin = ({ onLogin }) => {
         </form>
         
         <div className="login-note">
-          <p>Default super admin: admin / admin123</p>
           <p>Contact administrator for account approval</p>
         </div>
       </div>

@@ -15,7 +15,8 @@ import PageTransition from "./component/Common/PageTransition";
 import ErrorBoundary from "./component/Common/ErrorBoundary";
 import Popup from "./pages/Popup";
 import "./App.css";
-import { isTokenValid, getUser } from "./utils/tokenManager";
+import { isTokenValid, getUser, getToken, clearToken } from "./utils/tokenManager";
+import { API_BASE } from "./config/api";
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -227,6 +228,26 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(isTokenValid());
   const [currentUser, setCurrentUser] = useState(getUser());
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const verifySession = async () => {
+      if (isTokenValid()) {
+        try {
+          const response = await fetch(`${API_BASE}/auth/verify`, {
+            headers: { Authorization: `Bearer ${getToken()}` }
+          });
+          if (!response.ok) {
+            clearToken();
+            setIsAuthenticated(false);
+            setCurrentUser(null);
+          }
+        } catch {
+          // Network error — keep existing token state, will fail on next API call
+        }
+      }
+    };
+    verifySession();
+  }, []);
 
   return (
     <Router>

@@ -25,7 +25,7 @@ const Navbar = () => {
   };
 
   const goToGlobal = () => {
-    window.open("https://global.y4d.ngo/", "_blank");
+    window.open("https://global.y4d.ngo/", "_blank", "noopener,noreferrer");
   };
 
   const goToIndia = () => {
@@ -38,7 +38,7 @@ const Navbar = () => {
       navigate(`${location.pathname}?${searchParams.toString()}`);
     } else {
       // Standard production redirect
-      window.open("https://y4d.ngo/", "_blank");
+      window.open("https://y4d.ngo/", "_blank", "noopener,noreferrer");
     }
   };
 

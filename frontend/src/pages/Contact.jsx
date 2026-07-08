@@ -229,93 +229,105 @@ const Contact = () => {
   // Corporate partnership submit
   const handleCorporateSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE}/contact/corporate-partnership`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ companyName, email, contact, details }),
+      });
 
-    const res = await fetch(`${API_BASE}/contact/corporate-partnership`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ companyName, email, contact, details }),
-    });
+      const result = await res.json();
 
-    const result = await res.json();
-
-    if (result.success) {
-      closePopup();
-      handleSuccess("Your partnership form has been submitted.");
-      setCompanyName("");
-      setEmail("");
-      setContact("");
-      setDetails("");
+      if (result.success) {
+        closePopup();
+        handleSuccess("Your partnership form has been submitted.");
+        setCompanyName("");
+        setEmail("");
+        setContact("");
+        setDetails("");
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
     }
   };
 
   // Internship submit
   const handleInternshipSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE}/contact/internship`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: internName,
+          email: internEmail,
+          phone: internPhone,
+          field: internField,
+          message: internMessage,
+        }),
+      });
 
-    const res = await fetch(`${API_BASE}/contact/internship`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fullName: internName,
-        email: internEmail,
-        phone: internPhone,
-        field: internField,
-        message: internMessage,
-      }),
-    });
+      const result = await res.json();
 
-    const result = await res.json();
-
-    if (result.success) {
-      closePopup();
-      handleSuccess("Your internship application has been submitted.");
+      if (result.success) {
+        closePopup();
+        handleSuccess("Your internship application has been submitted.");
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
     }
   };
 
   // Volunteer submit
   const handleVolunteerSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE}/contact/volunteer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: volName,
+          email: volEmail,
+          phone: volPhone,
+          reason: volReason,
+        }),
+      });
 
-    const res = await fetch(`${API_BASE}/contact/volunteer`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fullName: volName,
-        email: volEmail,
-        phone: volPhone,
-        reason: volReason,
-      }),
-    });
+      const result = await res.json();
 
-    const result = await res.json();
-
-    if (result.success) {
-      closePopup();
-      handleSuccess("Your volunteer form has been submitted.");
+      if (result.success) {
+        closePopup();
+        handleSuccess("Your volunteer form has been submitted.");
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
     }
   };
 
   // Enquiry submit
   const handleEnquirySubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await fetch(`${API_BASE}/contact/enquiry`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: enqFirst,
+          lastName: enqLast,
+          email: enqEmail,
+          phone: enqPhone,
+          message: enqMessage,
+        }),
+      });
 
-    const res = await fetch(`${API_BASE}/contact/enquiry`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: enqFirst,
-        lastName: enqLast,
-        email: enqEmail,
-        phone: enqPhone,
-        message: enqMessage,
-      }),
-    });
+      const result = await res.json();
 
-    const result = await res.json();
-
-    if (result.success) {
-      closePopup();
-      handleSuccess("Your enquiry has been submitted.");
+      if (result.success) {
+        closePopup();
+        handleSuccess("Your enquiry has been submitted.");
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
     }
   };
 
