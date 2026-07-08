@@ -6,6 +6,7 @@ import { impactService } from "../api/services/impact.service";
 import { UPLOADS_BASE } from "../config/api";
 import logger from "../utils/logger";
 import { useRegion } from "../hooks/useRegion";
+import { GLOBAL_BANK_DETAILS } from "../config/legalData";
 
 const LegalReports = () => {
   const region = useRegion();
@@ -58,8 +59,8 @@ const LegalReports = () => {
     { title: "6) Global Reach", value: "Active operations across USA, India, Kenya, and Nigeria" },
     { title: "7) Governance", value: "Managed through transparent systems and trusted banking partnerships to facilitate secure global collaborations" },
     { title: "Bank Details", value: " " },
-    { title: "i) Routing Number", value: import.meta.env.VITE_BANK_ROUTING_NUMBER || "" },
-    { title: "ii) Account Number", value: import.meta.env.VITE_BANK_ACCOUNT_NUMBER || "" },
+    { title: "i) Routing Number", value: GLOBAL_BANK_DETAILS.routingNumber },
+    { title: "ii) Account Number", value: GLOBAL_BANK_DETAILS.accountNumber },
 
   ] : [
     { title: "1) Niti Ayog (Darpan)", value: "MH/2015/0093159" },
