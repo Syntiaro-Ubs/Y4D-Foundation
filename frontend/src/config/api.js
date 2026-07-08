@@ -17,12 +17,12 @@ const getEnvVar = (key, fallback) => {
   return (value && value.trim() !== '') ? value.trim() : fallback;
 };
 
-// For local development only Provide sensible local defaults with protocol so fetch() works correctly
-const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'https://y4d.ngo/dev/api');
-const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', getEnvVar('VITE_UPLOADS_BASE_UR', 'https://y4d.ngo/dev/api/uploads')); 
-// For QA/Production only
-// const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'https://y4d.ngo/dev/api');
-// const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', 'https://y4d.ngo/dev/api/uploads'); 
+// Fallback to production API if no env var is set
+const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'http://localhost:5000/api');
+const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', 'http://localhost:5000/api/uploads');
+
+//const API_BASE_URL = getEnvVar('VITE_API_BASE_URL', 'https://y4d.ngo/dev/api');
+//const UPLOADS_BASE_URL = getEnvVar('VITE_UPLOADS_BASE_URL', 'https://y4d.ngo/dev/api/uploads');
 
 // Debug logging (only in development)
 import logger from '../utils/logger';
