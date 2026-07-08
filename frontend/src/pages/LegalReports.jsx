@@ -58,8 +58,8 @@ const LegalReports = () => {
     { title: "6) Global Reach", value: "Active operations across USA, India, Kenya, and Nigeria" },
     { title: "7) Governance", value: "Managed through transparent systems and trusted banking partnerships to facilitate secure global collaborations" },
     { title: "Bank Details", value: " " },
-    { title: "i) Routing Number", value: "063100277" },
-    { title: "ii) Account Number", value: "898163550829" },
+    { title: "i) Routing Number", value: import.meta.env.VITE_BANK_ROUTING_NUMBER || "" },
+    { title: "ii) Account Number", value: import.meta.env.VITE_BANK_ACCOUNT_NUMBER || "" },
 
   ] : [
     { title: "1) Niti Ayog (Darpan)", value: "MH/2015/0093159" },

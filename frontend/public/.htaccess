@@ -94,12 +94,12 @@
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
-# Force HTTPS (uncomment if you have SSL certificate)
-# <IfModule mod_rewrite.c>
-#   RewriteEngine On
-#   RewriteCond %{HTTPS} off
-#   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-# </IfModule>
+# Force HTTPS
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
 
 # Prevent directory browsing
 Options -Indexes

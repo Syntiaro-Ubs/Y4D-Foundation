@@ -36,12 +36,12 @@ const Navbar = () => {
     } else {
       // Standard production redirect - switch to same tab if user wants, but keeping window.open for now
       // unless they explicitly ask for same tab on production too.
-      window.open("https://global.y4dinfo.org", "_blank");
+      window.open("https://global.y4dinfo.org", "_blank", "noopener,noreferrer");
     }
   };
 
   const goToIndia = () => {
-    window.open("https://india.y4d.ngo/", "_blank");
+    window.open("https://india.y4d.ngo/", "_blank", "noopener,noreferrer");
   };
 
   useEffect(() => {

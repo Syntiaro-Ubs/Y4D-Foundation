@@ -20,19 +20,16 @@ const SanitizedHTML = ({ content, className = '', allowedTags = null }) => {
   ];
 
   // Default allowed attributes
-  const defaultAllowedAttrs = {
-    a: ['href', 'target', 'rel'],
-    img: ['src', 'alt', 'width', 'height', 'class'],
-    '*': ['class', 'id']
-  };
+  const defaultAllowedAttrs = ['href', 'target', 'rel', 'src', 'alt', 'width', 'height', 'class', 'id'];
 
   const config = {
     ALLOWED_TAGS: allowedTags || defaultAllowedTags,
     ALLOWED_ATTR: defaultAllowedAttrs,
     ALLOW_DATA_ATTR: false,
+    FORCE_BODY: true,
     // Prevent script execution
     FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input'],
-    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
+    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onkeyup', 'onkeydown', 'oninput', 'onfocus', 'onblur', 'onsubmit', 'onreset', 'onchange', 'onselect', 'onabort']
   };
 
   const sanitized = DOMPurify.sanitize(content, config);
