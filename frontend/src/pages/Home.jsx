@@ -238,7 +238,6 @@ const Home = () => {
                   muted
                   loop
                   playsInline
-                  onLoadedData={handleImageLoad}
                 />
               )}
               {(banner.title || banner.description || banner.button_text) && (

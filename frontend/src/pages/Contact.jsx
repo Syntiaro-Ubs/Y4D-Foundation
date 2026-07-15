@@ -189,6 +189,7 @@ const Contact = () => {
   // Success popup
   const [successMessage, setSuccessMessage] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const closePopup = () => setPopupType(null);
 
@@ -229,6 +230,7 @@ const Contact = () => {
   // Corporate partnership submit
   const handleCorporateSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_BASE}/contact/corporate-partnership`, {
         method: "POST",
@@ -248,12 +250,15 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Internship submit
   const handleInternshipSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_BASE}/contact/internship`, {
         method: "POST",
@@ -275,12 +280,15 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Volunteer submit
   const handleVolunteerSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_BASE}/contact/volunteer`, {
         method: "POST",
@@ -301,12 +309,15 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Enquiry submit
   const handleEnquirySubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const res = await fetch(`${API_BASE}/contact/enquiry`, {
         method: "POST",
@@ -328,6 +339,8 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -396,7 +409,9 @@ const Contact = () => {
                     onChange={(e) => setDetails(e.target.value)}
                   ></textarea>
 
-                  <button type="submit">Submit</button>
+                  <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? <span className="spinner"></span> : "Submit"}
+                  </button>
                 </form>
               </>
             )}
@@ -444,7 +459,9 @@ const Contact = () => {
                     onChange={(e) => setInternMessage(e.target.value)}
                   ></textarea>
 
-                  <button type="submit">Apply</button>
+                  <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? <span className="spinner"></span> : "Apply"}
+                  </button>
                 </form>
               </>
             )}
@@ -485,7 +502,9 @@ const Contact = () => {
                     onChange={(e) => setVolReason(e.target.value)}
                   ></textarea>
 
-                  <button type="submit">Submit</button>
+                  <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? <span className="spinner"></span> : "Submit"}
+                  </button>
                 </form>
               </>
             )}
@@ -534,7 +553,9 @@ const Contact = () => {
                     onChange={(e) => setEnqMessage(e.target.value)}
                   ></textarea>
 
-                  <button type="submit">Submit</button>
+                  <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? <span className="spinner"></span> : "Submit"}
+                  </button>
                 </form>
               </>
             )}

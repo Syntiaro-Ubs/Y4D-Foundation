@@ -5,11 +5,27 @@
   margin-top: 80px;
 }
 
-.legal-banner img {
+/* Banner Slider Styles */
+.legal-banner {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-image,
+.banner-video {
+  margin-top: 5%;
   width: 100%;
   height: auto;
+  max-height: 550px;
+  object-fit: cover;
   display: block;
-  border-radius: 8px;
 }
 
 .legal-section {
@@ -336,5 +352,22 @@ table td {
   .no-image {
     width: 120px;
     height: 120px;
+  }
+}
+
+@media (max-width: 1024px) {
+
+  .banner-image,
+  .banner-video {
+    height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .banner-image,
+  .banner-video {
+    margin-top: 2%;
+    height: 250px;
   }
 }

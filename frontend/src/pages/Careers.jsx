@@ -300,8 +300,8 @@ const Careers = () => {
                   />
                 </div>
 
-                <button type="submit" className="careers-btn">
-                  Submit Application
+                <button type="submit" className="careers-btn" disabled={isSubmitting}>
+                  {isSubmitting ? <span className="spinner"></span> : "Submit Application"}
                 </button>
               </form>
             )}

@@ -4,12 +4,89 @@
   background: #f9f9f9;
 }
 
-/* Banner */
-.story-banner img {
+/* Banner Slider Styles */
+.story-banner {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-image,
+.banner-video {
   width: 100%;
   height: auto;
+  max-height: 550px;
   object-fit: cover;
   display: block;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay for readability */
+}
+
+.banner-content {
+  text-align: center;
+  color: white;
+  padding: 20px;
+  max-width: 800px;
+  z-index: 2;
+}
+
+.banner-content h1 {
+  font-size: 2.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.banner-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.banner-btn {
+  background: #f26622;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.banner-btn:hover {
+  background: #e05511;
+  transform: translateY(-2px);
+}
+
+/* Slick Slider controls adjustment */
+.story-banner .slick-dots {
+  bottom: 20px;
+}
+
+.story-banner .slick-dots li button:before {
+  color: white;
+  font-size: 10px;
+}
+
+.story-banner .slick-dots li.slick-active button:before {
+  color: #f26622;
 }
 
 /* Tabs Bar */
@@ -164,8 +241,9 @@
   }
 }
 @media (max-width: 1024px) {
-  .story-banner img {
-    height: 300px;
+  .banner-image,
+  .banner-video {
+    height: 350px;
   }
 
   .story-tabs {
@@ -189,8 +267,9 @@
 
 /* Mobile view */
 @media (max-width: 768px) {
-  .story-banner img {
-    height: 200px;
+  .banner-image,
+  .banner-video {
+    height: 250px;
   }
 
   .story-tabs {

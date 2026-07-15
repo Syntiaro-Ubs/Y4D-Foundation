@@ -1,12 +1,15 @@
 // src/pages/About.jsx
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
 import "../pages/About.css";
 import pyramidImg from "../assets/Pyramid.png";
 import { getBanners } from "../services/api.jsx";
 import { UPLOADS_BASE } from "../config/api";
 import logger from "../utils/logger";
 import { useRegion } from "../hooks/useRegion";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const About = () => {
   const navigate = useNavigate();
@@ -70,6 +73,17 @@ const About = () => {
     });
   };
 
+  const sliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 800,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: false,
+  };
+
   // Render dynamic banner
   const renderBanner = () => {
     if (bannersLoading) {
@@ -92,42 +106,44 @@ const About = () => {
 
     return (
       <div className="story-banner">
-        {aboutBanners.map((banner) => (
-          <div key={banner.id} className="banner-container">
-            {banner.media_type === 'image' ? (
-              <img
-                src={`${UPLOADS_BASE}/banners/${banner.media}`}
-                alt={banner.title}
-                className="banner-image"
-              />
-            ) : (
-              <video
-                src={`${UPLOADS_BASE}/banners/${banner.media}`}
-                className="banner-video"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            )}
-            {(banner.title || banner.description) && (
-              <div className="banner-overlay">
-                <div className="banner-content">
-                  {banner.title && <h1>{banner.title}</h1>}
-                  {banner.description && <p>{banner.description}</p>}
-                  {banner.button_text && banner.button_link && (
-                    <button
-                      className="banner-btn"
-                      onClick={() => navigate(banner.button_link)}
-                    >
-                      {banner.button_text}
-                    </button>
-                  )}
+        <Slider {...sliderSettings}>
+          {aboutBanners.map((banner) => (
+            <div key={banner.id} className="banner-container">
+              {banner.media_type === 'image' ? (
+                <img
+                  src={`${UPLOADS_BASE}/banners/${banner.media}`}
+                  alt={banner.title}
+                  className="banner-image"
+                />
+              ) : (
+                <video
+                  src={`${UPLOADS_BASE}/banners/${banner.media}`}
+                  className="banner-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              )}
+              {(banner.title || banner.description) && (
+                <div className="banner-overlay">
+                  <div className="banner-content">
+                    {banner.title && <h1>{banner.title}</h1>}
+                    {banner.description && <p>{banner.description}</p>}
+                    {banner.button_text && banner.button_link && (
+                      <button
+                        className="banner-btn"
+                        onClick={() => navigate(banner.button_link)}
+                      >
+                        {banner.button_text}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          ))}
+        </Slider>
       </div>
     );
   };
@@ -262,7 +278,7 @@ const About = () => {
               <li>
                 <h4>ENVIRONMENT SUSTAINABILITY</h4>
                 <p>
-                  crowns the pyramid as the ultimate objective, emphasizing the
+                  Crowns the pyramid as the ultimate objective, emphasizing the
                   preservation of our planet for current and future generations.
                   Only when foundational human needs of education, livelihood,
                   and health are met, individuals focus on engaging in
@@ -278,7 +294,7 @@ const About = () => {
             <li>
               <h4>HEALTHCARE</h4>
               <p>
-                depends on a secure livelihood, allowing individuals to invest
+                Depends on a secure livelihood, allowing individuals to invest
                 in their physical, mental, and social well-being. With financial
                 stability, they can afford quality healthcare services,
                 nutritious diets, clean water, and a safe living environment,
@@ -288,7 +304,7 @@ const About = () => {
             <li>
               <h4>LIVELIHOOD</h4>
               <p>
-                emerges from education, providing economic stability and the
+                Emerges from education, providing economic stability and the
                 resources needed to sustain oneself and one's family. This
                 includes access to employment, entrepreneurial ventures, or
                 other income sources, fostering financial independence and
@@ -298,7 +314,7 @@ const About = () => {
             <li>
               <h4>EDUCATION</h4>
               <p>
-                forms the critical foundation, equipping individuals with
+                Forms the critical foundation, equipping individuals with
                 essential knowledge, practical skills, and the ability to think
                 critically. This empowers them to seize opportunities, pursue
                 personal growth, and lay the groundwork for a stable and
