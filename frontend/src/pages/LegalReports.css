@@ -5,11 +5,60 @@
   margin-top: 80px;
 }
 
-.legal-banner img {
+.legal-banner {
   width: 100%;
-  height: 70vh;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Ensure slick slider doesn't interfere with our height calculations */
+.legal-banner .slick-slider,
+.legal-banner .slick-list,
+.legal-banner .slick-track {
+  height: 100% !important;
+}
+
+.legal-banner .slick-slide {
+  height: auto !important;
+}
+
+.legal-banner .slick-slide>div {
+  height: 100%;
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  height: 70vh !important;
+  overflow: hidden;
+}
+
+.banner-image,
+.banner-video {
+  width: 100%;
+  height: 70vh !important;
+  object-fit: cover;
   display: block;
   border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+
+  .banner-container,
+  .banner-image,
+  .banner-video {
+    height: 40vh !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .banner-container,
+  .banner-image,
+  .banner-video {
+    height: 30vh !important;
+  }
 }
 
 .legal-section {
@@ -338,6 +387,7 @@ table td {
   .legal-banner {
     height: 50vh;
   }
+
   .legal-banner img {
     height: 50vh;
   }

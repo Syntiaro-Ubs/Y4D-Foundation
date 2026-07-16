@@ -1,6 +1,9 @@
 // src/pages/About.jsx
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "../pages/About.css";
 import pyramidImg from "../assets/Pyramid.png";
 import { getBanners } from "../services/api.jsx";
@@ -70,6 +73,17 @@ const About = () => {
     });
   };
 
+  const sliderSettings = {
+    dots: true,
+    infinite: aboutBanners.length > 1,
+    speed: 800,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: aboutBanners.length > 1,
+    autoplaySpeed: 4000,
+    arrows: false,
+  };
+
   // Render dynamic banner
   const renderBanner = () => {
     if (bannersLoading) {
@@ -92,42 +106,44 @@ const About = () => {
 
     return (
       <div className="story-banner">
-        {aboutBanners.map((banner) => (
-          <div key={banner.id} className="banner-container">
-            {banner.media_type === 'image' ? (
-              <img
-                src={`${UPLOADS_BASE}/banners/${banner.media}`}
-                alt={banner.title}
-                className="banner-image"
-              />
-            ) : (
-              <video
-                src={`${UPLOADS_BASE}/banners/${banner.media}`}
-                className="banner-video"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            )}
-            {(banner.title || banner.description) && (
-              <div className="banner-overlay">
-                <div className="banner-content">
-                  {banner.title && <h1>{banner.title}</h1>}
-                  {banner.description && <p>{banner.description}</p>}
-                  {banner.button_text && banner.button_link && (
-                    <button
-                      className="banner-btn"
-                      onClick={() => navigate(banner.button_link)}
-                    >
-                      {banner.button_text}
-                    </button>
-                  )}
+        <Slider {...sliderSettings}>
+          {aboutBanners.map((banner) => (
+            <div key={banner.id} className="banner-container">
+              {banner.media_type === 'image' ? (
+                <img
+                  src={`${UPLOADS_BASE}/banners/${banner.media}`}
+                  alt={banner.title}
+                  className="banner-image"
+                />
+              ) : (
+                <video
+                  src={`${UPLOADS_BASE}/banners/${banner.media}`}
+                  className="banner-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              )}
+              {(banner.title || banner.description) && (
+                <div className="banner-overlay">
+                  <div className="banner-content">
+                    {banner.title && <h1>{banner.title}</h1>}
+                    {banner.description && <p>{banner.description}</p>}
+                    {banner.button_text && banner.button_link && (
+                      <button
+                        className="banner-btn"
+                        onClick={() => navigate(banner.button_link)}
+                      >
+                        {banner.button_text}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          ))}
+        </Slider>
       </div>
     );
   };

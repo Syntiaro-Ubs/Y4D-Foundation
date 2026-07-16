@@ -1,5 +1,8 @@
 // src/pages/LegalReports.jsx
 import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "./LegalReports.css";
 import { bannerService } from "../api/services/banners.service";
 import { impactService } from "../api/services/impact.service";
@@ -82,6 +85,17 @@ const LegalReports = () => {
     { title: "9) MSME", value: "MH20D0001233" },
   ];
 
+  const sliderSettings = {
+    dots: true,
+    infinite: legalBanners.length > 1,
+    speed: 800,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: legalBanners.length > 1,
+    autoplaySpeed: 4000,
+    arrows: false,
+  };
+
   // Render dynamic banner
   const renderBanner = () => {
     if (bannersLoading) {
@@ -104,26 +118,28 @@ const LegalReports = () => {
 
     return (
       <div className="legal-banner">
-        {legalBanners.map((banner) => (
-          <div key={banner.id} className="banner-container">
-            {banner.media_type === 'image' ? (
-              <img
-                src={`${UPLOADS_BASE}/banners/${banner.media}`}
-                alt={`Legal Reports Banner - ${banner.page}`}
-                className="banner-image"
-              />
-            ) : (
-              <video
-                src={`${UPLOADS_BASE}/banners/${banner.media}`}
-                className="banner-video"
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            )}
-          </div>
-        ))}
+        <Slider {...sliderSettings}>
+          {legalBanners.map((banner) => (
+            <div key={banner.id} className="banner-container">
+              {banner.media_type === 'image' ? (
+                <img
+                  src={`${UPLOADS_BASE}/banners/${banner.media}`}
+                  alt={`Legal Reports Banner - ${banner.page}`}
+                  className="banner-image"
+                />
+              ) : (
+                <video
+                  src={`${UPLOADS_BASE}/banners/${banner.media}`}
+                  className="banner-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              )}
+            </div>
+          ))}
+        </Slider>
       </div>
     );
   };
