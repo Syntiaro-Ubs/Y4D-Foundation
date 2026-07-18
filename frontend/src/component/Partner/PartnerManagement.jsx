@@ -31,8 +31,95 @@ const PartnerManagement = ({
   });
   const [logoPreview, setLogoPreview] = useState(null);
   const [error, setError] = useState("");
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
 
   const token = localStorage.getItem("token");
+
+  // Selection handlers & bulk operations
+  const toggleSelectionMode = () => {
+    setIsSelectionMode(!isSelectionMode);
+    setSelectedIds(new Set());
+  };
+
+  const toggleSelectItem = (id) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const selectAllPartners = () => {
+    if (selectedIds.size === partners.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(partners.map((p) => p.id)));
+    }
+  };
+
+  const handleBulkStatusChange = async (isActive) => {
+    if (selectedIds.size === 0) return;
+    setLoading(true);
+    try {
+      const idsToUpdate = Array.from(selectedIds);
+      await Promise.all(
+        idsToUpdate.map((id) =>
+          partnersService.togglePartnerStatus(id, isActive)
+        )
+      );
+      setPartners(
+        partners.map((p) =>
+          selectedIds.has(p.id) ? { ...p, is_active: isActive } : p
+        )
+      );
+      toast.success(
+        `Successfully updated status for ${selectedIds.size} partner logos!`
+      );
+      setSelectedIds(new Set());
+      setIsSelectionMode(false);
+    } catch (error) {
+      logger.error("Error bulk updating status:", error);
+      toast.error(`Failed to update status for some partners: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    setLoading(true);
+    try {
+      const idsToDelete = Array.from(selectedIds);
+      await Promise.all(
+        idsToDelete.map((id) => partnersService.deletePartner(id))
+      );
+      setPartners(partners.filter((p) => !selectedIds.has(p.id)));
+      toast.success(`Successfully deleted ${selectedIds.size} partner logos!`);
+      setSelectedIds(new Set());
+      setIsSelectionMode(false);
+    } catch (error) {
+      logger.error("Error bulk deleting partners:", error);
+      toast.error(`Failed to delete some partners: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const triggerBulkDeleteConfirm = () => {
+    if (selectedIds.size === 0) return;
+    onShowConfirmation(
+      "Delete Selected Partners",
+      `Are you sure you want to delete the ${selectedIds.size} selected partner logos? This action cannot be undone.`,
+      "delete",
+      null,
+      "partners",
+      `${selectedIds.size} Partners`,
+      handleBulkDelete
+    );
+  };
 
   // Permission check functions
   const canUserPerformAction = (actionType) => {
@@ -59,6 +146,9 @@ const PartnerManagement = ({
     if (action === "view") {
       fetchPartners();
     }
+    // Clear selection state on action change
+    setIsSelectionMode(false);
+    setSelectedIds(new Set());
   }, [action]);
 
   const fetchPartners = async () => {
@@ -265,19 +355,132 @@ const PartnerManagement = ({
       <div className="accreditation-management">
         <div className="accreditation-header">
           <h2>Partners Logo Management</h2>
-          {canUserPerformAction("create") && (
-            <button
-              onClick={() => {
-                resetForm();
-                onActionChange("add");
-              }}
-              className="btn-primary"
-              disabled={loading}
-            >
-              + Add New Partner Logo
-            </button>
-          )}
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            {partners.length > 0 && (
+              <button
+                onClick={toggleSelectionMode}
+                className={isSelectionMode ? "btn-secondary" : "btn-primary"}
+                style={{
+                  backgroundColor: isSelectionMode ? "#6c757d" : "#4a90e2",
+                  color: "white",
+                  padding: "8px 16px",
+                  borderRadius: "4px",
+                  border: "none",
+                  cursor: "pointer",
+                  fontWeight: "500",
+                }}
+              >
+                {isSelectionMode ? "Cancel" : "Select"}
+              </button>
+            )}
+            {!isSelectionMode && canUserPerformAction("create") && (
+              <button
+                onClick={() => {
+                  resetForm();
+                  onActionChange("add");
+                }}
+                className="btn-primary"
+                disabled={loading}
+              >
+                + Add New Partner Logo
+              </button>
+            )}
+          </div>
         </div>
+
+        {isSelectionMode && (
+          <div
+            className="bulk-actions-bar"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "15px 20px",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "8px",
+              marginBottom: "20px",
+              border: "1px solid #e2e8f0",
+              flexWrap: "wrap",
+              gap: "15px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", margin: 0, fontWeight: "500" }}>
+                <input
+                  type="checkbox"
+                  ref={el => { if (el) el.indeterminate = selectedIds.size > 0 && selectedIds.size < partners.length; }}
+                  checked={partners.length > 0 && selectedIds.size === partners.length}
+                  onChange={selectAllPartners}
+                  style={{ width: "18px", height: "18px", cursor: "pointer" }}
+                />
+                Select All
+              </label>
+              <span style={{ color: "#64748b", fontSize: "14px", fontWeight: "500" }}>
+                {selectedIds.size} of {partners.length} selected
+              </span>
+            </div>
+
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={() => handleBulkStatusChange(true)}
+                disabled={selectedIds.size === 0 || loading}
+                style={{
+                  backgroundColor: selectedIds.size === 0 ? "#cbd5e1" : "#10b981",
+                  color: "white",
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  border: "none",
+                  cursor: selectedIds.size === 0 ? "not-allowed" : "pointer",
+                  fontWeight: "600",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  transition: "all 0.2s",
+                }}
+              >
+                Active
+              </button>
+              <button
+                onClick={() => handleBulkStatusChange(false)}
+                disabled={selectedIds.size === 0 || loading}
+                style={{
+                  backgroundColor: selectedIds.size === 0 ? "#cbd5e1" : "#f59e0b",
+                  color: "white",
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  border: "none",
+                  cursor: selectedIds.size === 0 ? "not-allowed" : "pointer",
+                  fontWeight: "600",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  transition: "all 0.2s",
+                }}
+              >
+                Inactive
+              </button>
+              <button
+                onClick={triggerBulkDeleteConfirm}
+                disabled={selectedIds.size === 0 || loading}
+                style={{
+                  backgroundColor: selectedIds.size === 0 ? "#cbd5e1" : "#ef4444",
+                  color: "white",
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  border: "none",
+                  cursor: selectedIds.size === 0 ? "not-allowed" : "pointer",
+                  fontWeight: "600",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  transition: "all 0.2s",
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        )}
 
         {error && <div className="error-message">{error}</div>}
 
@@ -299,14 +502,53 @@ const PartnerManagement = ({
                   item.is_active === 1 ||
                   item.is_active === "true";
 
+                const isSelected = selectedIds.has(item.id);
                 return (
                   <div
                     key={item.id}
-                    className="item-card"
+                    className={`item-card ${isSelectionMode ? "selection-mode-card" : ""} ${isSelected ? "selected-card" : ""}`}
+                    onClick={isSelectionMode ? () => toggleSelectItem(item.id) : undefined}
                     style={{
                       borderLeft: `4px solid ${isActive ? "#4CAF50" : "#ff9800"}`,
+                      position: "relative",
+                      cursor: isSelectionMode ? "pointer" : "default",
+                      boxShadow: isSelected ? "0 0 0 2px #4a90e2, 0 4px 12px rgba(74, 144, 226, 0.2)" : undefined,
+                      transform: isSelected ? "translateY(-2px)" : undefined,
+                      borderColor: isSelected ? "#4a90e2" : undefined,
+                      transition: "all 0.2s ease-in-out",
                     }}
                   >
+                    {isSelectionMode && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "10px",
+                          right: "10px",
+                          zIndex: 10,
+                          backgroundColor: "white",
+                          borderRadius: "50%",
+                          width: "24px",
+                          height: "24px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelectItem(item.id)}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            margin: 0,
+                            cursor: "pointer",
+                          }}
+                        />
+                      </div>
+                    )}
                     {item.logo && (
                       <div className="item-image" style={{ height: "120px", display: "flex", alignItems: "center", justifyContent: "center", padding: "10px", background: "#f8f9fa" }}>
                         <img
@@ -324,9 +566,9 @@ const PartnerManagement = ({
                         <h4>{item.name || "Unnamed Partner"}</h4>
                         <span
                           className={`status-badge ${isActive ? "active" : "inactive"}`}
-                          onClick={() => handleToggleStatus(item)}
-                          style={{ cursor: "pointer" }}
-                          title="Click to toggle status"
+                          onClick={isSelectionMode ? undefined : () => handleToggleStatus(item)}
+                          style={{ cursor: isSelectionMode ? "default" : "pointer" }}
+                          title={isSelectionMode ? undefined : "Click to toggle status"}
                         >
                           {isActive ? "ACTIVE" : "INACTIVE"}
                         </span>
@@ -344,7 +586,7 @@ const PartnerManagement = ({
                         </p>
                       </div>
 
-                      {renderItemActions(item)}
+                      {!isSelectionMode && renderItemActions(item)}
                     </div>
                   </div>
                 );

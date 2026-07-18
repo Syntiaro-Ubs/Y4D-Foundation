@@ -7,13 +7,10 @@ const Partners1 = ({ partners }) => {
   // Filter for line1 partners
   const line1Partners = partners ? partners.filter(p => p.carousel_line === 'line1') : [];
 
-  // Use dynamic logos if available, otherwise fallback to static ones (logos 1-27)
+  // Use dynamic logos if available, otherwise return empty array
   const partnerLogos = line1Partners.length > 0
     ? line1Partners.map(p => `${UPLOADS_BASE}/partners/${p.logo}`)
-    : Array.from({ length: 27 }, (_, i) => {
-        const num = (i + 1).toString().padStart(2, "0");
-        return `/partners/Partners-${num}.png`;
-      });
+    : [];
 
   const isInfinite = partnerLogos.length > 6;
   const settings = {

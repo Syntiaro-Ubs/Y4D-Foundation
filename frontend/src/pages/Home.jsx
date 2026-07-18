@@ -102,7 +102,7 @@ const Home = () => {
             logger.error("❌ Error fetching campaign banners:", err);
             return [];
           }),
-          partnersService.getPartners("india").catch((err) => {
+          partnersService.getPartners(region).catch((err) => {
             logger.error("❌ Error fetching partners:", err);
             return [];
           }),
@@ -129,7 +129,7 @@ const Home = () => {
     };
 
     fetchHomeData();
-  }, []);
+  }, [region]);
 
   // Dynamic slider height adjustment
   // Removed dynamic slider height adjustment - now handled by CSS
@@ -432,26 +432,12 @@ const Home = () => {
       </section>
 
       {/* Partners Section */}
-      <section className="Partners-section">
-        {region === "global" ? (
-          <div className="global-partners-container">
-            <h2 className="partner-title">
-              Our Partners<span></span>
-            </h2>
-            <div className="global-partners-list">
-              <img src="/partners/global/global-partner-1.jpg" alt="Partner 1" />
-              <img src="/partners/global/global-partner-2.jpg" alt="Partner 2" />
-              <img src="/partners/global/global-partner-3.png" alt="Partner 3" />
-              <img src="/partners/global/smiling-rocks.png" alt="Smiling Rocks" />
-            </div>
-          </div>
-        ) : (
-          <>
-            <Partners1 partners={dynamicPartners} />
-            <Partners2 partners={dynamicPartners} />
-          </>
-        )}
-      </section>
+      {dynamicPartners.length > 0 && (
+        <section className="Partners-section">
+          <Partners1 partners={dynamicPartners} />
+          <Partners2 partners={dynamicPartners} />
+        </section>
+      )}
 
       {/* Accreditations Section */}
       {region !== "global" && (
