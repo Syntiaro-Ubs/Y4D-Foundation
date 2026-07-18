@@ -186,6 +186,13 @@ const Home = () => {
       acc.is_active === true || acc.is_active === 1 || acc.is_active === "true"
   );
 
+  const activePartners = partners.filter(
+    (partner) =>
+      partner.is_active === true ||
+      partner.is_active === 1 ||
+      partner.is_active === "true"
+  );
+
   const handleImageError = (e) => {
     e.target.style.display = "none";
     const nextSibling = e.target.nextSibling;
@@ -443,15 +450,15 @@ const Home = () => {
       </section>
 
       {/* Partners Section */}
-      <section className="Partners-section">
-        {region === "global" ? (
-          <div className="global-partners-container">
-            <h2 className="partner-title">
-              Our Partners<span></span>
-            </h2>
-            <div className="global-partners-list">
-              {partners && partners.length > 0 ? (
-                partners.map((partner) => {
+      {region === "global" ? (
+        activePartners && activePartners.length > 0 ? (
+          <section className="Partners-section">
+            <div className="global-partners-container">
+              <h2 className="partner-title">
+                Our Partners<span></span>
+              </h2>
+              <div className="global-partners-list">
+                {activePartners.map((partner) => {
                   const logoUrl = partner.logo.startsWith("http")
                     ? partner.logo
                     : `${API_BASE}/uploads/partners/${partner.logo}`;
@@ -466,23 +473,17 @@ const Home = () => {
                       }}
                     />
                   );
-                })
-              ) : (
-                <>
-                  <img src="/partners/partner-pink-cycle.png" alt="Pink Cycle EmpowerHer Initiative" />
-                  <img src="/partners/partner-smart-education.png" alt="Smart Education" />
-                  <img src="/partners/partner-trip.jpg" alt="TRIP - Terimbere Rural Integrated Partnership" />
-                </>
-              )}
+                })}
+              </div>
             </div>
-          </div>
-        ) : (
-          <>
-            <Partners1 />
-            <Partners2 />
-          </>
-        )}
-      </section>
+          </section>
+        ) : null
+      ) : (
+        <section className="Partners-section">
+          <Partners1 />
+          <Partners2 />
+        </section>
+      )}
 
       {/* Accreditations Section */}
       {region !== "global" && (

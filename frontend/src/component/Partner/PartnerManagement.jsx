@@ -35,6 +35,73 @@ const PartnerManagement = ({
   const [filterRegion, setFilterRegion] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [isSelectMode, setIsSelectMode] = useState(false);
+
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.length === filteredPartners.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredPartners.map((p) => p.id));
+    }
+  };
+
+  const handleBulkStatusChange = async (status) => {
+    if (!canUserPerformAction("publish")) {
+      toast.warning("You don't have permission to change partner status");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    try {
+      await Promise.all(
+        selectedIds.map((id) => partnersService.togglePartnerStatus(id, status))
+      );
+      fetchPartners();
+      setSelectedIds([]);
+      setIsSelectMode(false);
+      toast.success(
+        `Successfully updated ${selectedIds.length} partners to ${
+          status ? "Active" : "Inactive"
+        }`
+      );
+    } catch (error) {
+      logger.error("Error updating bulk partner status:", error);
+      toast.error(`Error updating partner status: ${error.message}`);
+    }
+    setLoading(false);
+  };
+
+  const handleBulkDelete = async () => {
+    if (!canUserPerformAction("delete")) {
+      toast.warning("You don't have permission to delete partners");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    try {
+      await Promise.all(
+        selectedIds.map((id) => partnersService.deletePartner(id))
+      );
+      fetchPartners();
+      setSelectedIds([]);
+      setIsSelectMode(false);
+      toast.success(`Successfully deleted ${selectedIds.length} partners`);
+    } catch (error) {
+      logger.error("Error deleting bulk partners:", error);
+      toast.error(`Error deleting partners: ${error.message}`);
+    }
+    setLoading(false);
+  };
+
   // Permission check functions
   const canUserPerformAction = (actionType) => {
     if (!currentUser) return false;
@@ -69,6 +136,8 @@ const PartnerManagement = ({
       // The backend accepts a region query param: /api/partners?region=xxx
       const data = await partnersService.getPartners("global");
       setPartners(data || []);
+      setSelectedIds([]);
+      setIsSelectMode(false);
     } catch (error) {
       logger.error("Error fetching partners:", error);
       setError("Failed to fetch partners");
@@ -210,6 +279,8 @@ const PartnerManagement = ({
     });
     setLogoPreview(null);
     setError("");
+    setSelectedIds([]);
+    setIsSelectMode(false);
   };
 
   const cancelAction = () => {
@@ -312,7 +383,7 @@ const PartnerManagement = ({
           )}
         </div>
 
-        <div className="filter-search-container" style={{ display: "flex", gap: "15px", margin: "15px 0", flexWrap: "wrap" }}>
+        <div className="filter-search-container" style={{ display: "flex", gap: "15px", margin: "15px 0", flexWrap: "wrap", alignItems: "center" }}>
           <div className="search-box" style={{ flex: "1", minWidth: "200px" }}>
             <input
               type="text"
@@ -322,7 +393,169 @@ const PartnerManagement = ({
               style={{ width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
             />
           </div>
+          {filteredPartners.length > 0 && (
+            <div style={{ display: "flex", gap: "10px" }}>
+              {!isSelectMode ? (
+                <button
+                  type="button"
+                  onClick={() => setIsSelectMode(true)}
+                  className="btn-secondary"
+                  style={{
+                    padding: "10px 15px",
+                    cursor: "pointer",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#f5f6f8",
+                    fontWeight: "500",
+                    color: "#333",
+                    transition: "all 0.2s"
+                  }}
+                >
+                  Select
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleSelectAll}
+                    className="btn-secondary"
+                    style={{
+                      padding: "10px 15px",
+                      cursor: "pointer",
+                      borderRadius: "5px",
+                      border: "1px solid #ccc",
+                      backgroundColor: "#e8f0fe",
+                      fontWeight: "500",
+                      color: "#1967d2",
+                      transition: "all 0.2s"
+                    }}
+                  >
+                    {selectedIds.length === filteredPartners.length ? "Deselect All" : "Select All"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSelectMode(false);
+                      setSelectedIds([]);
+                    }}
+                    className="btn-secondary"
+                    style={{
+                      padding: "10px 15px",
+                      cursor: "pointer",
+                      borderRadius: "5px",
+                      border: "1px solid #ccc",
+                      backgroundColor: "#f5f6f8",
+                      fontWeight: "500",
+                      color: "#333",
+                      transition: "all 0.2s"
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
+
+        {selectedIds.length > 0 && (
+          <div 
+            className="bulk-actions-bar" 
+            style={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: "10px", 
+              padding: "12px 15px", 
+              backgroundColor: "#e8f0fe", 
+              borderRadius: "5px", 
+              marginBottom: "15px",
+              border: "1px solid #c2dbff"
+            }}
+          >
+            <span style={{ fontWeight: "bold", color: "#1967d2", marginRight: "10px" }}>
+              {selectedIds.length} partner{selectedIds.length > 1 ? "s" : ""} selected
+            </span>
+            
+            <button
+              onClick={() => {
+                onShowConfirmation(
+                  "Activate Selected Partners",
+                  `Are you sure you want to activate the ${selectedIds.length} selected partners?`,
+                  "publish",
+                  null,
+                  "partners",
+                  `${selectedIds.length} partners`,
+                  () => handleBulkStatusChange(true)
+                );
+              }}
+              style={{ 
+                padding: "8px 12px", 
+                backgroundColor: "#28a745", 
+                color: "white", 
+                border: "none", 
+                borderRadius: "4px", 
+                cursor: "pointer",
+                fontWeight: "500"
+              }}
+              disabled={loading}
+            >
+              Active
+            </button>
+
+            <button
+              onClick={() => {
+                onShowConfirmation(
+                  "Deactivate Selected Partners",
+                  `Are you sure you want to deactivate the ${selectedIds.length} selected partners?`,
+                  "publish",
+                  null,
+                  "partners",
+                  `${selectedIds.length} partners`,
+                  () => handleBulkStatusChange(false)
+                );
+              }}
+              style={{ 
+                padding: "8px 12px", 
+                backgroundColor: "#ffc107", 
+                color: "#333", 
+                border: "none", 
+                borderRadius: "4px", 
+                cursor: "pointer",
+                fontWeight: "500"
+              }}
+              disabled={loading}
+            >
+              Inactive
+            </button>
+
+            <button
+              onClick={() => {
+                onShowConfirmation(
+                  "Delete Selected Partners",
+                  `Are you sure you want to delete the ${selectedIds.length} selected partners? This action cannot be undone.`,
+                  "delete",
+                  null,
+                  "partners",
+                  `${selectedIds.length} partners`,
+                  () => handleBulkDelete()
+                );
+              }}
+              style={{ 
+                padding: "8px 12px", 
+                backgroundColor: "#dc3545", 
+                color: "white", 
+                border: "none", 
+                borderRadius: "4px", 
+                cursor: "pointer",
+                marginLeft: "auto",
+                fontWeight: "500"
+              }}
+              disabled={loading}
+            >
+              Delete
+            </button>
+          </div>
+        )}
 
         {error && <div className="error-message">{error}</div>}
 
@@ -350,8 +583,27 @@ const PartnerManagement = ({
                     className="item-card"
                     style={{
                       borderLeft: `4px solid ${isActive ? "#4CAF50" : "#ff9800"}`,
+                      position: "relative",
+                      backgroundColor: (isSelectMode && selectedIds.includes(item.id)) ? "#f1f8ff" : "white",
+                      boxShadow: (isSelectMode && selectedIds.includes(item.id)) ? "0 0 0 2px #0056b3" : "none",
+                      transition: "all 0.2s ease"
                     }}
                   >
+                    {isSelectMode && (
+                      <div style={{ position: "absolute", top: "10px", left: "10px", zIndex: 10 }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.includes(item.id)}
+                          onChange={() => toggleSelect(item.id)}
+                          style={{
+                            width: "18px",
+                            height: "18px",
+                            cursor: "pointer",
+                            accentColor: "#007bff"
+                          }}
+                        />
+                      </div>
+                    )}
                     {item.logo && (
                       <div className="item-image" style={{ background: "#f5f6f8", display: "flex", alignItems: "center", justifyContent: "center", height: "120px", padding: "10px" }}>
                         <img
