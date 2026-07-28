@@ -10,6 +10,21 @@ import logger from "../utils/logger";
 import toast from "../utils/toast";
 import { useRegion } from "../hooks/useRegion";
 
+const getPaymentCurrencyFromHost = () => {
+  const hostname = window.location.hostname;
+  const globalDomains = [
+    "global.y4d.ngo",
+    "global.y4dinfo.org",
+    "y4d-global.netlify.app",
+    "global.localhost",
+  ];
+  const isGlobalHost =
+    globalDomains.some((domain) => hostname.includes(domain)) ||
+    hostname.startsWith("global.");
+
+  return isGlobalHost ? "USD" : "INR";
+};
+
 const DonateNow = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -24,8 +39,9 @@ const DonateNow = () => {
 
   const region = useRegion();
   const isGlobal = region === 'global';
-  const currencySymbol = isGlobal ? "$" : "₹";
-  const suggestedAmounts = isGlobal ? [25, 50, 100, 150] : [500, 1000, 2000, 5000];
+  const paymentCurrency = getPaymentCurrencyFromHost();
+  const currencySymbol = paymentCurrency === "USD" ? "$" : "₹";
+  const suggestedAmounts = paymentCurrency === "USD" ? [25, 50, 100, 150] : [500, 1000, 2000, 5000];
 
   useEffect(() => {
     AOS.init({
@@ -151,6 +167,7 @@ const DonateNow = () => {
           email: formData.email.trim(),
           pan: formData.pan?.trim() || "",
           message: formData.message?.trim() || "",
+          currency: paymentCurrency,
         });
       } catch (error) {
         logger.error("Error creating order:", error);
@@ -172,7 +189,7 @@ const DonateNow = () => {
       const options = {
         key: keyData.key,
         amount: order.amount,
-        currency: isGlobal ? "USD" : "INR",
+        currency: order.currency || paymentCurrency,
         name: "Y4D Foundation",
         description: "Donation to Y4D Foundation",
         order_id: order.id,
