@@ -458,7 +458,6 @@ const AccreditationManagement = ({
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="accreditation-form">
-          {/* Form fields remain the same */}
           <div className="form-group">
             <label>Title:</label>
             <input
@@ -469,57 +468,6 @@ const AccreditationManagement = ({
               }
               required
             />
-          </div>
-
-          <div className="form-group">
-            <label>Description:</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              rows="3"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Issuing Organization:</label>
-            <input
-              type="text"
-              value={formData.issuing_organization}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  issuing_organization: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Issue Date:</label>
-              <input
-                type="date"
-                value={formData.issue_date}
-                onChange={(e) =>
-                  setFormData({ ...formData, issue_date: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Expiry Date:</label>
-              <input
-                type="date"
-                value={formData.expiry_date}
-                onChange={(e) =>
-                  setFormData({ ...formData, expiry_date: e.target.value })
-                }
-              />
-            </div>
           </div>
 
           <div className="form-group">
