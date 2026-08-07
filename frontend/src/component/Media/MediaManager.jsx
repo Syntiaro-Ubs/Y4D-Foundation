@@ -6,6 +6,7 @@ import { useLoadingState } from "../../hooks/useLoadingState";
 import logger from "../../utils/logger";
 import toast from "../../utils/toast";
 import confirmDialog from "../../utils/confirmDialog";
+import RichTextEditor from "../Common/RichTextEditor";
 
 const MediaManager = ({ mediaType, onClose }) => {
   const [editingItem, setEditingItem] = useState(null);
@@ -32,6 +33,14 @@ const MediaManager = ({ mediaType, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      (mediaType === "stories" || mediaType === "blogs") &&
+      !formData.content?.replace(/<(.|\n)*?>/g, "").trim()
+    ) {
+      toast.error("Content is required");
+      return;
+    }
 
     await execute(async () => {
       try {
@@ -337,13 +346,12 @@ const MediaManager = ({ mediaType, onClose }) => {
         {(mediaType === "stories" || mediaType === "blogs") && (
           <div className="form-group">
             <label>Content:</label>
-            <textarea
-              value={formData.content || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, content: e.target.value })
+            <RichTextEditor
+              value={formData.content}
+              onChange={(html) =>
+                setFormData({ ...formData, content: html })
               }
-              required
-              rows="6"
+              placeholder="Write the story content here..."
             />
           </div>
         )}

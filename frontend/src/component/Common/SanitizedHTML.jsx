@@ -20,7 +20,7 @@ const SanitizedHTML = ({ content, className = '', allowedTags = null }) => {
   ];
 
   // Default allowed attributes
-  const defaultAllowedAttrs = ['href', 'target', 'rel', 'src', 'alt', 'width', 'height', 'class', 'id'];
+  const defaultAllowedAttrs = ['href', 'target', 'rel', 'src', 'alt', 'width', 'height', 'class', 'id', 'style'];
 
   const config = {
     ALLOWED_TAGS: allowedTags || defaultAllowedTags,

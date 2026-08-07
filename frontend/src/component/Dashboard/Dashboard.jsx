@@ -25,6 +25,7 @@ import {
   clearPermissionsCache,
 } from "../../utils/permissions";
 import toast from "../../utils/toast";
+import RichTextEditor from "../Common/RichTextEditor";
 
 const GRID_MEDIA_TYPES = [
   "newsletters",
@@ -1307,12 +1308,12 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
           {["stories", "blogs"].includes(currentMediaType) && (
             <div className="form-group">
               <label>Content:</label>
-              <textarea
-                value={mediaForm.content || ""}
-                onChange={(e) =>
-                  setMediaForm({ ...mediaForm, content: e.target.value })
+              <RichTextEditor
+                value={mediaForm.content}
+                onChange={(html) =>
+                  setMediaForm({ ...mediaForm, content: html })
                 }
-                rows="5"
+                placeholder="Write the story content here..."
               />
             </div>
           )}
