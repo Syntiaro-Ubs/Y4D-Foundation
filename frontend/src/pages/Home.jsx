@@ -470,7 +470,9 @@ const Home = () => {
                         className="accreditation-icon"
                         onError={handleImageError}
                       />
-                      <h3>{item.title}</h3>
+                      <div className="accreditation-card-body">
+                        <h3>{item.title}</h3>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -504,7 +506,9 @@ const Home = () => {
                         className="accreditation-icon"
                         onError={handleImageError}
                       />
-                      <h3>{item.title}</h3>
+                      <div className="accreditation-card-body">
+                        <h3>{item.title}</h3>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -557,7 +561,9 @@ const Home = () => {
                       className="accreditation-icon"
                       onError={handleImageError}
                     />
-                    <h3>{item.title}</h3>
+                    <div className="accreditation-card-body">
+                      <h3>{item.title}</h3>
+                    </div>
                   </div>
                 ))}
               </Slider>

@@ -310,7 +310,7 @@
 .accreditations-title::before {
   content: "";
   position: absolute;
-  right: 350px;
+  right: 300px;
   top: calc(50% - 6px);
   width: 15px;
   height: 2px;
@@ -321,7 +321,7 @@
 .accreditations-title::after {
   content: "";
   position: absolute;
-  right: 335px;
+  right: 285px;
   top: calc(50% + 4px);
   width: 30px;
   height: 2px;
@@ -332,7 +332,7 @@
 .accreditations-title span::before {
   content: "";
   position: absolute;
-  left: 350px;
+  left: 300px;
   top: calc(50% - 6px);
   width: 15px;
   height: 2px;
@@ -342,7 +342,7 @@
 .accreditations-title span::after {
   content: "";
   position: absolute;
-  left: 335px;
+  left: 285px;
   top: calc(50% + 4px);
   width: 30px;
   height: 2px;
@@ -627,6 +627,7 @@
   display: flex !important;
   justify-content: center;
   align-items: center;
+  height: 150px;
   padding: 10px;
 }
 
@@ -650,8 +651,16 @@
 }
 
 .partner-item img {
-  max-width: 120px;
+  max-width: 200px;
+  max-height: 100px;
+  width: auto;
   height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.partner-item img:hover {
+  transform: scale(1.05);
 }
 
 /* Interventions Section */
@@ -766,54 +775,71 @@
   padding: 40px 20px;
 }
 
+.accreditations-container .slick-slide>div {
+  padding: 0 12px;
+}
+
+.accreditations-container .slick-list {
+  margin: 0 -12px;
+  padding: 10px 0;
+}
+
 .accreditation-card {
-  max-width: 270px;
-  /* Let the card grow with content instead of clipping long text */
-  min-height: 320px;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 15px;
-  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  min-height: 300px;
+  border-radius: 16px;
+  padding: 0;
+  margin: 0 auto;
+  text-align: left;
   border: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  overflow: hidden;
 }
 
 .accreditation-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
 }
 
 .accreditation-icon {
-  width: 200px;
-  height: 160px;
-  object-fit: contain;
-  margin: 0 auto 15px;
-  transition: transform 0.3s ease;
+  width: 100% !important;
+  height: 200px !important;
+  object-fit: cover !important;
+  margin: 0 !important;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  display: block;
 }
 
-.accreditation-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
-  margin-top: auto;
-  /* pushes text down for alignment */
+.accreditation-card-body {
+  padding: 20px 22px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.accreditation-card h3,
+.accreditation-card-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
   text-align: center;
-  /* Make sure very long words (or text without spaces) wrap inside the card */
+  line-height: 1.35;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
-/* Description text inside accreditation cards */
 .accreditation-card p {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #555;
   margin-top: 8px;
-  text-align: center;
-  /* Prevent long continuous text from overflowing the card horizontally */
+  text-align: left;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -889,14 +915,7 @@
     max-width: 88%;
   }
 
-  .accreditation-card {
-    max-width: 240px;
-  }
 
-  .accreditation-card img {
-    width: 200px;
-    height: 170px;
-  }
 
   .About-container {
     width: 86%;
@@ -1069,10 +1088,7 @@
     margin-bottom: 20px;
   }
 
-  .accreditation-icon {
-    width: 70px;
-    height: 70px;
-  }
+
 
   .accreditation-card h3 {
     font-size: 0.95rem;
@@ -1188,20 +1204,11 @@
 
   }
 
-  .accreditations-title::before {
-    right: -50px;
-  }
-
-  .accreditations-title::after {
-    right: -70px;
-  }
-
-  .accreditations-title span::before {
-    left: -50px;
-  }
-
+  .accreditations-title::before,
+  .accreditations-title::after,
+  .accreditations-title span::before,
   .accreditations-title span::after {
-    left: -70px;
+    display: none !important;
   }
 
   .media-title {
@@ -1228,6 +1235,16 @@
 }
 
 @media (max-width: 768px) {
+
+  .partner-item {
+    height: 70px !important;
+    padding: 5px !important;
+  }
+
+  .partner-item img {
+    max-width: 120px !important;
+    max-height: 55px !important;
+  }
 
   .hero-slider .slick-slider,
   .hero-slider .slick-list,
@@ -1268,23 +1285,7 @@
     margin-bottom: 30px;
   }
 
-  .accreditation-icon {
-    width: 100%;
-    max-width: 180px;
-    height: auto;
-    margin: 0 auto 10px;
-  }
 
-  .accreditation-card {
-    max-width: 300px;
-    height: auto;
-  }
-
-  .accreditation-card h3 {
-    font-size: 0.9rem;
-    text-align: center;
-    margin-top: 5px;
-  }
 
   .accreditation-card p {
     overflow-wrap: break-word;
@@ -1395,20 +1396,11 @@
     margin-bottom: 2rem;
   }
 
-  .accreditations-title::before {
-    right: -35px;
-  }
-
-  .accreditations-title::after {
-    right: -50px;
-  }
-
-  .accreditations-title span::before {
-    left: -35px;
-  }
-
+  .accreditations-title::before,
+  .accreditations-title::after,
+  .accreditations-title span::before,
   .accreditations-title span::after {
-    left: -50px;
+    display: none !important;
   }
 
   .media-title {

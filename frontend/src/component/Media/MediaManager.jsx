@@ -324,23 +324,25 @@ const MediaManager = ({ mediaType, onClose }) => {
           />
         </div>
 
-        <div className="form-group">
-          <label>Description:</label>
-          <RichTextToolbar
-            fieldName="description"
-            formState={formData}
-            setFormState={setFormData}
-            textareaId="media-description-textarea"
-          />
-          <textarea
-            id="media-description-textarea"
-            value={formData.description || ""}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            rows="3"
-          />
-        </div>
+        {mediaType !== "newsletters" && (
+          <div className="form-group">
+            <label>Description:</label>
+            <RichTextToolbar
+              fieldName="description"
+              formState={formData}
+              setFormState={setFormData}
+              textareaId="media-description-textarea"
+            />
+            <textarea
+              id="media-description-textarea"
+              value={formData.description || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              rows="3"
+            />
+          </div>
+        )}
 
         {(mediaType === "stories" || mediaType === "blogs") && (
           <div className="form-group">

@@ -239,8 +239,9 @@
 }
 
 .download-btn:hover {
-  background-color: #555;
-  /* lighter gray on hover */
+  background-color: #f26722;
+  border-color: #f26722;
+  color: #fff;
   transform: translateY(-2px);
   /* small lift */
 }

@@ -1290,7 +1290,7 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
             />
           </div>
 
-          {!["stories", "blogs"].includes(currentMediaType) && (
+          {!["stories", "blogs", "newsletters"].includes(currentMediaType) && (
             <div className="form-group">
               <label>Description:</label>
               <RichTextToolbar
