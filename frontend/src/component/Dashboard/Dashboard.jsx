@@ -14,6 +14,7 @@ import BannerManagement from "../Banner/Management/../BannerManagement"; // Keep
 import PartnerManagement from "../Partner/PartnerManagement";
 import SanitizedHTML from "../Common/SanitizedHTML";
 import RichTextToolbar from "../Common/RichTextToolbar";
+import RichTextEditor from "../Common/RichTextEditor";
 import "./Dashboard.css";
 import logger from "../../utils/logger";
 import {
@@ -1315,19 +1316,12 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
           {["stories", "blogs"].includes(currentMediaType) && (
             <div className="form-group">
               <label>Content:</label>
-              <RichTextToolbar
-                fieldName="content"
-                formState={mediaForm}
-                setFormState={setMediaForm}
-                textareaId="dash-content-textarea"
-              />
-              <textarea
-                id="dash-content-textarea"
-                value={mediaForm.content || ""}
-                onChange={(e) =>
-                  setMediaForm({ ...mediaForm, content: e.target.value })
+              <RichTextEditor
+                value={mediaForm.content}
+                onChange={(html) =>
+                  setMediaForm({ ...mediaForm, content: html })
                 }
-                rows="8"
+                placeholder="Write the story content here..."
               />
             </div>
           )}

@@ -303,6 +303,23 @@
   line-height: 1.7;
 }
 
+.st-full-content > *:first-child {
+  margin-top: 0;
+}
+
+.st-full-content u {
+  text-decoration: underline;
+}
+
+.st-full-content a {
+  color: #fb6401;
+  text-decoration: underline;
+}
+
+.st-full-content a:hover {
+  color: #d95400;
+}
+
 .st-full-content h1,
 .st-full-content h2,
 .st-full-content h3,

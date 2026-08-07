@@ -44,7 +44,10 @@ const Stories = () => {
 
   const getPlainTextPreview = (text, maxLength = 150) => {
     if (!text) return "";
-    const plainText = text.replace(/<[^>]+>/g, "").trim();
+    const withoutTags = text.replace(/<[^>]+>/g, " ");
+    const decoder = document.createElement("textarea");
+    decoder.innerHTML = withoutTags;
+    const plainText = decoder.value.replace(/\s+/g, " ").trim();
     return plainText.length > maxLength
       ? `${plainText.substring(0, maxLength)}...`
       : plainText;
