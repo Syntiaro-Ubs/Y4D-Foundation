@@ -564,13 +564,25 @@
 }
 
 @media (max-width: 768px) {
+  .donate-page {
+    margin-top: 65px;
+  }
+
   .donate-banner {
-    margin-top: 80px;
-    height: 200px;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 240px;
+  }
+
+  .donate-banner img,
+  .donate-banner video {
+    height: 240px !important;
+    object-fit: cover !important;
+    object-position: center !important;
   }
 
   .donate-left {
-    padding: 10px 10px;
+    padding: 20px 15px;
   }
 
   .donate-right {

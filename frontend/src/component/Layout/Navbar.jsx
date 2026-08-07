@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/navbar_logo.png";
 import globalLogo from "../../assets/GlobalLogo.png";
 import "./Navbar.css";
-import helpingHands from "../../assets/handshake.png";
 import { useRegion } from "../../hooks/useRegion";
 
 const Navbar = () => {
@@ -110,25 +109,6 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Helping hands - show only on mobile, centered */}
-        <div className="mobile-only-content" style={{ display: "none" }}>
-          <div
-            className="mobile-center-help"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              src={helpingHands}
-              alt="Helping Hands"
-              style={{ width: "50px", height: "50px" }}
-            />
-            <div style={{ fontSize: "14px", fontWeight: "600" }}>Helping...</div>
-          </div>
-        </div>
 
         {/* Navigation Menu */}
         <div className={`nav-menu ${isMobileMenuOpen ? "active" : ""}`}>
@@ -313,26 +293,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile view activation logic */}
-      <style>
-        {`
-          @media (max-width: 768px) {
-            .mobile-only-content {
-              display: flex !important;
-              position: absolute;
-              left: 50%;
-              transform: translateX(-50%);
-              top: 50%;
-              transform: translate(-50%, -50%);
-            }
-          }
-          @media (min-width: 769px) {
-            .mobile-only-content {
-              display: none !important;
-            }
-          }
-        `}
-      </style>
     </nav>
   );
 };

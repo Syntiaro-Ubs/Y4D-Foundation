@@ -5,7 +5,6 @@ import "./IDP.css";
 import { bannerService } from "../api/services/banners.service";
 import { ourworkService } from "../api/services/ourwork.service";
 import { UPLOADS_BASE } from "../config/api";
-import DonateButton from "../component/Common/DonateButton";
 import SanitizedHTML from "../component/Common/SanitizedHTML";
 import logger from "../utils/logger";
 
@@ -22,7 +21,7 @@ const IDP = () => {
 
   // Slider settings
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -111,7 +110,6 @@ const IDP = () => {
                   src={`${UPLOADS_BASE}/banners/${banner.media}`}
                   alt={`IDP Banner - ${banner.page}`}
                   className="idp-banner-image"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               ) : (
                 <video
@@ -121,7 +119,6 @@ const IDP = () => {
                   muted
                   loop
                   playsInline
-                  style={{ width: '100%' }}
                 />
               )}
             </div>
@@ -180,7 +177,9 @@ const IDP = () => {
 
                     <div className="idp-card-content">
                       <h2 className="idp-card-title">{item.title}</h2>
-                      <p className="idp-card-description">{item.description}</p>
+                      {item.description && (
+                        <p className="idp-card-description">{item.description}</p>
+                      )}
 
                       {item.content && (
                         <SanitizedHTML
@@ -202,7 +201,6 @@ const IDP = () => {
           </div>
         </div>
       </section>
-      <DonateButton />
     </div>
   );
 };

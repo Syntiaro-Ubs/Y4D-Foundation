@@ -5,6 +5,7 @@ import { bannerService } from "../api/services/banners.service";
 import { mediaService } from "../api/services/media.service";
 import { UPLOADS_BASE } from "../config/api";
 import logger from "../utils/logger";
+import SanitizedHTML from "../component/Common/SanitizedHTML";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,6 +41,20 @@ const Events = () => {
     fetchEvents();
   }, []);
 
+  const formatEventDescription = (desc) => {
+    if (!desc) return "";
+    const hasHTML = /<[a-z][\s\S]*>/i.test(desc);
+    if (hasHTML) {
+      return desc;
+    }
+    return desc
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .map((line) => `<p>${line}</p>`)
+      .join("");
+  };
+
   const fetchEvents = async () => {
     try {
       const eventsData = await mediaService.getPublishedMedia("events");
@@ -55,7 +70,7 @@ const Events = () => {
   };
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 800,
     slidesToShow: 1,
@@ -248,9 +263,10 @@ const Events = () => {
                     </div>
                   )}
                 </div>
-                <div className="ev-full-content">
-                  <p>{selectedEvent.description}</p>
-                </div>
+                <SanitizedHTML
+                  content={formatEventDescription(selectedEvent.description)}
+                  className="ev-full-content"
+                />
                 <div className="ev-modal-footer">
                   <a
                     href={`mailto:media@y4d.ngo?subject=Inquiry about ${selectedEvent.title

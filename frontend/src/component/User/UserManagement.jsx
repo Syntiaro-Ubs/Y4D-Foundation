@@ -99,7 +99,7 @@ const UserManagement = ({ activeSubTab: propActiveSubTab = "users" }) => {
     },
     { section: "impact", label: "Impact Data", subSections: [] },
     { section: "banners", label: "Banner Management", subSections: [] },
-    { section: "accreditations", label: "Accreditations", subSections: [] },
+    { section: "accreditations", label: "Milestones & Awards", subSections: [] },
     { section: "partners", label: "Partners Logo", subSections: [] },
     {
       section: "team",

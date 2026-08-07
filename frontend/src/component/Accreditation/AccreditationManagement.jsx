@@ -333,7 +333,7 @@ const AccreditationManagement = ({
     return (
       <div className="accreditation-management">
         <div className="accreditation-header">
-          <h2>Accreditations Management</h2>
+          <h2>Milestones & Awards Management</h2>
           {canUserPerformAction("create") && (
             <button
               onClick={() => {
@@ -343,7 +343,7 @@ const AccreditationManagement = ({
               className="btn-primary"
               disabled={loading}
             >
-              + Add New Accreditation
+              + Add New Milestone & Award
             </button>
           )}
         </div>
@@ -353,10 +353,10 @@ const AccreditationManagement = ({
         <div className="accreditation-list">
           {accreditations.length === 0 ? (
             <div className="no-items">
-              <p>No accreditations found</p>
+              <p>No milestones & awards found</p>
               <p>
                 <small>
-                  Click "Add Accreditation" to create your first accreditation.
+                  Click "Add Milestone & Award" to create your first item.
                 </small>
               </p>
             </div>
@@ -446,12 +446,12 @@ const AccreditationManagement = ({
               className="back-to-accreditations-btn"
             >
               <span className="back-arrow">←</span>
-              <span>Back to Accreditations</span>
+              <span>Back to Milestones & Awards</span>
             </button>
           </div>
 
           <div className="form-header-title">
-            <h2>{editingItem ? "Edit" : "Add New"} Accreditation</h2>
+            <h2>{editingItem ? "Edit" : "Add New"} Milestone & Award</h2>
           </div>
         </div>
 

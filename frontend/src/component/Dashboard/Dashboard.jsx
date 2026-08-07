@@ -13,6 +13,7 @@ import AccreditationManagement from "../Accreditation/AccreditationManagement";
 import BannerManagement from "../Banner/Management/../BannerManagement"; // Keep original path
 import PartnerManagement from "../Partner/PartnerManagement";
 import SanitizedHTML from "../Common/SanitizedHTML";
+import RichTextToolbar from "../Common/RichTextToolbar";
 import "./Dashboard.css";
 import logger from "../../utils/logger";
 import {
@@ -1292,7 +1293,14 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
           {!["stories", "blogs"].includes(currentMediaType) && (
             <div className="form-group">
               <label>Description:</label>
+              <RichTextToolbar
+                fieldName="description"
+                formState={mediaForm}
+                setFormState={setMediaForm}
+                textareaId="dash-description-textarea"
+              />
               <textarea
+                id="dash-description-textarea"
                 value={mediaForm.description}
                 onChange={(e) =>
                   setMediaForm({ ...mediaForm, description: e.target.value })
@@ -1307,12 +1315,19 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
           {["stories", "blogs"].includes(currentMediaType) && (
             <div className="form-group">
               <label>Content:</label>
+              <RichTextToolbar
+                fieldName="content"
+                formState={mediaForm}
+                setFormState={setMediaForm}
+                textareaId="dash-content-textarea"
+              />
               <textarea
+                id="dash-content-textarea"
                 value={mediaForm.content || ""}
                 onChange={(e) =>
                   setMediaForm({ ...mediaForm, content: e.target.value })
                 }
-                rows="5"
+                rows="8"
               />
             </div>
           )}
@@ -1528,18 +1543,6 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                     <span>🎥 Selected: {mediaForm.video_file.name}</span>
                   </div>
                 )}
-              </div>
-
-              <div className="form-group">
-                <label>Duration (optional)</label>
-                <input
-                  type="text"
-                  value={mediaForm.duration}
-                  onChange={(e) =>
-                    setMediaForm({ ...mediaForm, duration: e.target.value })
-                  }
-                  placeholder="e.g., 15:30, 1h 25m"
-                />
               </div>
             </>
           )}
@@ -3804,7 +3807,7 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                     }
                   }}
                 >
-                  Accreditations {openDropdown === "accreditations" ? "▴" : "▾"}
+                  Milestones & Awards {openDropdown === "accreditations" ? "▴" : "▾"}
                 </button>
                 {openDropdown === "accreditations" && (
                   <ul className="submenu">
@@ -3814,7 +3817,7 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                           handleAccreditationAction("view");
                         }}
                       >
-                        Show Accreditations
+                        Show Milestones & Awards
                       </button>
                     </li>
                     {canUserPerformAction("accreditations", null, "create") && (
@@ -3824,7 +3827,7 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                             handleAccreditationAction("add");
                           }}
                         >
-                          Add Accreditation
+                          Add Milestone & Award
                         </button>
                       </li>
                     )}
@@ -3835,7 +3838,7 @@ const Dashboard = ({ currentUser: propCurrentUser }) => {
                             handleAccreditationAction("update");
                           }}
                         >
-                          Update Accreditation
+                          Update Milestone & Award
                         </button>
                       </li>
                     )}

@@ -96,14 +96,25 @@
 
 .st-card-image {
   position: relative;
-  height: auto;
+  height: 230px;
+  width: 100%;
   overflow: hidden;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .st-card-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
+  transition: transform 0.3s ease;
+}
+
+.st-card:hover .st-card-image img {
+  transform: scale(1.05);
 }
 
 .st-card-body {
@@ -250,14 +261,25 @@
   padding: 1.2rem;
 }
 
+.st-modal-image {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  max-height: 480px;
+}
+
 .st-modal-image img {
   width: 100%;
-  height: 300px;
-  /* smaller height */
-  object-fit: cover;
-  /* maintain aspect ratio */
+  max-height: 480px;
+  height: auto;
+  object-fit: contain;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  display: block;
 }
 
 .st-modal-meta {
@@ -270,12 +292,66 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+  color: #333;
+  line-height: 1.7;
+  font-size: 1rem;
 }
 
 .st-full-content p {
   margin-bottom: 1rem;
   color: #444;
-  line-height: 1.6;
+  line-height: 1.7;
+}
+
+.st-full-content h1,
+.st-full-content h2,
+.st-full-content h3,
+.st-full-content h4,
+.st-full-content h5,
+.st-full-content h6 {
+  color: #1a252f;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.st-full-content h1 { font-size: 1.75rem; }
+.st-full-content h2 { font-size: 1.5rem; }
+.st-full-content h3 { font-size: 1.25rem; }
+.st-full-content h4 { font-size: 1.1rem; }
+
+.st-full-content strong,
+.st-full-content b {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.st-full-content em,
+.st-full-content i {
+  font-style: italic;
+}
+
+.st-full-content ul,
+.st-full-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.st-full-content li {
+  margin-bottom: 0.5rem;
+}
+
+.st-full-content blockquote {
+  border-left: 4px solid #fb6401;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #555;
+  font-style: italic;
+  background: #fdf8f5;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0 4px 4px 0;
 }
 
 /* Stories Banner - Same as About Page */

@@ -116,7 +116,7 @@ const Newsletters = () => {
   };
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 800,
     slidesToShow: 1,
@@ -197,10 +197,41 @@ const Newsletters = () => {
             newsletters.map((newsletter) => (
               <div key={newsletter.id} className="newsletter-card">
                 <div className="newsletter-content">
+                  <div className="newsletter-logo-wrapper">
+                    {newsletter.image ? (
+                      <img
+                        src={`${UPLOADS_BASE}/media/${newsletter.image}`}
+                        alt={newsletter.title}
+                        className="newsletter-card-logo"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          if (e.target.nextSibling) {
+                            e.target.nextSibling.style.display = 'flex';
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className="newsletter-emblem"
+                      style={{ display: newsletter.image ? 'none' : 'flex' }}
+                    >
+                      <div className="newsletter-circle-icon">
+                        <svg viewBox="0 0 100 100" width="76" height="76" className="newsletter-svg">
+                          <circle cx="50" cy="50" r="48" fill="#0d2b45" />
+                          <rect x="32" y="24" width="36" height="34" rx="4" fill="#dc2626" />
+                          <line x1="38" y1="31" x2="62" y2="31" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                          <line x1="38" y1="37" x2="56" y2="37" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                          <line x1="38" y1="43" x2="62" y2="43" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                          <path d="M 22 44 L 50 62 L 78 44 L 78 72 C 78 75 75 77 72 77 L 28 77 C 25 77 22 75 22 72 Z" fill="#ffffff" />
+                          <path d="M 22 44 L 50 63 L 78 44" stroke="#d1d5db" strokeWidth="1.5" fill="none" />
+                          <path d="M 22 74 L 42 57" stroke="#e5e7eb" strokeWidth="1.5" />
+                          <path d="M 78 74 L 58 57" stroke="#e5e7eb" strokeWidth="1.5" />
+                        </svg>
+                      </div>
+
+                    </div>
+                  </div>
                   <h3>{newsletter.title}</h3>
-                  <p className="newsletter-description">
-                    {newsletter.description}
-                  </p>
                   <div className="newsletter-actions">
                     <button
                       onClick={() => handleDownload(newsletter)}

@@ -15,8 +15,6 @@
 .lv-banner-image,
 .lv-banner-video {
   width: 100%;
-  height: 600px;
-  /* Fixed height to match Home page */
   display: block;
   object-position: center;
   object-fit: cover;

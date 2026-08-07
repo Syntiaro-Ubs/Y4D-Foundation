@@ -3,9 +3,11 @@
 .hero-slider {
   position: relative;
   width: 100%;
+  max-width: 100%;
+  margin: 85px 0 0 0;
   overflow: hidden;
-  height: 600px;
-  /* Fixed height for desktop */
+  height: clamp(260px, 20vw, 380px);
+  border-radius: 0;
 }
 
 .slide-content {
@@ -1533,7 +1535,7 @@ html {
 /* Responsive adjustments for Home Slider */
 @media (max-width: 1024px) {
   .hero-slider {
-    height: 500px;
+    height: 420px;
   }
 }
 

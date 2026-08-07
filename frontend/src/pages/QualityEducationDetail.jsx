@@ -3,13 +3,14 @@ import { useParams, Link } from "react-router-dom";
 import { ourworkService } from "../api/services/ourwork.service";
 import { UPLOADS_BASE } from "../config/api";
 import SanitizedHTML from "../component/Common/SanitizedHTML";
+import DetailImageGallery from "../component/Common/DetailImageGallery";
 import logger from "../utils/logger";
 import "./QualityEducationDetail.css";
 
 // --- Helpers ---
 const getFullUrl = (path) => {
   if (!path) return "";
-  if (path.startsWith("http")) return path;
+  if (path.startsWith("http") || path.startsWith("data:")) return path;
 
   // Remove any leading slashes just in case
   const cleanPath = path.replace(
@@ -47,6 +48,57 @@ const getEmbedUrl = (url) => {
 // Detect if URL is a direct .mp4 or something embeddable
 const isDirectVideoFile = (url) => {
   return url?.match(/\.(mp4|webm|ogg)$/i);
+};
+
+const getItemImages = (item) => {
+  if (!item) return [];
+  const images = [];
+
+  if (item.image_url) {
+    const mainUrl = getFullUrl(item.image_url);
+    if (mainUrl) images.push(mainUrl);
+  }
+
+  if (item.additional_images) {
+    let raw = item.additional_images;
+    let list = [];
+
+    if (typeof raw === "string") {
+      raw = raw.trim();
+      if (raw.startsWith("[") && raw.endsWith("]")) {
+        try {
+          list = JSON.parse(raw);
+        } catch (e) {
+          const dataUrlMatches = raw.match(/data:image\/[^;]+;base64,[^"',\]]+/gi);
+          if (dataUrlMatches) {
+            list = dataUrlMatches;
+          }
+        }
+      } else if (raw.includes(",")) {
+        list = raw.split(",").map((s) => s.trim());
+      } else if (raw.length > 0) {
+        list = [raw];
+      }
+    } else if (Array.isArray(raw)) {
+      list = raw;
+    }
+
+    if (Array.isArray(list)) {
+      list.forEach((img) => {
+        if (img) {
+          const imgPath = typeof img === "object" ? (img.path || img.filename || img.url) : img;
+          if (imgPath) {
+            const url = getFullUrl(imgPath);
+            if (url && !images.includes(url)) {
+              images.push(url);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  return images;
 };
 
 const QualityEducationDetail = () => {
@@ -110,21 +162,15 @@ const QualityEducationDetail = () => {
 
       {/* Content section */}
       <div className="qe-detail-content">
-        {/* Row: image + title + description */}
-        <div className="qe-detail-row">
-          {item.image_url && (
-            <div className="qe-detail-image">
-              <img src={getFullUrl(item.image_url)} alt={item.title} />
-            </div>
-          )}
-
-          <div className="qe-detail-text">
-            <h1 className="qe-detail-title">{item.title}</h1>
-            <p className="qe-detail-description">{item.description}</p>
-          </div>
+        {/* Title */}
+        <div className="qe-detail-header-block">
+          <h1 className="qe-detail-title">{item.title}</h1>
         </div>
 
-        {/* Content section below the row */}
+        {/* Gallery Collage */}
+        <DetailImageGallery images={getItemImages(item)} title={item.title} />
+
+        {/* Content section below gallery */}
         {item.content && (
           <SanitizedHTML
             content={item.content}

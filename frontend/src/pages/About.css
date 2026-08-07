@@ -1,5 +1,5 @@
 .our-story-page {
-  margin-top: 80px;
+
   font-family: "Poppins", sans-serif;
   background: #f9f9f9;
 }
@@ -19,6 +19,7 @@
 
 .banner-image,
 .banner-video {
+  margin-top: 80px;
   width: 100%;
   height: auto;
   max-height: 550px;
@@ -35,7 +36,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4); /* Dark overlay for readability */
+  background: rgba(0, 0, 0, 0.4);
+  /* Dark overlay for readability */
 }
 
 .banner-content {
@@ -121,6 +123,7 @@
   color: white;
   border-radius: 19px;
 }
+
 .story-tab.active {
   background-color: #f26622;
   color: #fff;
@@ -135,7 +138,7 @@
   padding: 0 20px;
 }
 
-.story-section > .story-tab {
+.story-section>.story-tab {
   background: #fefc00;
   display: inline-block;
   font-size: 20px;
@@ -159,6 +162,7 @@
   text-align: center;
   margin-top: 12px;
 }
+
 .read-more-btn {
   background: none;
   border: none;
@@ -240,7 +244,9 @@
     width: 84%;
   }
 }
+
 @media (max-width: 1024px) {
+
   .banner-image,
   .banner-video {
     height: 350px;
@@ -267,9 +273,11 @@
 
 /* Mobile view */
 @media (max-width: 768px) {
+
   .banner-image,
   .banner-video {
     height: 250px;
+    margin-top: 0px;
   }
 
   .story-tabs {
@@ -297,6 +305,7 @@
     font-size: 14px;
     line-height: 1.6;
   }
+
   .pyramid-container {
     flex-direction: column;
   }

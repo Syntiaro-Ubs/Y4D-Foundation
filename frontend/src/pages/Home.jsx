@@ -27,7 +27,6 @@ import idp from "../assets/Interventions/IDP.png";
 import Partners1 from "./Partners1";
 import Partners2 from "./Partners2";
 
-import DonateButton from "../component/Common/DonateButton";
 import fallbackBanner from "../assets/BannerImages/f.jpeg";
 
 import LogoSlider from "./LogoSlider.jsx";
@@ -137,7 +136,7 @@ const Home = () => {
 
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 800,
     slidesToShow: 1,
@@ -448,7 +447,7 @@ const Home = () => {
               data-aos="fade-up"
               data-aos-delay="100"
             >
-              Accreditations<span></span>
+              Milestones & Awards<span></span>
             </h2>
             {isMobile ? (
               <div
@@ -472,12 +471,11 @@ const Home = () => {
                         onError={handleImageError}
                       />
                       <h3>{item.title}</h3>
-                      {item.description && <p>{item.description}</p>}
                     </div>
                   ))
                 ) : (
                   <div className="no-accreditations-message">
-                    <p>No accreditations available at the moment.</p>
+                    <p>No milestones & awards available at the moment.</p>
                   </div>
                 )}
               </div>
@@ -507,12 +505,11 @@ const Home = () => {
                         onError={handleImageError}
                       />
                       <h3>{item.title}</h3>
-                      {item.description && <p>{item.description}</p>}
                     </div>
                   ))
                 ) : (
                   <div className="no-accreditations-message">
-                    <p>No accreditations available at the moment.</p>
+                    <p>No milestones & awards available at the moment.</p>
                   </div>
                 )}
               </div>
@@ -561,13 +558,12 @@ const Home = () => {
                       onError={handleImageError}
                     />
                     <h3>{item.title}</h3>
-                    {item.description && <p>{item.description}</p>}
                   </div>
                 ))}
               </Slider>
             ) : (
               <div className="no-accreditations-message">
-                <p>No accreditations available at the moment.</p>
+                <p>No milestones & awards available at the moment.</p>
               </div>
             )}
           </div>
@@ -660,8 +656,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      <DonateButton />
     </div>
   );
 };

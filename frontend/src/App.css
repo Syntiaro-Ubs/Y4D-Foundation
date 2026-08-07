@@ -95,3 +95,521 @@ body {
     opacity: 0.8;
   }
 }
+
+/* Universal Banner Container Width & Height Fix for Desktop & Mobile */
+.slick-slider {
+  margin-bottom: 0 !important;
+}
+
+.slick-dots {
+  display: none !important;
+}
+
+.hero-slider,
+.story-banner,
+.hc-banner-slider-container,
+.qe-banner-slider-container,
+.es-banner-slider-container,
+.idp-banner-slider-container,
+.lh-banner-slider-container,
+.lv-banner-slider-container,
+.rp-banner-slider-container,
+.donate-banner,
+.documentaries-banner,
+.careers-banner,
+.newsletters-banner,
+.newsletter-banner,
+.stories-banner,
+.events-banner,
+.blogs-banner,
+.legal-banner,
+.banner-container,
+.banner {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+.hero-slider .slide-img,
+.hero-slider video,
+.hc-banner-image,
+.hc-banner-video,
+.qe-banner-image,
+.qe-banner-video,
+.es-banner-image,
+.es-banner-video,
+.idp-banner-image,
+.idp-banner-video,
+.lh-banner-image,
+.lh-banner-video,
+.lv-banner-image,
+.lv-banner-video,
+.rp-banner-image,
+.rp-banner-video,
+.banner-image,
+.banner-video,
+.stories-banner-image,
+.stories-banner-video,
+.newsletter-banner-image,
+.newsletter-banner-video,
+.newsletter-banner img,
+.newsletter-banner video,
+.events-banner-image,
+.events-banner-video,
+.events-banner img,
+.events-banner video,
+.documentaries-banner-image,
+.documentaries-banner-video,
+.banner img,
+.banner video,
+.careers-banner img {
+  width: 100% !important;
+  height: clamp(260px, 20vw, 380px) !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 0 !important;
+}
+
+@media (max-width: 1024px) {
+  .hero-slider,
+  .story-banner,
+  .hc-banner-slider-container,
+  .qe-banner-slider-container,
+  .es-banner-slider-container,
+  .idp-banner-slider-container,
+  .lh-banner-slider-container,
+  .lv-banner-slider-container,
+  .rp-banner-slider-container,
+  .donate-banner,
+  .documentaries-banner,
+  .careers-banner,
+  .newsletters-banner,
+  .newsletter-banner,
+  .stories-banner,
+  .events-banner,
+  .blogs-banner,
+  .legal-banner,
+  .banner-container,
+  .banner {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .hero-slider .slide-img,
+  .hero-slider video,
+  .hc-banner-image,
+  .hc-banner-video,
+  .qe-banner-image,
+  .qe-banner-video,
+  .es-banner-image,
+  .es-banner-video,
+  .idp-banner-image,
+  .idp-banner-video,
+  .lh-banner-image,
+  .lh-banner-video,
+  .lv-banner-image,
+  .lv-banner-video,
+  .rp-banner-image,
+  .rp-banner-video,
+  .banner-image,
+  .banner-video,
+  .stories-banner-image,
+  .stories-banner-video,
+  .newsletter-banner-image,
+  .newsletter-banner-video,
+  .newsletter-banner img,
+  .newsletter-banner video,
+  .events-banner-image,
+  .events-banner-video,
+  .events-banner img,
+  .events-banner video,
+  .documentaries-banner-image,
+  .documentaries-banner-video,
+  .banner img,
+  .banner video,
+  .careers-banner img {
+    height: clamp(260px, 20vw, 380px) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .newsletters-container,
+  .events-container,
+  .stories-container,
+  .documentaries-container,
+  .careers-container,
+  .our-story-page,
+  .legal-page,
+  .hc-page,
+  .qe-page,
+  .es-page,
+  .idp-page,
+  .lv-page {
+    margin-top: 65px !important;
+  }
+
+  .hero-slider,
+  .story-banner,
+  .hc-banner-slider-container,
+  .qe-banner-slider-container,
+  .es-banner-slider-container,
+  .idp-banner-slider-container,
+  .lh-banner-slider-container,
+  .lv-banner-slider-container,
+  .rp-banner-slider-container,
+  .donate-banner,
+  .documentaries-banner,
+  .careers-banner,
+  .newsletters-banner,
+  .newsletter-banner,
+  .stories-banner,
+  .events-banner,
+  .blogs-banner,
+  .legal-banner,
+  .banner-container,
+  .banner {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .hero-slider .slide-img,
+  .hero-slider video,
+  .hc-banner-image,
+  .hc-banner-video,
+  .qe-banner-image,
+  .qe-banner-video,
+  .es-banner-image,
+  .es-banner-video,
+  .idp-banner-image,
+  .idp-banner-video,
+  .lh-banner-image,
+  .lh-banner-video,
+  .lv-banner-image,
+  .lv-banner-video,
+  .rp-banner-image,
+  .rp-banner-video,
+  .banner-image,
+  .banner-video,
+  .stories-banner-image,
+  .stories-banner-video,
+  .newsletter-banner-image,
+  .newsletter-banner-video,
+  .newsletter-banner img,
+  .newsletter-banner video,
+  .events-banner-image,
+  .events-banner-video,
+  .events-banner img,
+  .events-banner video,
+  .documentaries-banner-image,
+  .documentaries-banner-video,
+  .banner img,
+  .banner video,
+  .careers-banner img {
+    height: 240px !important;
+    border-radius: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-slider,
+  .story-banner,
+  .hc-banner-slider-container,
+  .qe-banner-slider-container,
+  .es-banner-slider-container,
+  .idp-banner-slider-container,
+  .lh-banner-slider-container,
+  .lv-banner-slider-container,
+  .rp-banner-slider-container,
+  .donate-banner,
+  .documentaries-banner,
+  .careers-banner,
+  .newsletters-banner,
+  .newsletter-banner,
+  .stories-banner,
+  .events-banner,
+  .blogs-banner,
+  .legal-banner,
+  .banner-container,
+  .banner {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  .hero-slider .slide-img,
+  .hero-slider video,
+  .hc-banner-image,
+  .hc-banner-video,
+  .qe-banner-image,
+  .qe-banner-video,
+  .es-banner-image,
+  .es-banner-video,
+  .idp-banner-image,
+  .idp-banner-video,
+  .lh-banner-image,
+  .lh-banner-video,
+  .lv-banner-image,
+  .lv-banner-video,
+  .rp-banner-image,
+  .rp-banner-video,
+  .banner-image,
+  .banner-video,
+  .stories-banner-image,
+  .stories-banner-video,
+  .newsletter-banner-image,
+  .newsletter-banner-video,
+  .newsletter-banner img,
+  .newsletter-banner video,
+  .events-banner-image,
+  .events-banner-video,
+  .events-banner img,
+  .events-banner video,
+  .documentaries-banner-image,
+  .documentaries-banner-video,
+  .banner img,
+  .banner video,
+  .careers-banner img {
+    height: 200px !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* =========================================================
+   Our Work Detail Pages - Screenshot Layout & Sections
+   ========================================================= */
+
+.ourwork-detail-content,
+.qe-detail-html,
+.lv-detail-html,
+.healthcare-detail-html,
+.env-detail-html,
+.idp-detail-html {
+  margin-top: 2rem;
+  width: 100%;
+  color: #333;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.7;
+}
+
+/* Headings for What We Do, Our Approach, Program Impact - ALL BLACK */
+.qe-detail-html h1, .qe-detail-html h2, .qe-detail-html h3, .qe-detail-html h4,
+.lv-detail-html h1, .lv-detail-html h2, .lv-detail-html h3, .lv-detail-html h4,
+.healthcare-detail-html h1, .healthcare-detail-html h2, .healthcare-detail-html h3, .healthcare-detail-html h4,
+.env-detail-html h1, .env-detail-html h2, .env-detail-html h3, .env-detail-html h4,
+.idp-detail-html h1, .idp-detail-html h2, .idp-detail-html h3, .idp-detail-html h4,
+.ourwork-detail-content h1, .ourwork-detail-content h2, .ourwork-detail-content h3, .ourwork-detail-content h4 {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: #000000 !important;
+  margin-top: 2.2rem !important;
+  margin-bottom: 1.2rem !important;
+  position: relative;
+  text-align: left;
+}
+
+.qe-detail-html p,
+.lv-detail-html p,
+.healthcare-detail-html p,
+.env-detail-html p,
+.idp-detail-html p,
+.ourwork-detail-content p {
+  font-size: 1rem;
+  color: #333333;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Our Approach Section Grid - Unique & Modern Pillar Card Design */
+.approach-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-top: 1.2rem;
+  margin-bottom: 3.5rem;
+  padding: 0.5rem 0;
+}
+
+.approach-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  padding: 20px 22px;
+  border-radius: 14px;
+  border: 1px solid #e8ecef;
+  border-left: 4px solid #fb6401;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  width: calc(33.333% - 14px);
+  min-width: 260px;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow: hidden;
+}
+
+.approach-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(251, 100, 1, 0.15);
+  border-color: #fb6401;
+}
+
+.approach-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(251, 100, 1, 0.1), rgba(255, 140, 0, 0.18));
+  border: 1px solid rgba(251, 100, 1, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.approach-card:hover .approach-icon-box {
+  transform: scale(1.08) rotate(3deg);
+  background: linear-gradient(135deg, #fb6401, #ff5500);
+  border-color: #fb6401;
+}
+
+.approach-icon,
+.approach-icon-box i {
+  font-size: 1.4rem;
+  color: #fb6401;
+  transition: color 0.3s ease;
+}
+
+.approach-card:hover .approach-icon-box i,
+.approach-card:hover .approach-icon {
+  color: #ffffff;
+}
+
+.approach-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.approach-step {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fb6401;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.approach-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #000000 !important;
+  line-height: 1.35;
+}
+
+/* Program Impact Stats Section Grid - Matching Screenshot 3 */
+.impact-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px 20px;
+  margin-top: 1.5rem;
+  margin-bottom: 3rem;
+  background: #f9f9f9;
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.impact-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.impact-number {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #fb6401 !important;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: -1px;
+}
+
+.impact-label {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #000000 !important;
+  line-height: 1.3;
+  max-width: 220px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .approach-card {
+    width: calc(50% - 10px);
+  }
+  
+  .impact-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 15px;
+    padding: 2rem 1rem;
+  }
+  
+  .impact-number {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .approach-card {
+    width: 100%;
+  }
+
+  .impact-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+}
+
+/* Header block for detail pages above gallery */
+.qe-detail-header-block,
+.lv-detail-header-block,
+.hc-detail-header-block,
+.es-detail-header-block,
+.idp-detail-header-block {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.qe-detail-title,
+.lv-detail-title,
+.hc-detail-title,
+.es-detail-title,
+.idp-detail-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #000000 !important;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.qe-detail-description,
+.lv-detail-description,
+.hc-detail-description,
+.es-detail-description,
+.idp-detail-description {
+  font-size: 1.1rem;
+  color: #4b5563;
+  line-height: 1.6;
+}

@@ -5,6 +5,7 @@ import { bannerService } from "../api/services/banners.service";
 import { mediaService } from "../api/services/media.service";
 import { UPLOADS_BASE } from "../config/api";
 import logger from "../utils/logger";
+import SanitizedHTML from "../component/Common/SanitizedHTML";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -40,6 +41,28 @@ const Stories = () => {
   useEffect(() => {
     fetchStories();
   }, []);
+
+  const getPlainTextPreview = (text, maxLength = 150) => {
+    if (!text) return "";
+    const plainText = text.replace(/<[^>]+>/g, "").trim();
+    return plainText.length > maxLength
+      ? `${plainText.substring(0, maxLength)}...`
+      : plainText;
+  };
+
+  const formatStoryContent = (content) => {
+    if (!content) return "";
+    const hasHTML = /<[a-z][\s\S]*>/i.test(content);
+    if (hasHTML) {
+      return content;
+    }
+    return content
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .map((line) => `<p>${line}</p>`)
+      .join("");
+  };
 
   const fetchStories = async () => {
     try {
@@ -161,9 +184,7 @@ const Stories = () => {
                     <div className="st-card-body">
                       <h2 className="st-card-title">{story.title}</h2>
                       <p className="st-card-desc">
-                        {story.content.length > 150
-                          ? `${story.content.substring(0, 150)}...`
-                          : story.content}
+                        {getPlainTextPreview(story.content, 150)}
                       </p>
 
                       <div className="st-card-footer">
@@ -205,11 +226,10 @@ const Stories = () => {
                   </div>
                 )}
 
-                <div className="st-full-content">
-                  {selectedStory.content.split("\n").map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-                </div>
+                <SanitizedHTML
+                  content={formatStoryContent(selectedStory.content)}
+                  className="st-full-content"
+                />
               </div>
             </div>
           </div>

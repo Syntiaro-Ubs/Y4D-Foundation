@@ -604,7 +604,9 @@
 }
 
 @media (max-width: 768px) {
-  .banner {
+
+  .banner-image,
+  .banner-video {
     margin-top: 80px;
   }
 

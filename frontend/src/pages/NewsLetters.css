@@ -29,14 +29,12 @@
 /* Newsletter Banner - Same as About Page */
 .newsletter-banner {
   width: 100%;
-  height: auto;
   overflow: hidden;
 }
 
 .newsletter-banner img,
 .newsletter-banner video {
   width: 100%;
-  height: auto;
   object-fit: cover;
   display: block;
 }
@@ -126,6 +124,51 @@
 .newsletter-content {
   text-align: center;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.newsletter-logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  min-height: 80px;
+}
+
+.newsletter-card-logo {
+  max-width: 140px;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.newsletter-emblem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletter-circle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 10px rgba(13, 43, 69, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.newsletter-card:hover .newsletter-circle-icon {
+  transform: scale(1.06) translateY(-2px);
+}
+
+.newsletter-badge-title {
+  color: #0b2545;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
 }
 
 .newsletter-content h3 {
@@ -278,6 +321,10 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .newsletters-container {
+    margin-top: 65px;
+  }
+
   .newsletters-page {
     padding: 1rem;
   }

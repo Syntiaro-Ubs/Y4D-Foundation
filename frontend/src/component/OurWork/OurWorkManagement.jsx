@@ -6,6 +6,7 @@ import { useLoadingState } from "../../hooks/useLoadingState";
 import toast from "../../utils/toast";
 import logger from "../../utils/logger";
 import confirmDialog from "../../utils/confirmDialog";
+import RichTextToolbar from "../Common/RichTextToolbar";
 import "./OurWorkManagement.css";
 import {
   canView,
@@ -14,6 +15,39 @@ import {
   canDelete,
   canPublish,
 } from "../../utils/permissions";
+
+// Compress uploaded gallery image files client-side
+const compressImageFile = (file, maxWidth = 900, quality = 0.65) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        resolve(dataUrl);
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+};
 
 const OurWorkManagement = ({
   category,
@@ -40,6 +74,9 @@ const OurWorkManagement = ({
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [gallerySelectedFiles, setGallerySelectedFiles] = useState([]);
+  const [galleryPreviews, setGalleryPreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
   const [error, setError] = useState("");
 
   // Use useApi hook for fetching items
@@ -88,7 +125,8 @@ const OurWorkManagement = ({
 
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
-    if (imageUrl.startsWith("http")) return imageUrl;
+    if (typeof imageUrl !== "string") return null;
+    if (imageUrl.startsWith("http") || imageUrl.startsWith("data:")) return imageUrl;
     if (imageUrl.startsWith("/uploads/")) {
       return `${API_BASE}${imageUrl}`;
     }
@@ -98,7 +136,6 @@ const OurWorkManagement = ({
   // Items are automatically fetched via useApi hook
   // No need for manual fetchItems function
 
-  // Save / Update Item
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -112,19 +149,25 @@ const OurWorkManagement = ({
     await execute(async () => {
       try {
         const formDataToSend = new FormData();
+
         Object.keys(formData).forEach((key) => {
           if (key === "additional_images") {
-            formDataToSend.append(key, JSON.stringify(formData[key]));
+            // Skipped, handled below
           } else if (key === "is_active") {
             formDataToSend.append(key, formData[key] ? "1" : "0");
           } else {
-            formDataToSend.append(key, formData[key]);
+            formDataToSend.append(key, formData[key] || "");
           }
         });
 
-        if (imageFile) {
+        if (gallerySelectedFiles.length > 0) {
+          formDataToSend.append("image", gallerySelectedFiles[0]);
+        } else if (imageFile) {
           formDataToSend.append("image", imageFile);
         }
+
+        // Pass all gallery previews (including extra uploaded files as DataURLs and existing URLs)
+        formDataToSend.append("additional_images", JSON.stringify(galleryPreviews));
 
         const adminRegion = localStorage.getItem("adminRegion");
         if (adminRegion) {
@@ -146,7 +189,11 @@ const OurWorkManagement = ({
 
         toast.success(`Item ${editingItem ? "updated" : "created"} successfully!`);
       } catch (error) {
-        const errorMessage = error.response?.data?.error || error.message || "Failed to save item";
+        logger.error(`Error saving ${category} item:`, error);
+        const errorMessage =
+          error.response?.data?.error ||
+          error.response?.data?.details ||
+          "Failed to save item";
         setError(errorMessage);
         toast.error(errorMessage);
         throw error;
@@ -177,6 +224,33 @@ const OurWorkManagement = ({
     if (item.image_url) {
       setImagePreview(getImageUrl(item.image_url));
     }
+
+    let parsedImages = [];
+    if (item.additional_images) {
+      try {
+        parsedImages = typeof item.additional_images === "string"
+          ? JSON.parse(item.additional_images)
+          : item.additional_images;
+        if (!Array.isArray(parsedImages)) parsedImages = [];
+      } catch (e) {
+        parsedImages = [];
+      }
+    }
+    setExistingImages(parsedImages);
+
+    const initialPreviews = [];
+    if (item.image_url) {
+      initialPreviews.push(getImageUrl(item.image_url));
+    }
+    parsedImages.forEach((img) => {
+      const url = getImageUrl(img);
+      if (!initialPreviews.includes(url)) {
+        initialPreviews.push(url);
+      }
+    });
+    setGalleryPreviews(initialPreviews);
+    setGallerySelectedFiles([]);
+
     onActionChange("update");
   };
 
@@ -219,16 +293,53 @@ const OurWorkManagement = ({
     });
   };
 
-  // Image Preview
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
+  // Image Preview & Multi-Image Gallery Handler (with image compression)
+  const handleImageChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-    if (file) reader.readAsDataURL(file);
+    if (!imageFile && files.length > 0) {
+      setImageFile(files[0]);
+    }
+
+    const updatedFiles = [...gallerySelectedFiles, ...files];
+    setGallerySelectedFiles(updatedFiles);
+
+    for (const file of files) {
+      const compressedDataUrl = await compressImageFile(file);
+      if (compressedDataUrl) {
+        setGalleryPreviews((prev) => [...prev, compressedDataUrl]);
+      }
+    }
+  };
+
+  const removeGalleryPreview = (index) => {
+    const totalExisting = existingImages.length;
+    if (index < totalExisting) {
+      const updatedExisting = [...existingImages];
+      updatedExisting.splice(index, 1);
+      setExistingImages(updatedExisting);
+      setFormData((prev) => ({ ...prev, additional_images: updatedExisting }));
+
+      const updatedPreviews = [...galleryPreviews];
+      updatedPreviews.splice(index, 1);
+      setGalleryPreviews(updatedPreviews);
+    } else {
+      const fileIndex = index - totalExisting;
+      const updatedFiles = [...gallerySelectedFiles];
+      updatedFiles.splice(fileIndex, 1);
+      setGallerySelectedFiles(updatedFiles);
+
+      if (fileIndex === 0 && updatedFiles.length > 0) {
+        setImageFile(updatedFiles[0]);
+      } else if (updatedFiles.length === 0) {
+        setImageFile(null);
+      }
+
+      const updatedPreviews = [...galleryPreviews];
+      updatedPreviews.splice(index, 1);
+      setGalleryPreviews(updatedPreviews);
+    }
   };
 
   const resetForm = () => {
@@ -248,6 +359,9 @@ const OurWorkManagement = ({
     });
     setImageFile(null);
     setImagePreview(null);
+    setGallerySelectedFiles([]);
+    setGalleryPreviews([]);
+    setExistingImages([]);
     setError("");
   };
 
@@ -502,26 +616,21 @@ const OurWorkManagement = ({
           </div>
 
           <div className="form-group">
-            <label>Description:</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              rows="3"
-              required
-              disabled={submitting}
-            />
-          </div>
-
-          <div className="form-group">
             <label>Content:</label>
+            <RichTextToolbar
+              fieldName="content"
+              formState={formData}
+              setFormState={setFormData}
+              textareaId="ourwork-content-textarea"
+              showTemplates={true}
+            />
             <textarea
+              id="ourwork-content-textarea"
               value={formData.content}
               onChange={(e) =>
                 setFormData({ ...formData, content: e.target.value })
               }
-              rows="6"
+              rows="10"
               placeholder="Detailed content (HTML supported)"
               disabled={submitting}
             />
@@ -541,16 +650,36 @@ const OurWorkManagement = ({
           </div>
 
           <div className="form-group">
-            <label>Or Upload Image:</label>
+            <label>Upload Gallery Images (Select Multiple):</label>
             <input
               type="file"
               accept="image/*"
+              multiple
               onChange={handleImageChange}
               disabled={submitting}
             />
-            {imagePreview && (
-              <div className="image-preview">
-                <img src={imagePreview} alt="Preview" />
+            <small style={{ display: "block", color: "#64748b", marginTop: "4px" }}>
+              Hold Ctrl/Cmd or Shift to select multiple photos at once for the detail page gallery collage.
+            </small>
+
+            {galleryPreviews.length > 0 && (
+              <div className="gallery-previews-grid">
+                {galleryPreviews.map((preview, idx) => (
+                  <div key={idx} className="gallery-preview-item">
+                    <img src={preview} alt={`Gallery Preview ${idx + 1}`} />
+                    <button
+                      type="button"
+                      className="remove-gallery-img-btn"
+                      title="Remove photo"
+                      onClick={() => removeGalleryPreview(idx)}
+                    >
+                      &times;
+                    </button>
+                    <span className="gallery-preview-badge">
+                      {idx === 0 ? "Featured" : `Photo ${idx + 1}`}
+                    </span>
+                  </div>
+                ))}
               </div>
             )}
           </div>

@@ -21,7 +21,7 @@ const QualityEducation = () => {
 
   // Slider settings
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -112,7 +112,6 @@ const QualityEducation = () => {
                   src={`${UPLOADS_BASE}/banners/${banner.media}`}
                   alt={`Quality Education Banner - ${banner.page}`}
                   className="qe-banner-image"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               ) : (
                 <video
@@ -122,7 +121,6 @@ const QualityEducation = () => {
                   muted
                   loop
                   playsInline
-                  style={{ width: '100%' }}
                 />
               )}
             </div>
@@ -182,7 +180,9 @@ const QualityEducation = () => {
 
                   <div className="qe-card-body">
                     <h2 className="qe-card-title">{item.title}</h2>
-                    <p className="qe-card-desc">{item.description}</p>
+                    {item.description && (
+                      <p className="qe-card-desc">{item.description}</p>
+                    )}
 
                     {item.content && (
                       <SanitizedHTML

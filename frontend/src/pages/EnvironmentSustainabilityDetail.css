@@ -101,8 +101,9 @@
 .es-detail-html h2,
 .es-detail-html h3,
 .es-detail-html h4 {
-  margin-top: 20px;
-  color: #1e88e5;
+  margin-top: 25px;
+  color: #000000 !important;
+  font-weight: 700;
 }
 
 .es-detail-html p {

@@ -1283,6 +1283,8 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   animation: slideUp 0.3s ease;
   border: 1px solid #e0e0e0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .confirmation-modal-header {
@@ -1303,6 +1305,7 @@
   justify-content: center;
   border-radius: 50%;
   background: #f8f9fa;
+  flex-shrink: 0;
 }
 
 .confirmation-modal-header h3 {
@@ -1310,10 +1313,14 @@
   color: #333;
   font-size: 20px;
   font-weight: 600;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .confirmation-modal-body {
   margin-bottom: 25px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .confirmation-modal-body p {
@@ -1321,6 +1328,8 @@
   font-size: 16px;
   line-height: 1.5;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .confirmation-modal-footer {
@@ -1426,6 +1435,11 @@
   background-color: #f8f9fa;
   border-radius: 4px;
   border-left: 3px solid #007bff;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .confirmation-item-name strong {

@@ -21,7 +21,7 @@ const Livelihood = () => {
 
   // Slider settings
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -107,7 +107,6 @@ const Livelihood = () => {
                   src={`${UPLOADS_BASE}/banners/${banner.media}`}
                   alt={`Livelihood Banner - ${banner.page}`}
                   className="lv-banner-image"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               ) : (
                 <video
@@ -117,7 +116,6 @@ const Livelihood = () => {
                   muted
                   loop
                   playsInline
-                  style={{ width: '100%' }}
                 />
               )}
             </div>
@@ -177,7 +175,9 @@ const Livelihood = () => {
 
                   <div className="lv-card-body">
                     <h2 className="lv-card-title">{item.title}</h2>
-                    <p className="lv-card-desc">{item.description}</p>
+                    {item.description && (
+                      <p className="lv-card-desc">{item.description}</p>
+                    )}
 
                     {item.content && (
                       <SanitizedHTML

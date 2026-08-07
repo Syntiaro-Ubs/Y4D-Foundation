@@ -21,7 +21,7 @@ const Healthcare = () => {
 
   // Slider settings
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -107,7 +107,6 @@ const Healthcare = () => {
                   src={`${UPLOADS_BASE}/banners/${banner.media}`}
                   alt={`Healthcare Banner - ${banner.page}`}
                   className="hc-banner-image"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               ) : (
                 <video
@@ -117,7 +116,6 @@ const Healthcare = () => {
                   muted
                   loop
                   playsInline
-                  style={{ width: '100%' }}
                 />
               )}
             </div>
@@ -173,7 +171,9 @@ const Healthcare = () => {
 
                   <div className="hc-card-body">
                     <h2 className="hc-card-title">{item.title}</h2>
-                    <p className="hc-card-desc">{item.description}</p>
+                    {item.description && (
+                      <p className="hc-card-desc">{item.description}</p>
+                    )}
 
                     {item.content && (
                       <SanitizedHTML

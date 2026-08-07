@@ -2,7 +2,6 @@
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
-  margin-top: 80px;
 }
 
 /* Banner Slider Styles */
@@ -263,6 +262,10 @@ table td {
 }
 
 @media (max-width: 768px) {
+  .banner-container {
+    margin-top: 70px;
+  }
+
   table td {
     padding: 6px;
     font-size: 0.8rem;

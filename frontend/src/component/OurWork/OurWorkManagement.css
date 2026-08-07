@@ -87,6 +87,8 @@
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .item-card:hover {
@@ -120,12 +122,16 @@
 
 .item-content {
   padding: 15px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .item-content h4 {
   margin: 0 0 10px 0;
   color: #333;
   font-size: 18px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .item-description {
@@ -137,6 +143,8 @@
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .item-meta {
@@ -298,6 +306,71 @@
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid #ddd;
+}
+
+/* Gallery Image Upload Previews Grid */
+.gallery-previews-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+.gallery-preview-item {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.gallery-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-gallery-img-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(220, 53, 69, 0.9);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  z-index: 5;
+}
+
+.remove-gallery-img-btn:hover {
+  background: #b02a37;
+}
+
+.gallery-preview-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  padding: 2px 0;
 }
 
 .form-actions {

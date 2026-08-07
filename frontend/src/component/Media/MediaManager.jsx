@@ -6,6 +6,7 @@ import { useLoadingState } from "../../hooks/useLoadingState";
 import logger from "../../utils/logger";
 import toast from "../../utils/toast";
 import confirmDialog from "../../utils/confirmDialog";
+import RichTextToolbar from "../Common/RichTextToolbar";
 
 const MediaManager = ({ mediaType, onClose }) => {
   const [editingItem, setEditingItem] = useState(null);
@@ -325,7 +326,14 @@ const MediaManager = ({ mediaType, onClose }) => {
 
         <div className="form-group">
           <label>Description:</label>
+          <RichTextToolbar
+            fieldName="description"
+            formState={formData}
+            setFormState={setFormData}
+            textareaId="media-description-textarea"
+          />
           <textarea
+            id="media-description-textarea"
             value={formData.description || ""}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
@@ -337,13 +345,20 @@ const MediaManager = ({ mediaType, onClose }) => {
         {(mediaType === "stories" || mediaType === "blogs") && (
           <div className="form-group">
             <label>Content:</label>
+            <RichTextToolbar
+              fieldName="content"
+              formState={formData}
+              setFormState={setFormData}
+              textareaId="media-content-textarea"
+            />
             <textarea
+              id="media-content-textarea"
               value={formData.content || ""}
               onChange={(e) =>
                 setFormData({ ...formData, content: e.target.value })
               }
               required
-              rows="6"
+              rows="8"
             />
           </div>
         )}
@@ -477,17 +492,6 @@ const MediaManager = ({ mediaType, onClose }) => {
                 }
                 required
                 placeholder="https://youtube.com/embed/..."
-              />
-            </div>
-            <div className="form-group">
-              <label>Duration:</label>
-              <input
-                type="text"
-                value={formData.duration || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, duration: e.target.value })
-                }
-                placeholder="e.g., 1h 30m"
               />
             </div>
           </>

@@ -33,7 +33,7 @@ const EnvironmentSustainability = () => {
 
   // Slider settings
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -110,7 +110,6 @@ const EnvironmentSustainability = () => {
                   src={`${UPLOADS_BASE}/banners/${banner.media}`}
                   alt={`Environment Sustainability Banner - ${banner.page}`}
                   className="es-banner-image"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               ) : (
                 <video
@@ -120,7 +119,6 @@ const EnvironmentSustainability = () => {
                   muted
                   loop
                   playsInline
-                  style={{ width: '100%' }}
                 />
               )}
             </div>
@@ -178,7 +176,9 @@ const EnvironmentSustainability = () => {
 
                   <div className="es-card-body">
                     <h2 className="es-card-title">{item.title}</h2>
-                    <p className="es-card-desc">{item.description}</p>
+                    {item.description && (
+                      <p className="es-card-desc">{item.description}</p>
+                    )}
 
                     {item.content && (
                       <SanitizedHTML

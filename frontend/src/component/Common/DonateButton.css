@@ -1,65 +1,79 @@
-.donate-btn {
+/* Floating Donate Button - Icon Only (Mobile View) */
+
+.floating-donate-btn {
   position: fixed;
-  top: 50%;
-  right: -10px;
+  top: 55%;
+  right: 12px;
   transform: translateY(-50%);
   z-index: 9999;
 
   display: none;
-  padding: 14px 28px;
+  /* Hidden on desktop by default */
+  align-items: center;
+  justify-content: center;
 
-  color: #fff;
-  font-size: 18px;
-  font-weight: 300;
-  text-transform: uppercase;
-  text-decoration: none;
-
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-
-  /* 🔹 Make text vertical */
-  writing-mode: vertical-rl;
-  text-orientation: upright;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Hover */
-.donate-btn:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  transform: translateY(-50%) scale(1.05);
+.floating-donate-img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+  animation: heartPulse 2s infinite ease-in-out;
+  filter: drop-shadow(0 4px 14px rgba(251, 100, 1, 0.45)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
 }
 
-.donate-btn:active {
-  transform: translateY(-50%) scale(0.98);
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.15);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.1);
+  }
+
+  70% {
+    transform: scale(1);
+  }
 }
 
-.donate-btn img {
-  width: 80px;
-  height: auto;
-  transition: all 0.3s ease;
+/* Hover & Active Effects */
+.floating-donate-btn:hover {
+  transform: translateY(-50%) scale(1.12);
 }
-/* Hide on desktop */
+
+.floating-donate-btn:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+/* Show on mobile and tablet view */
 @media (max-width: 1024px) {
-  .donate-btn {
-    display: block;
-    padding: 10px 15px;
-    font-size: 16px;
-  }
-  .donate-btn img {
-    width: 65px; /* smaller image */
+  .floating-donate-btn {
+    display: flex;
   }
 }
 
-/* Optional: smaller on very small screens */
+/* Smaller mobile screens */
 @media (max-width: 480px) {
-  .donate-btn {
-    display: block;
-    padding: 10px 10px;
-    font-size: 16px;
+  .floating-donate-btn {
+    right: 6px;
   }
-  .donate-btn img {
-    width: 55px; /* smallest size */
+
+  .floating-donate-img {
+    width: 68px;
+    height: 68px;
   }
 }

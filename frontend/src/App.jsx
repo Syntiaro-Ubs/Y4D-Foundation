@@ -14,6 +14,7 @@ import ScrollToTop from "./ScrollToTop";
 import PageTransition from "./component/Common/PageTransition";
 import ErrorBoundary from "./component/Common/ErrorBoundary";
 import Popup from "./pages/Popup";
+import DonateButton from "./component/Common/DonateButton";
 import "./App.css";
 import { isTokenValid, getUser, getToken, clearToken } from "./utils/tokenManager";
 import { API_BASE } from "./config/api";
@@ -174,6 +175,7 @@ function AppContent({
                     </Suspense>
                   </main>
                   <Footer />
+                  <DonateButton />
                 </>
               }
             />

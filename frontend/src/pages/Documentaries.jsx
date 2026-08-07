@@ -232,13 +232,7 @@ const Documentaries = () => {
                       : doc.description || "No description available"}
                   </p>
 
-                  <div className="doc-meta">
-                    {doc.duration && (
-                      <span className="doc-duration">
-                        Duration: {doc.duration}
-                      </span>
-                    )}
-                  </div>
+
 
                   <button
                     className="btn-watch"
@@ -276,12 +270,6 @@ const Documentaries = () => {
                   <p>{selectedDoc.description || "No description available"}</p>
 
                   <div className="doc-meta-full">
-                    {selectedDoc.duration && (
-                      <p>
-                        <strong>Duration:</strong> {selectedDoc.duration}
-                      </p>
-                    )}
-
                     <p>
                       <strong>Published:</strong>{" "}
                       {new Date(selectedDoc.published_date).toLocaleDateString(
@@ -289,20 +277,6 @@ const Documentaries = () => {
                       )}
                     </p>
 
-                    {selectedDoc.video_filename && (
-                      <p>
-                        <strong>Video Type:</strong> Uploaded File
-                      </p>
-                    )}
-
-                    {selectedDoc.video_url && (
-                      <p>
-                        <strong>Video Type:</strong>{" "}
-                        {isExternalVideo(selectedDoc.video_url)
-                          ? "External (YouTube/Vimeo)"
-                          : "Direct URL"}
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
